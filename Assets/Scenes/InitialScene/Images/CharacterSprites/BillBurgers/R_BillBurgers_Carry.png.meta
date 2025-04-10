@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -95,7 +95,175 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: R_BillBurgers_Carry_0
+      rect:
+        serializedVersion: 2
+        x: 59
+        y: 23
+        width: 279
+        height: 383
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 941a88d87e423dd49bf9611741ba25a9
+      internalID: -878178717
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: R_BillBurgers_Carry_1
+      rect:
+        serializedVersion: 2
+        x: 419
+        y: 23
+        width: 279
+        height: 381
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c59146b40ae36e3439f6d386cddc434b
+      internalID: 2083665567
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: R_BillBurgers_Carry_2
+      rect:
+        serializedVersion: 2
+        x: 789
+        y: 23
+        width: 280
+        height: 377
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3a1cf0d926b05e5489d366629f5c17ed
+      internalID: 2108623452
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: R_BillBurgers_Carry_3
+      rect:
+        serializedVersion: 2
+        x: 1149
+        y: 23
+        width: 279
+        height: 381
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8044a43c4a72f89419f5c67bab4ee1c2
+      internalID: 844652883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: R_BillBurgers_Carry_4
+      rect:
+        serializedVersion: 2
+        x: 1539
+        y: 23
+        width: 280
+        height: 383
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eb8f1c8a3d44ccb49810dd68868f6c64
+      internalID: 1665160944
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: R_BillBurgers_Carry_5
+      rect:
+        serializedVersion: 2
+        x: 1889
+        y: 23
+        width: 280
+        height: 381
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d00920a0063f1714da1ca5633c092bdd
+      internalID: 1305195643
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: R_BillBurgers_Carry_6
+      rect:
+        serializedVersion: 2
+        x: 2256
+        y: 23
+        width: 279
+        height: 377
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: b479b108d4653544bb1172df2530d494
+      internalID: -837808641
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: R_BillBurgers_Carry_7
+      rect:
+        serializedVersion: 2
+        x: 2628
+        y: 23
+        width: 279
+        height: 381
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 3317603575ee9df469e6e8e1537eeb85
+      internalID: 661947883
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -106,7 +274,15 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      R_BillBurgers_Carry_0: -878178717
+      R_BillBurgers_Carry_1: 2083665567
+      R_BillBurgers_Carry_2: 2108623452
+      R_BillBurgers_Carry_3: 844652883
+      R_BillBurgers_Carry_4: 1665160944
+      R_BillBurgers_Carry_5: 1305195643
+      R_BillBurgers_Carry_6: -837808641
+      R_BillBurgers_Carry_7: 661947883
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

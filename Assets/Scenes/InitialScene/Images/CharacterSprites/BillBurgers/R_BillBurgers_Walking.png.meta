@@ -43,7 +43,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -95,7 +95,175 @@ TextureImporter:
     forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
-    sprites: []
+    sprites:
+    - serializedVersion: 2
+      name: R_BillBurgers_Walking_0
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 23
+        width: 201
+        height: 383
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: d02a49d185dd109439a54a81f81f189f
+      internalID: 1562126425
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: R_BillBurgers_Walking_1
+      rect:
+        serializedVersion: 2
+        x: 456
+        y: 23
+        width: 201
+        height: 381
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: dae118b6c98477844beb727f9f4c3acf
+      internalID: 503519704
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: R_BillBurgers_Walking_2
+      rect:
+        serializedVersion: 2
+        x: 827
+        y: 23
+        width: 200
+        height: 377
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5b2df675d8df9e46bf4527b461e6a5c
+      internalID: 749613436
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: R_BillBurgers_Walking_3
+      rect:
+        serializedVersion: 2
+        x: 1186
+        y: 23
+        width: 202
+        height: 381
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: da20cb17576187e41857fa27e5de0603
+      internalID: -1302863881
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: R_BillBurgers_Walking_4
+      rect:
+        serializedVersion: 2
+        x: 1577
+        y: 23
+        width: 200
+        height: 383
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 5d6f9d36c11bfe141b016789f153b92f
+      internalID: 387112935
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: R_BillBurgers_Walking_5
+      rect:
+        serializedVersion: 2
+        x: 1933
+        y: 23
+        width: 200
+        height: 381
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 23972f164fec7b34ab7d616880f89b36
+      internalID: -2133196252
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: R_BillBurgers_Walking_6
+      rect:
+        serializedVersion: 2
+        x: 2293
+        y: 23
+        width: 205
+        height: 377
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: ff997119344a4cf44a9ed9767805def5
+      internalID: -1006062781
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: R_BillBurgers_Walking_7
+      rect:
+        serializedVersion: 2
+        x: 2665
+        y: 23
+        width: 205
+        height: 381
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 7b24d0aeb24a1494da986c806ab643ac
+      internalID: 1711182159
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
     outline: []
     physicsShape: []
     bones: []
@@ -106,7 +274,15 @@ TextureImporter:
     edges: []
     weights: []
     secondaryTextures: []
-    nameFileIdTable: {}
+    nameFileIdTable:
+      R_BillBurgers_Walking_0: 1562126425
+      R_BillBurgers_Walking_1: 503519704
+      R_BillBurgers_Walking_2: 749613436
+      R_BillBurgers_Walking_3: -1302863881
+      R_BillBurgers_Walking_4: 387112935
+      R_BillBurgers_Walking_5: -2133196252
+      R_BillBurgers_Walking_6: -1006062781
+      R_BillBurgers_Walking_7: 1711182159
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
