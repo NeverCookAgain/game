@@ -1,5 +1,6 @@
 {
   "className": "Workspace",
+  "ignoreUnknownInstances": true,
   "properties": {
     "StreamingEnabled": false
   }
