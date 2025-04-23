@@ -2,22 +2,22 @@
 
 local ServerStorage = game:GetService("ServerStorage");
 
-local Item = require(ServerStorage.Item.types);
+local IItem = require(ServerStorage.Item.types);
 
 export type ContestantProperties = {
   player: Player?;
   model: Model?;
-  inventory: {Item.Item};
+  inventory: {IItem.IItem};
 };
 
 export type ContestantMethods = {
-  addItemToInventory: () -> ();
+  addItemToInventory: (self: IContestant, item: IItem.IItem) -> ();
 };
 
 export type ContestantEvents = {
-  ItemObtained: RBXScriptSignal;
+  InventoryChanged: RBXScriptSignal;
 }
 
-export type Contestant = ContestantProperties & ContestantMethods & ContestantEvents;
+export type IContestant = ContestantProperties & ContestantMethods & ContestantEvents;
 
 return {};

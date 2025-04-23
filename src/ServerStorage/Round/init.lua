@@ -3,13 +3,13 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
 local Round = {};
-local types = require(script.types);
+local IRound = require(script.types);
 
-function Round.new(properties: types.RoundProperties): types.Round
+function Round.new(properties: IRound.RoundProperties): IRound.IRound
 
   local roundChangedEvent = Instance.new("BindableEvent");
 
-  local function setStatus(self: types.Round, newStatus: types.RoundStatus): ()
+  local function setStatus(self: IRound.IRound, newStatus: IRound.RoundStatus): ()
 
     self.status = newStatus;
     ReplicatedStorage.Shared.Events.RoundChanged:FireAllClients(self);
@@ -17,7 +17,7 @@ function Round.new(properties: types.RoundProperties): types.Round
 
   end;
 
-  local round: types.Round = {
+  local round: IRound.IRound = {
     status = properties.status;
     durationSeconds = properties.durationSeconds;
     contestants = {};

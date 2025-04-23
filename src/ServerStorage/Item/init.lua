@@ -3,13 +3,13 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
 local Item = {};
-local types = require(script.types);
+local IItem = require(script.types);
 
-function Item.new(properties: types.ItemProperties): types.Item
+function Item.new(properties: IItem.ItemProperties): IItem.IItem
 
   local statusChangedEvent = Instance.new("BindableEvent");
 
-  local function setStatus(self: types.Item, newStatus: types.Status): ()
+  local function setStatus(self: IItem.IItem, newStatus: IItem.Status): ()
 
     self.status = newStatus;
     ReplicatedStorage.Shared.Events.RoundChanged:FireAllClients(self);
@@ -17,7 +17,7 @@ function Item.new(properties: types.ItemProperties): types.Item
 
   end;
 
-  local round: types.Item = {
+  local round: IItem.IItem = {
     name = properties.name;
     description = properties.description;
     status = properties.status;

@@ -6,13 +6,13 @@ export type RoundProperties = {
 };
 
 export type RoundMethods = {
-  setStatus: (self: Round, newStatus: RoundStatus) -> ()
+  setStatus: (self: IRound, newStatus: RoundStatus) -> ()
 };
 
 export type RoundEvents = {
   RoundChanged: RBXScriptSignal;
 }
 
-export type Round = RoundProperties & RoundMethods & RoundEvents;
+export type IRound = RoundProperties & RoundMethods & RoundEvents;
 
 return {};

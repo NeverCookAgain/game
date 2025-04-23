@@ -1,29 +1,34 @@
 --!strict
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
+local ServerStorage = game:GetService("ServerStorage");
 
 local Contestant = {};
-local types = require(script.types);
+local IItem = require(ServerStorage.Item.types);
+local IContestant = require(script.types);
 
-function Contestant.new(properties: types.ContestantProperties): types.Contestant
+function Contestant.new(properties: IContestant.ContestantProperties): IContestant.IContestant
 
-  local roundChangedEvent = Instance.new("BindableEvent");
+  local inventoryChangedEvent = Instance.new("BindableEvent");
 
-  local function setStatus(self: types.Round, newStatus: types.RoundStatus): ()
+  local function addItemToInventory(self: IContestant.IContestant, item: IItem.IItem): ()
 
-    self.status = newStatus;
+    table.insert(self.inventory, item);
     ReplicatedStorage.Shared.Events.RoundChanged:FireAllClients(self);
-    roundChangedEvent:Fire();
+    inventoryChangedEvent:Fire();
 
   end;
 
-  local contestant: types.Contestant = {
+  local contestant: IContestant.IContestant = {
     player = properties.player;
     model = properties.model;
+    inventory = {};
+    addItemToInventory = addItemToInventory;
+    InventoryChanged = inventoryChangedEvent.Event;
   };
 
   return contestant;
 
 end;
 
-return Round;
+return Contestant;

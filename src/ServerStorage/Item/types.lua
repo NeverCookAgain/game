@@ -15,6 +15,6 @@ export type ItemEvents = {
   StatusChanged: (status: Status) -> ()
 }
 
-export type Item = ItemProperties;
+export type IItem = ItemProperties;
 
 return {};
