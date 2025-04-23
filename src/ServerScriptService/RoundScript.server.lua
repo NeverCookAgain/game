@@ -7,6 +7,7 @@ local ServerStorage = game:GetService("ServerStorage");
 
 local Contestant = require(ServerStorage.Contestant);
 local Item = require(ServerStorage.Item);
+local IItem = require(ServerStorage.Item.types);
 local Round = require(ServerStorage.Round);
 
 local round = Round.new({
@@ -34,6 +35,7 @@ round.RoundChanged:Connect(function()
   if round.status == "Ongoing" then
 
     ServerScriptService.ToasterScript.Enabled = true;
+    ServerScriptService.SandwichStationScript.Enabled = true;
   
   elseif round.status == "Ended" then
     
@@ -54,8 +56,8 @@ round.RoundChanged:Connect(function()
 
 end);
 
-Players.PlayerAdded:Connect(function(player: Player)
-  
+local function addPlayerAsContestant(player: Player)
+
   player.Character = workspace.CousinRicky;
 
   local contestant = Contestant.new({
@@ -76,10 +78,30 @@ Players.PlayerAdded:Connect(function(player: Player)
   contestant:addItemToInventory(Item.new({
     name = "Avocado",
     description = "Test",
-    status = "Raw"
+    image = "rbxassetid://72701864119182",
+    status = "Raw" :: IItem.Status
   }, round));
 
+  contestant:addItemToInventory(Item.new({
+    name = "Avocado",
+    description = "Test",
+    image = "rbxassetid://72701864119182",
+    status = "Raw" :: IItem.Status
+  }, round));
+
+end;
+
+Players.PlayerAdded:Connect(function(player: Player)
+  
+  addPlayerAsContestant(player)
+
 end);
+
+for _, player in Players:GetPlayers() do
+
+  coroutine.wrap(addPlayerAsContestant)(player);
+
+end;
 
 ReplicatedStorage.Shared.Functions.ActivateItem.OnServerInvoke = function(player, slot)
 
