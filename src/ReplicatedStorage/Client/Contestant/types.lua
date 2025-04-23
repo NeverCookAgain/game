@@ -7,8 +7,6 @@ local IItem = require(ServerStorage.Item.types);
 export type ContestantProperties = {
   player: Player?;
   inventorySlots: number;
-  model: Model?;
-  inventory: {IItem.IItem};
 };
 
 export type ContestantMethods = {

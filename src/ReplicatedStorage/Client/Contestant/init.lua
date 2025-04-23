@@ -11,26 +11,10 @@ function Contestant.new(properties: IContestant.ContestantProperties, round: IRo
 
   local inventoryChangedEvent = Instance.new("BindableEvent");
 
-  local function addItemToInventory(self: IContestant.IContestant, item: IItem.IItem): ()
+  local function getInventory(self: IContestant.IContestant, item: IItem.IItem): ()
 
     table.insert(self.inventory, item);
     inventoryChangedEvent:Fire();
-
-  end;
-
-  local function removeItemFromInventory(self: IContestant.IContestant, item: IItem.IItem): ()
-
-    for index = #self.inventory, 1, -1 do
-
-      if self.inventory[index] == item then
-
-        table.remove(self.inventory, index);
-        inventoryChangedEvent:Fire();
-        break;
-
-      end;
-
-    end;
 
   end;
 
@@ -38,9 +22,7 @@ function Contestant.new(properties: IContestant.ContestantProperties, round: IRo
     player = properties.player;
     model = properties.model;
     inventorySlots = properties.inventorySlots;
-    inventory = {};
-    addItemToInventory = addItemToInventory;
-    removeItemFromInventory = removeItemFromInventory;
+    getInventory = getInventory;
     InventoryChanged = inventoryChangedEvent.Event;
   };
 

@@ -1,6 +1,7 @@
 --!strict
 
 local ServerStorage = game:GetService("ServerStorage");
+local ProximityPromptService = game:GetService("ProximityPromptService");
 
 local IItem = require(script.types);
 local IRound = require(ServerStorage.Round.types);

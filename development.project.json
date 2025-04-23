@@ -8,13 +8,13 @@
     },
     "ReplicatedStorage": {
       "Client": {
-        "$path": "src/ReplicatedStorage/Client",
+        "$path": "src/ReplicatedStorage/Client"
+      },
+      "Shared": {
+        "$path": "src/ReplicatedStorage/Shared",
         "Packages": {
           "$path": "Packages"
         }
-      },
-      "Shared": {
-        "$path": "src/ReplicatedStorage/Shared"
       }
     },
     "Lighting": {

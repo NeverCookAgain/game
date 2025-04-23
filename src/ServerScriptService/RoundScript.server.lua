@@ -23,6 +23,13 @@ ReplicatedStorage.Shared.Functions.GetRound.OnServerInvoke = function()
 
 end;
 
+ReplicatedStorage.Shared.Functions.GetContestant.OnServerInvoke = function(player)
+
+  local contestant = round:findContestantFromPlayer(player);
+  return contestant;
+
+end;
+
 round.RoundChanged:Connect(function()
 
   if round.status == "Ongoing" then
@@ -47,14 +54,23 @@ round.RoundChanged:Connect(function()
 end);
 
 Players.PlayerAdded:Connect(function(player: Player)
+  
+  player.Character = workspace.CousinRicky;
 
   local contestant = Contestant.new({
     player = player;
     inventory = {};
+    inventorySlots = 2;
+    model = player.Character;
   }, round);
 
+  contestant.InventoryChanged:Connect(function()
+  
+    ReplicatedStorage.Shared.Events.ContestantInventoryChanged:FireClient(player);
+
+  end);
+
   round:addContestant(contestant);
-  player.Character = workspace.CousinRicky;
 
   task.wait(2);
 
@@ -65,6 +81,28 @@ Players.PlayerAdded:Connect(function(player: Player)
   }, round));
 
 end);
+
+ReplicatedStorage.Shared.Functions.ActivateItem.OnServerInvoke = function(player, slot)
+
+  local contestant = round:findContestantFromPlayer(player);
+  if contestant then
+
+    local item = contestant.inventory[slot];
+    if item then
+
+      contestant:removeItemFromInventory(item);
+      
+      if contestant.model and contestant.model.PrimaryPart then
+        
+        item:drop(contestant.model.PrimaryPart.CFrame.Position, -contestant.model.PrimaryPart.CFrame.LookVector * 5);
+
+      end;
+
+    end;
+
+  end;
+
+end;
 
 round:setStatus("Ongoing");
 
