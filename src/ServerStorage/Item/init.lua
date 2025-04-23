@@ -112,12 +112,37 @@ function Item.new(properties: IItem.ItemConstructorProperties, round: IRound.IRo
 
   end;
 
+  local templatePart = properties.templatePart or script.Part;
+  local function updateImages(surfaceGUI: SurfaceGui?)
+
+    if not surfaceGUI then
+
+      error("SurfaceGUI required.");
+
+    end;
+
+    local itemImageLabel = surfaceGUI:FindFirstChild("ItemImageLabel");
+    if not itemImageLabel or not itemImageLabel:IsA("ImageLabel") then
+
+      error(`{surfaceGUI.Name} needs an "ItemImageLabel".`);
+
+    end;
+
+    itemImageLabel.Image = properties.image;
+    
+  end;
+  
+  local backGUI = templatePart:FindFirstChild("BackGUI");
+  local frontGUI = templatePart:FindFirstChild("FrontGUI");
+  updateImages(backGUI);
+  updateImages(frontGUI);
+
   local item: IItem.IItem = {
     name = properties.name;
     description = properties.description;
     image = properties.image;
     status = properties.status;
-    templatePart = properties.templatePart or script.Part;
+    templatePart = templatePart;
     setStatus = setStatus;
     drop = drop;
     StatusChanged = statusChangedEvent.Event;

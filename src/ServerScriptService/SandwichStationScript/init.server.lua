@@ -98,4 +98,10 @@ if round then
 
   print(`Initialized {#sandwichStations} sandwich stations.`);
 
+  while task.wait(1) do
+
+    print(round.contestants);
+
+  end;
+
 end;

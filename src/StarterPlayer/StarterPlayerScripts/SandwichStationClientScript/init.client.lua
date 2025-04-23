@@ -44,6 +44,7 @@ local function updatePrompts()
         proximityPrompt.ActionText = `Add {contestant.inventory[1].name}`;
         proximityPrompt.KeyboardKeyCode = Enum.KeyCode.E;
         proximityPrompt.Parent = proximityPromptsPart;
+        proximityPrompt.UIOffset = Vector2.new(0, 100);
         proximityPrompt.Triggered:Connect(function()
         
           proximityPrompt.Enabled = false;
@@ -60,6 +61,7 @@ local function updatePrompts()
         proximityPrompt.Name = "RightHandProximityPrompt";
         proximityPrompt.ActionText = `Add {contestant.inventory[2].name}`;
         proximityPrompt.KeyboardKeyCode = Enum.KeyCode.Q;
+        proximityPrompt.UIOffset = Vector2.new(0, -100);
         proximityPrompt.Parent = proximityPromptsPart;
         proximityPrompt.Triggered:Connect(function()
 

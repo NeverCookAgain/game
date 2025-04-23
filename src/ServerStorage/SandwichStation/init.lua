@@ -40,10 +40,10 @@ function SandwichStation.new(properties: ISandwichStation.SandwichStationPropert
 
     sandwichModel:SetAttribute("LatestIngredient", nil);
 
-    for _, item in self.sandwich do
+    for index, item in self.sandwich do
 
       local itemPart = item.templatePart:Clone();
-      itemPart.CFrame = self.model.PrimaryPart.CFrame;
+      itemPart.CFrame = CFrame.Angles(0, 0, math.rad(90)) + self.model.PrimaryPart.CFrame.Position + Vector3.new(0, (index - 1) * 0.1, 0);
       itemPart.Anchored = true;
       itemPart.Parent = self.model:FindFirstChild("Sandwich");
       sandwichModel:SetAttribute("LatestIngredient", item.name);
