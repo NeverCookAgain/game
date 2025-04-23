@@ -15,6 +15,7 @@ function Toaster.new(properties: IToaster.ToasterProperties, round: IRound.IRoun
   local smoke: Smoke? = nil;
   local fire: Fire? = nil;
   local proximityPrompt = script.ProximityPrompt:Clone();
+  local humSound: Sound? = nil;
 
   local function setItem(self: IToaster.IToaster, newItem: IItem.IItem?): ()
 
@@ -36,6 +37,13 @@ function Toaster.new(properties: IToaster.ToasterProperties, round: IRound.IRoun
 
       fire:Destroy();
       fire = nil;
+
+    end;
+
+    if humSound then
+
+      humSound:Destroy();
+      humSound = nil;
 
     end;
 
@@ -63,6 +71,16 @@ function Toaster.new(properties: IToaster.ToasterProperties, round: IRound.IRoun
     self.item = newItem;
 
     if self.item then
+
+      local newHumSound = Instance.new("Sound");
+      newHumSound.SoundId = `rbxassetid://4817657002`;
+      newHumSound.Parent = self.model.PrimaryPart;
+      newHumSound.Looped = true;
+      newHumSound.PlaybackRegionsEnabled = true;
+      newHumSound.LoopRegion = NumberRange.new(2, 3);
+      newHumSound.Volume = 0.4;
+      newHumSound:Play();
+      humSound = newHumSound;
 
       toastProcess = task.spawn(function()
       

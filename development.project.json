@@ -28,6 +28,9 @@
     "ServerScriptService": {
       "$path": "src/ServerScriptService"
     },
+    "StarterGui": {
+      "$path": "src/StarterGui"
+    },
     "ServerStorage": {
       "$path": "src/ServerStorage"
     },
