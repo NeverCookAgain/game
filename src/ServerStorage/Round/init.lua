@@ -2,11 +2,16 @@
 
 local ServerStorage = game:GetService("ServerStorage");
 
-local Round = {};
 local IRound = require(script.types);
 local IContestant = require(ServerStorage.Contestant.types);
 
 local sharedRound: IRound.IRound? = nil;
+local sharedRoundChangedBindableEvent: BindableEvent = Instance.new("BindableEvent");
+local sharedRoundChangedEvent: RBXScriptSignal<IRound.IRound?> = sharedRoundChangedBindableEvent.Event
+
+local Round = {
+  SharedRoundChanged = sharedRoundChangedEvent;
+};
 
 function Round.new(properties: IRound.RoundProperties): IRound.IRound
 
@@ -66,6 +71,7 @@ end;
 function Round.setSharedRound(round: IRound.IRound?): ()
 
   sharedRound = round;
+  sharedRoundChangedBindableEvent:Fire(round);
 
 end;
 

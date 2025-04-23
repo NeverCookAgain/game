@@ -23,9 +23,21 @@ function SandwichStation.new(properties: ISandwichStation.SandwichStationPropert
   local function popItem(self: ISandwichStation.ISandwichStation): IItem.IItem
 
     local item = self.sandwich[#self.sandwich];
+    if not item then
+
+      error(`Sandwich Station {self.model.Name} doesn't have an item to pop.`);
+
+    end;
+
     table.remove(self.sandwich, #self.sandwich);
 
     local primaryPart = self.model.PrimaryPart;
+    if not primaryPart then
+
+      error(`Sandwich Station {self.model.Name} must have a PrimaryPart to pop an item.`);
+
+    end;
+
     local force = primaryPart.CFrame:VectorToObjectSpace(primaryPart.Position - primaryPart.Position) * 1000;
     item:drop(primaryPart.CFrame.Position, force);
 

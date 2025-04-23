@@ -1,23 +1,95 @@
 --!strict
 
-for _, instance in workspace.SandwichStations:GetChildren() do
+local ReplicatedStorage = game:GetService("ReplicatedStorage");
+local ServerStorage = game:GetService("ServerStorage");
 
-  if instance:IsA("Model") then
+local SandwichStation = require(ServerStorage.SandwichStation);
+local Round = require(ServerStorage.Round);
 
-    for _, child in instance:FindFirstChild("ProximityPrompts"):GetChildren() do
+local sandwichStations = {};
 
-      if child:IsA("ProximityPrompt") then
+local round = Round.getFromSharedRound() or Round.SharedRoundChanged:Wait();
 
-        child.Triggered:Connect(function(activatingPlayer: Player)
-        
-          print(activatingPlayer);
+if round then
 
-        end);
+  for _, instance in workspace.SandwichStations:GetChildren() do
+
+    if instance:IsA("Model") then
+
+      local sandwichStation = SandwichStation.new({
+        model = instance;
+        sandwich = {};
+      }, round);
+
+      local activateSandwichStationRemoteFunction = Instance.new("RemoteFunction");
+      activateSandwichStationRemoteFunction.Name = `ActivateSandwichStation_{instance.Name}`;
+      activateSandwichStationRemoteFunction.OnServerInvoke = function(player: Player, action: unknown)
+
+        if typeof(action) ~= "string" or (action ~= "PushLeft" and action ~= "PushRight" and action ~= "Pop" and action ~= "Complete") then
+
+          error(`Action name must be a "PushLeft", "PushRight", "Pop", or "Complete".`);
+
+        end;
+
+        local contestant = round:findContestantFromPlayer(player);
+        if contestant then
+
+          if action:find("Push") then
+
+            local item = (
+              if action == "PushLeft" then contestant.inventory[1] 
+              elseif action == "PushRight" then contestant.inventory[2]
+              else nil
+            );
+
+            if item then
+
+              contestant:removeItemFromInventory(item);
+              sandwichStation:pushItem(item);
+
+            end;
+
+          elseif action == "Pop" then
+
+            -- Remove the top-most ingredient from the sandwich.
+            local item = sandwichStation.sandwich[#sandwichStation];
+            if item then
+
+              sandwichStation:popItem();
+
+            end;
+          
+          elseif action == "Complete" then
+
+            -- TODO: Get the sandwich and add it to the player's inventory.
+
+          end;
+
+        end;
 
       end;
+
+      activateSandwichStationRemoteFunction.Parent = ReplicatedStorage.Shared.Functions.DynamicFunctions;
+
+      table.insert(sandwichStations, sandwichStation);
+
+      local function checkStatus()
+
+        if round.status == "Ended" then
+
+          -- TODO: Break down sandwich station.
+
+        end;
+
+      end;
+
+      round.RoundChanged:Connect(checkStatus);
+      checkStatus();
 
     end;
 
   end;
+
+  print(`Initialized {#sandwichStations} sandwich stations.`);
 
 end;

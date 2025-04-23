@@ -35,6 +35,8 @@ local function updatePrompts()
 
       end;
 
+      local activateSandwichStationBindableFunction = ReplicatedStorage.Shared.Functions.DynamicFunctions:FindFirstChild(`ActivateSandwichStation_{stationModel.Name}`);
+
       if contestant.inventory[1] then
 
         local proximityPrompt = script.ProximityPrompt:Clone();
@@ -44,6 +46,10 @@ local function updatePrompts()
         proximityPrompt.Parent = proximityPromptsPart;
         proximityPrompt.Triggered:Connect(function()
         
+          proximityPrompt.Enabled = false;
+          activateSandwichStationBindableFunction:InvokeServer("PushLeft");
+          proximityPrompt.Enabled = true;
+
         end);
 
       end;
@@ -56,6 +62,10 @@ local function updatePrompts()
         proximityPrompt.KeyboardKeyCode = Enum.KeyCode.Q;
         proximityPrompt.Parent = proximityPromptsPart;
         proximityPrompt.Triggered:Connect(function()
+
+          proximityPrompt.Enabled = false;
+          activateSandwichStationBindableFunction:InvokeServer("PushRight");
+          proximityPrompt.Enabled = true;
         
         end);
 
@@ -70,17 +80,14 @@ local function updatePrompts()
         proximityPrompt.ActionText = "Remove top item";
         proximityPrompt.UIOffset = Vector2.new(if stationModel.Name:find("Left") then -100 else 100, 0);
         proximityPrompt.Triggered:Connect(function()
-        
+          
+          proximityPrompt.Enabled = false;
+          activateSandwichStationBindableFunction:InvokeServer("Pop");
+          proximityPrompt.Enabled = true;
+
         end);
 
       end;
-
-    end;
-
-    local sandwichModel = stationModel:FindFirstChild("Sandwich");
-    if #sandwichModel:GetChildren() > 1 then
-
-      
 
     end;
   
@@ -89,5 +96,4 @@ local function updatePrompts()
 end;
 
 ReplicatedStorage.Shared.Events.ContestantInventoryChanged.OnClientEvent:Connect(updatePrompts);
-
 updatePrompts();
