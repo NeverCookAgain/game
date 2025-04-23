@@ -41,7 +41,7 @@ local function updatePrompts()
 
         local proximityPrompt = script.ProximityPrompt:Clone();
         proximityPrompt.Name = "LeftHandProximityPrompt";
-        proximityPrompt.ActionText = "Add left hand item";
+        proximityPrompt.ActionText = `Add {contestant.inventory[1].name}`;
         proximityPrompt.KeyboardKeyCode = Enum.KeyCode.E;
         proximityPrompt.Parent = proximityPromptsPart;
         proximityPrompt.Triggered:Connect(function()
@@ -58,7 +58,7 @@ local function updatePrompts()
 
         local proximityPrompt = script.ProximityPrompt:Clone();
         proximityPrompt.Name = "RightHandProximityPrompt";
-        proximityPrompt.ActionText = "Add right hand item";
+        proximityPrompt.ActionText = `Add {contestant.inventory[2].name}`;
         proximityPrompt.KeyboardKeyCode = Enum.KeyCode.Q;
         proximityPrompt.Parent = proximityPromptsPart;
         proximityPrompt.Triggered:Connect(function()
@@ -77,7 +77,7 @@ local function updatePrompts()
         proximityPrompt.Name = "RemoveTopItemProximityPrompt";
         proximityPrompt.Parent = proximityPromptsPart;
         proximityPrompt.KeyboardKeyCode = Enum.KeyCode.C;
-        proximityPrompt.ActionText = "Remove top item";
+        proximityPrompt.ActionText = `Remove {stationModel:FindFirstChild("Sandwich"):GetAttribute("LatestIngredient") or "unknown ingredient"}`;
         proximityPrompt.UIOffset = Vector2.new(if stationModel.Name:find("Left") then -100 else 100, 0);
         proximityPrompt.Triggered:Connect(function()
           

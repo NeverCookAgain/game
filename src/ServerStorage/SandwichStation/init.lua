@@ -31,12 +31,22 @@ function SandwichStation.new(properties: ISandwichStation.SandwichStationPropert
 
     end;
 
+    local sandwichModel = self.model:FindFirstChild("Sandwich");
+    if not sandwichModel then
+
+      error(`Sandwich Station {self.model.Name} must have a "Sandwich" model.`)
+
+    end;
+
+    sandwichModel:SetAttribute("LatestIngredient", nil);
+
     for _, item in self.sandwich do
 
       local itemPart = item.templatePart:Clone();
       itemPart.CFrame = self.model.PrimaryPart.CFrame;
       itemPart.Anchored = true;
       itemPart.Parent = self.model:FindFirstChild("Sandwich");
+      sandwichModel:SetAttribute("LatestIngredient", item.name);
       table.insert(sandwichParts, itemPart);
 
     end;
