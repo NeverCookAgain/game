@@ -8,8 +8,9 @@ export type RoundStatus = "Preparing" | "Ongoing" | "Ended";
 
 export type RoundProperties = {
   status: RoundStatus;
-  durationSeconds: number;
   contestants: {IContestant.IContestant};
+  startTimeMilliseconds: number?;
+  completionTimeMilliseconds: number?;
 };
 
 export type RoundMethods = {

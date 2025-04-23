@@ -21,11 +21,7 @@ local function InventoryContainer()
 
     local contestantInventoryChanged = ReplicatedStorage.Shared.Events.ContestantInventoryChanged.OnClientEvent:Connect(refreshInventory);
 
-    task.spawn(function()
-    
-      refreshInventory();
-
-    end);
+    task.spawn(refreshInventory);
 
     return function()
 

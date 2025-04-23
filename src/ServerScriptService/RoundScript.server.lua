@@ -12,7 +12,6 @@ local Round = require(ServerStorage.Round);
 local round = Round.new({
   status = "Preparing";
   contestants = {};
-  durationSeconds = 2;
 });
 
 Round.setSharedRound(round);
@@ -51,6 +50,8 @@ round.RoundChanged:Connect(function()
 
   end;
 
+  ReplicatedStorage.Shared.Events.RoundChanged:FireAllClients(round);
+
 end);
 
 Players.PlayerAdded:Connect(function(player: Player)
@@ -71,8 +72,6 @@ Players.PlayerAdded:Connect(function(player: Player)
   end);
 
   round:addContestant(contestant);
-
-  task.wait(2);
 
   contestant:addItemToInventory(Item.new({
     name = "Avocado",
@@ -104,9 +103,13 @@ ReplicatedStorage.Shared.Functions.ActivateItem.OnServerInvoke = function(player
 
 end;
 
+local startTimeMilliseconds = DateTime.now().UnixTimestampMillis;
+local completionTimeMilliseconds = startTimeMilliseconds + (90 * 1000);
+round.startTimeMilliseconds = startTimeMilliseconds;
+round.completionTimeMilliseconds = completionTimeMilliseconds;
 round:setStatus("Ongoing");
 
-task.delay(round.durationSeconds, function()
+task.delay((completionTimeMilliseconds - startTimeMilliseconds) / 1000, function()
 
   round:setStatus("Ended");
 

@@ -1,6 +1,5 @@
 --!strict
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage");
 local ServerStorage = game:GetService("ServerStorage");
 
 local Round = {};
@@ -17,7 +16,6 @@ function Round.new(properties: IRound.RoundProperties): IRound.IRound
   local function setStatus(self: IRound.IRound, newStatus: IRound.RoundStatus): ()
 
     self.status = newStatus;
-    ReplicatedStorage.Shared.Events.RoundChanged:FireAllClients(self);
     roundChangedEvent:Fire();
 
   end;
@@ -47,7 +45,6 @@ function Round.new(properties: IRound.RoundProperties): IRound.IRound
 
   local round: IRound.IRound = {
     status = properties.status;
-    durationSeconds = properties.durationSeconds;
     contestants = {};
     addContestant = addContestant;
     setStatus = setStatus;
