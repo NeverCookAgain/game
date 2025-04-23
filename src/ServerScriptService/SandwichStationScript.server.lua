@@ -21,6 +21,12 @@ if round then
         sandwich = {};
       }, round);
 
+      sandwichStation.SandwichChanged:Connect(function()
+      
+        ReplicatedStorage.Shared.Events.SandwichStationChanged:FireAllClients(sandwichStation);
+
+      end);
+
       local activateSandwichStationRemoteFunction = Instance.new("RemoteFunction");
       activateSandwichStationRemoteFunction.Name = `ActivateSandwichStation_{instance.Name}`;
       activateSandwichStationRemoteFunction.OnServerInvoke = function(player: Player, action: unknown)
@@ -52,7 +58,7 @@ if round then
           elseif action == "Pop" then
 
             -- Remove the top-most ingredient from the sandwich.
-            local item = sandwichStation.sandwich[#sandwichStation];
+            local item = sandwichStation.sandwich[#sandwichStation.sandwich];
             if item then
 
               sandwichStation:popItem();

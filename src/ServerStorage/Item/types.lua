@@ -1,10 +1,19 @@
 export type Status = "Raw" | "Cooked" | "Burnt";
 
-export type ItemProperties = {
+export type ItemBaseProperties = {
   name: string;
   description: string;
+  image: string;
   status: Status;
   part: BasePart?;
+}
+
+export type ItemConstructorProperties = ItemBaseProperties & {
+  templatePart: BasePart?;
+}
+
+export type ItemProperties = ItemBaseProperties & {
+  templatePart: BasePart;
 };
 
 export type ItemMethods = {

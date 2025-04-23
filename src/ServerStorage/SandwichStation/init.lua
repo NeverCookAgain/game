@@ -12,16 +12,48 @@ function SandwichStation.new(properties: ISandwichStation.SandwichStationPropert
 
   local sandwichChangedEvent = Instance.new("BindableEvent");
   local sandwichCompletedEvent = Instance.new("BindableEvent");
+  
+  local sandwichParts: {BasePart} = {};
+
+  local function updateSandwichModel(self: ISandwichStation.ISandwichStation)
+
+    for _, sandwichPart in sandwichParts do
+
+      sandwichPart:Destroy();
+
+    end;
+
+    sandwichParts = {};
+
+    if not self.model.PrimaryPart then
+
+      error(`Sandwich Station {self.model.Name} must have a PrimaryPart.`);
+
+    end;
+
+    for _, item in self.sandwich do
+
+      local itemPart = item.templatePart:Clone();
+      itemPart.CFrame = self.model.PrimaryPart.CFrame;
+      itemPart.Anchored = true;
+      itemPart.Parent = self.model:FindFirstChild("Sandwich");
+      table.insert(sandwichParts, itemPart);
+
+    end;
+    
+  end;
 
   local function pushItem(self: ISandwichStation.ISandwichStation, item: IItem.IItem): ()
 
     table.insert(self.sandwich, item);
+    self:updateSandwichModel();
     sandwichChangedEvent:Fire();
 
   end;
 
   local function popItem(self: ISandwichStation.ISandwichStation): IItem.IItem
 
+    -- Remove the item from the sandwich array.
     local item = self.sandwich[#self.sandwich];
     if not item then
 
@@ -30,18 +62,19 @@ function SandwichStation.new(properties: ISandwichStation.SandwichStationPropert
     end;
 
     table.remove(self.sandwich, #self.sandwich);
+    self:updateSandwichModel();
+    sandwichChangedEvent:Fire();
 
+    -- Allow any player to get the item.
     local primaryPart = self.model.PrimaryPart;
     if not primaryPart then
 
-      error(`Sandwich Station {self.model.Name} must have a PrimaryPart to pop an item.`);
+      error(`Sandwich Station {self.model.Name} must have a PrimaryPart.`);
 
     end;
 
     local force = primaryPart.CFrame:VectorToObjectSpace(primaryPart.Position - primaryPart.Position) * 1000;
     item:drop(primaryPart.CFrame.Position, force);
-
-    sandwichChangedEvent:Fire();
 
     return item;
 
@@ -51,6 +84,7 @@ function SandwichStation.new(properties: ISandwichStation.SandwichStationPropert
 
     local sandwich = self.sandwich;
     self.sandwich = {};
+    self:updateSandwichModel();
 
     sandwichCompletedEvent:Fire();
 
@@ -61,9 +95,10 @@ function SandwichStation.new(properties: ISandwichStation.SandwichStationPropert
   local toaster: ISandwichStation.ISandwichStation = {
     model = properties.model;
     sandwich = {};
+    completeSandwich = completeSandwich;
     pushItem = pushItem;
     popItem = popItem;
-    completeSandwich = completeSandwich;
+    updateSandwichModel = updateSandwichModel;
     SandwichChanged = sandwichChangedEvent.Event;
     SandwichCompleted = sandwichCompletedEvent.Event;
   };

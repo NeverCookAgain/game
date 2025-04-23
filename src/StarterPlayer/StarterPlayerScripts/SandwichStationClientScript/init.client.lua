@@ -95,5 +95,6 @@ local function updatePrompts()
 
 end;
 
+ReplicatedStorage.Shared.Events.SandwichStationChanged.OnClientEvent:Connect(updatePrompts);
 ReplicatedStorage.Shared.Events.ContestantInventoryChanged.OnClientEvent:Connect(updatePrompts);
 updatePrompts();
