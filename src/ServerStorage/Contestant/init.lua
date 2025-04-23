@@ -1,21 +1,36 @@
 --!strict
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage");
 local ServerStorage = game:GetService("ServerStorage");
 
 local Contestant = {};
+local IRound = require(ServerStorage.Round.types);
 local IItem = require(ServerStorage.Item.types);
 local IContestant = require(script.types);
 
-function Contestant.new(properties: IContestant.ContestantProperties): IContestant.IContestant
+function Contestant.new(properties: IContestant.ContestantProperties, round: IRound.IRound): IContestant.IContestant
 
   local inventoryChangedEvent = Instance.new("BindableEvent");
 
   local function addItemToInventory(self: IContestant.IContestant, item: IItem.IItem): ()
 
     table.insert(self.inventory, item);
-    ReplicatedStorage.Shared.Events.RoundChanged:FireAllClients(self);
     inventoryChangedEvent:Fire();
+
+  end;
+
+  local function removeItemFromInventory(self: IContestant.IContestant, item: IItem.IItem): ()
+
+    for index = #self.inventory, 1, -1 do
+
+      if self.inventory[index] == item then
+
+        table.remove(self.inventory, index);
+        inventoryChangedEvent:Fire();
+        break;
+
+      end;
+
+    end;
 
   end;
 
@@ -24,6 +39,7 @@ function Contestant.new(properties: IContestant.ContestantProperties): IContesta
     model = properties.model;
     inventory = {};
     addItemToInventory = addItemToInventory;
+    removeItemFromInventory = removeItemFromInventory;
     InventoryChanged = inventoryChangedEvent.Event;
   };
 

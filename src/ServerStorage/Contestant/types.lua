@@ -12,6 +12,7 @@ export type ContestantProperties = {
 
 export type ContestantMethods = {
   addItemToInventory: (self: IContestant, item: IItem.IItem) -> ();
+  removeItemFromInventory: (self: IContestant, item: IItem.IItem) -> ();
 };
 
 export type ContestantEvents = {
