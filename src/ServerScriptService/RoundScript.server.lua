@@ -46,9 +46,7 @@ round.RoundChanged:Connect(function()
 
 end);
 
-Players.PlayerAdded:Connect(function(player)
-
-  print("add " .. player.Name)
+Players.PlayerAdded:Connect(function(player: Player)
 
   local contestant = Contestant.new({
     player = player;
@@ -56,6 +54,7 @@ Players.PlayerAdded:Connect(function(player)
   }, round);
 
   round:addContestant(contestant);
+  player.Character = workspace.CousinRicky;
 
   task.wait(2);
 

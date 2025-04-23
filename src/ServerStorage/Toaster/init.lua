@@ -4,19 +4,38 @@ local ServerStorage = game:GetService("ServerStorage");
 
 local IItem = require(ServerStorage.Item.types);
 local IToaster = require(script.types);
+local IRound = require(ServerStorage.Round.types);
 
 local Toaster = {};
 
-function Toaster.new(properties: IToaster.ToasterProperties): IToaster.IToaster
+function Toaster.new(properties: IToaster.ToasterProperties, round: IRound.IRound): IToaster.IToaster
 
   local itemChangedEvent = Instance.new("BindableEvent");
   local toastProcess: thread? = nil;
+  local smoke: Smoke? = nil;
+  local fire: Fire? = nil;
+  local proximityPrompt = script.ProximityPrompt:Clone();
 
   local function setItem(self: IToaster.IToaster, newItem: IItem.IItem?): ()
 
     if toastProcess then
 
       task.cancel(toastProcess);
+      toastProcess = nil;
+
+    end;
+
+    if smoke then
+
+      smoke:Destroy();
+      smoke = nil
+
+    end;
+
+    if fire then
+
+      fire:Destroy();
+      fire = nil;
 
     end;
 
@@ -49,12 +68,46 @@ function Toaster.new(properties: IToaster.ToasterProperties): IToaster.IToaster
       
         while self.item.status ~= "Burnt" do
 
-          task.wait(3);
+          task.wait(1);
           self.item:setStatus(if self.item.status == "Cooked" then "Burnt" else "Cooked");
+          if self.item.status == "Cooked" then
+
+            proximityPrompt.ActionText = "Cooked to perfection"
+
+          end;
 
         end;
 
+        proximityPrompt.ActionText = "it's over"
+
+        local newSmoke = Instance.new("Smoke");
+        newSmoke.Color = Color3.new(0, 0, 0);
+        newSmoke.Parent = self.model.PrimaryPart;
+        smoke = newSmoke;
+
+        task.wait(6);
+        
+        proximityPrompt.ActionText = "bro IT'S DONE"
+
+        local newFire = Instance.new("Fire");
+        newFire.Heat = 25;
+        newFire.Parent = self.model.PrimaryPart;
+        fire = newFire;
+
       end);
+
+      proximityPrompt.ActionText = "raw"
+
+    else
+
+      local sound = Instance.new("Sound");
+      sound.SoundId = `rbxassetid://317553816`;
+      sound.Parent = self.model;
+      sound.PlaybackSpeed = 0.96;
+      sound.Volume = 0.4;
+      sound:Play();
+      
+      proximityPrompt.ActionText = "Put 'er in"
 
     end;
 
@@ -68,6 +121,29 @@ function Toaster.new(properties: IToaster.ToasterProperties): IToaster.IToaster
     setItem = setItem;
     ItemChanged = itemChangedEvent.Event;
   };
+  
+  proximityPrompt.ActionText = "Put 'er in"
+  proximityPrompt.Parent = toaster.model;
+  proximityPrompt.Triggered:Connect(function(activatingPlayer: Player)
+  
+    local contestant = round:findContestantFromPlayer(activatingPlayer);
+    if contestant then
+
+      if toaster.item then
+
+        toaster:setItem();
+
+      elseif #contestant.inventory > 0 then
+
+        local item = contestant.inventory[#contestant.inventory];
+        contestant:removeItemFromInventory(item);
+        toaster:setItem(item);
+
+      end;
+
+    end;
+
+  end);
 
   return toaster;
 
