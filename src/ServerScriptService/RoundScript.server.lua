@@ -119,6 +119,24 @@ for _, customerModel in customerModels do
 
 end;
 
+ReplicatedStorage.Shared.Functions.GetCustomer.OnServerInvoke = function(player, customerName: unknown)
+
+  assert(typeof(customerName) == "string", "Customer name must be a string.");
+
+  for _, customer in customers do
+
+    if customer.model.Name == customerName then
+
+      return customer;
+
+    end;
+
+  end;
+
+  error("Customer not found.");
+
+end;
+
 ReplicatedStorage.Shared.Functions.ActivateItem.OnServerInvoke = function(player, slot)
 
   local contestant = round:findContestantFromPlayer(player);

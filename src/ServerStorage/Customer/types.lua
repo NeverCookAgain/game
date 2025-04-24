@@ -6,6 +6,7 @@ local IOrder = require(ServerStorage.Order.types);
 
 export type CustomerBaseProperties = {
   order: IOrder.IOrder?;
+  image: string;
   model: Model;
 }
 

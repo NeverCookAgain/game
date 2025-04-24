@@ -13,6 +13,7 @@ function Order.new(properties: IOrder.OrderConstructorProperties): IOrder.IOrder
 
   local order: IOrder.IOrder = {
     type = "Order" :: "Order";
+    difficulty = properties.difficulty;
     sandwich = properties.sandwich;
   };
 
@@ -20,14 +21,14 @@ function Order.new(properties: IOrder.OrderConstructorProperties): IOrder.IOrder
 
 end;
 
-function Order.generate(type: "Easy" | "Medium" | "Difficult", round: IRound.IRound): IOrder.IOrder
+function Order.generate(difficulty: IOrder.Difficulty, round: IRound.IRound): IOrder.IOrder
 
   local sandwich = Sandwich.new({
-    name = `{type} Sandwich`;
+    name = `{difficulty} Sandwich`;
     description = (
-      if type == "Easy" then "..." -- TODO: Replace with lore.
-      elseif type == "Medium" then "..."
-      elseif type == "Difficult" then "..."
+      if difficulty == "Easy" then "..." -- TODO: Replace with lore.
+      elseif difficulty == "Medium" then "..."
+      elseif difficulty == "Hard" then "..."
       else "Unknown." 
     )
   }, round);
@@ -38,10 +39,11 @@ function Order.generate(type: "Easy" | "Medium" | "Difficult", round: IRound.IRo
     item.status = "Cooked";
     table.insert(sandwich.items, item);
 
-  until (type == "Easy" and #sandwich.items == 3) or (type == "Medium" and #sandwich.items == 4) or (type == "Difficult" and #sandwich.items == 5)
+  until (difficulty == "Easy" and #sandwich.items == 3) or (difficulty == "Medium" and #sandwich.items == 4) or (difficulty == "Hard" and #sandwich.items == 5)
 
   return Order.new({
     sandwich = sandwich;
+    difficulty = difficulty
   });
 
 end;
