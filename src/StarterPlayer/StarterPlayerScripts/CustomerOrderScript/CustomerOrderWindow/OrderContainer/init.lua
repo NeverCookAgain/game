@@ -8,6 +8,7 @@ local OrderSection = require(script.OrderSection);
 export type OrderContainerProperties = {
   order: any;
   onClose: () -> ();
+  onAccept: () -> ();
 }
 
 local function OrderContainer(properties: OrderContainerProperties)
@@ -74,13 +75,18 @@ local function OrderContainer(properties: OrderContainerProperties)
         -- });
       });
     });
-    ConfirmButton = React.createElement("ImageButton", {
+    AcceptButton = React.createElement("ImageButton", {
       AnchorPoint = Vector2.new(1, 1);
       BackgroundTransparency = 1;
       Image = "rbxassetid://119649376156285";
       Position = UDim2.new(1, 20, 1, 25);
       Size = UDim2.new(0, 100, 0, 100);
       ZIndex = 2;
+      [React.Event.Activated] = function()
+
+        properties.onAccept();
+
+      end;
     }, {
       UIAspectRatioConstraint = React.createElement("UIAspectRatioConstraint", {
         AspectRatio = 2.28;

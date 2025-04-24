@@ -140,6 +140,41 @@ ReplicatedStorage.Shared.Functions.GetCustomer.OnServerInvoke = function(player,
 
 end;
 
+ReplicatedStorage.Shared.Functions.AcceptCustomer.OnServerInvoke = function(player, customerName: unknown)
+
+  local contestant = round:findContestantFromPlayer(player);
+  assert(contestant, "You aren't a contestant of this round.");
+  assert(typeof(customerName) == "string", "Customer name must be a string.");
+
+  local customer;
+  for _, possibleCustomer in customers do
+
+    if possibleCustomer.model.Name == customerName then
+
+      customer = possibleCustomer;
+      break;
+
+    end;
+
+  end;
+
+  assert(customer, "Customer not found.");
+
+  contestant:setAssignedCustomer(customer);
+
+  if customer.model.PrimaryPart then
+    
+    local proximityPrompt = customer.model.PrimaryPart:FindFirstChild("TakeOrderProximityPrompt");
+    if proximityPrompt then
+
+      proximityPrompt:Destroy();
+
+    end;
+
+  end;
+
+end;
+
 ReplicatedStorage.Shared.Functions.ActivateItem.OnServerInvoke = function(player, slot)
 
   local contestant = round:findContestantFromPlayer(player);

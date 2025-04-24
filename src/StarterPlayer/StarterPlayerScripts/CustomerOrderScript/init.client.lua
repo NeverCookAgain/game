@@ -30,16 +30,25 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt)
       newScreenGUI.Parent = Players.LocalPlayer.PlayerGui;
 
       local customerOrderRoot = ReactRoblox.createRoot(newScreenGUI);
+
+      local function closeGUI()
+
+        ProximityPromptService.Enabled = true;
+        newScreenGUI:Destroy();
+        customerOrderRoot:unmount();
+        screenGUI = nil;
+
+      end;
+
       customerOrderRoot:render(React.createElement(CustomerOrderWindow, {
         customer = customer;
-        onClose = function()
+        onAccept = function()
 
-          ProximityPromptService.Enabled = true;
-          newScreenGUI:Destroy();
-          customerOrderRoot:unmount();
-          screenGUI = nil;
+          ReplicatedStorage.Shared.Functions.AcceptCustomer:InvokeServer(possibleCustomerModel.Name);
+          closeGUI();
 
         end;
+        onClose = closeGUI;
       }));
 
     end;

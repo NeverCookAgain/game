@@ -38,6 +38,7 @@ local function CustomerOrderWindow(properties: CustomerOrderWindowProperties)
     OrderContainer = React.createElement(OrderContainer, {
       order = properties.customer.order;
       onClose = properties.onClose;
+      onAccept = properties.onAccept;
     });
     Blur = ReactRoblox.createPortal(React.createElement("BlurEffect", {
       Size = 12;
