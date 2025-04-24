@@ -6,9 +6,10 @@ local ServerScriptService = game:GetService("ServerScriptService");
 local ServerStorage = game:GetService("ServerStorage");
 
 local Contestant = require(ServerStorage.Contestant);
-local Item = require(ServerStorage.Item);
-local IItem = require(ServerStorage.Item.types);
+local Customer = require(ServerStorage.Customer);
+local Avocado = require(ServerStorage.Items.Avocado);
 local Round = require(ServerStorage.Round);
+local Order = require(ServerStorage.Order);
 
 local round = Round.new({
   status = "Preparing";
@@ -67,6 +68,12 @@ local function addPlayerAsContestant(player: Player)
     model = player.Character;
   }, round);
 
+  contestant.CustomerAssignmentChanged:Connect(function()
+  
+    
+
+  end);
+
   contestant.InventoryChanged:Connect(function()
   
     ReplicatedStorage.Shared.Events.ContestantInventoryChanged:FireClient(player);
@@ -77,19 +84,8 @@ local function addPlayerAsContestant(player: Player)
 
   if #contestant.inventory < 2 then
 
-    contestant:addToInventory(Item.new({
-      name = "Avocado",
-      description = "Test",
-      image = "rbxassetid://72701864119182",
-      status = "Raw" :: IItem.Status
-    }, round));
-
-    contestant:addToInventory(Item.new({
-      name = "Avocado",
-      description = "Test",
-      image = "rbxassetid://72701864119182",
-      status = "Raw" :: IItem.Status
-    }, round));
+    contestant:addToInventory(Avocado.new(round));
+    contestant:addToInventory(Avocado.new(round));
 
   end;
   
@@ -105,6 +101,77 @@ end);
 for _, player in Players:GetPlayers() do
 
   coroutine.wrap(addPlayerAsContestant)(player);
+
+end;
+
+local customers = {};
+local customerModels = {workspace.CustomerA, workspace.CustomerB, workspace.CustomerC, workspace.CustomerD};
+for _, customerModel in customerModels do
+
+  local customerImages = {"rbxassetid://136955129612174", "rbxassetid://121007848481264", "rbxassetid://85190412089778", "rbxassetid://72181972813178"};
+
+  local customer = Customer.new({
+    model = customerModel;
+    image = customerImages[Random.new():NextInteger(1, #customerImages)]
+  }, round);
+
+  local order = Order.generate("Easy", round);
+  customer:setOrder(order);
+
+  table.insert(customers, customer);
+
+end;
+
+ReplicatedStorage.Shared.Functions.GetCustomer.OnServerInvoke = function(player, customerName: unknown)
+
+  assert(typeof(customerName) == "string", "Customer name must be a string.");
+
+  for _, customer in customers do
+
+    if customer.model.Name == customerName then
+
+      return customer;
+
+    end;
+
+  end;
+
+  error("Customer not found.");
+
+end;
+
+ReplicatedStorage.Shared.Functions.AcceptCustomer.OnServerInvoke = function(player, customerName: unknown)
+
+  local contestant = round:findContestantFromPlayer(player);
+  assert(contestant, "You aren't a contestant of this round.");
+  assert(typeof(customerName) == "string", "Customer name must be a string.");
+
+  local customer;
+  for _, possibleCustomer in customers do
+
+    if possibleCustomer.model.Name == customerName then
+
+      customer = possibleCustomer;
+      break;
+
+    end;
+
+  end;
+
+  assert(customer, "Customer not found.");
+
+  contestant:setAssignedCustomer(customer);
+
+  if customer.model.PrimaryPart then
+    
+    local proximityPrompt = customer.model.PrimaryPart:FindFirstChild("TakeOrderProximityPrompt");
+    if proximityPrompt then
+
+      proximityPrompt:Destroy();
+
+    end;
+
+  end;
 
 end;
 

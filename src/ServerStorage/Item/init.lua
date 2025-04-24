@@ -139,7 +139,7 @@ function Item.new(properties: IItem.ItemConstructorProperties, round: IRound.IRo
     name = properties.name;
     description = properties.description;
     image = properties.image;
-    status = properties.status;
+    status = properties.status or ("Raw" :: "Raw");
     templatePart = properties.templatePart or script.Part;
     createPart = createPart;
     setStatus = setStatus;
@@ -148,6 +148,57 @@ function Item.new(properties: IItem.ItemConstructorProperties, round: IRound.IRo
   };
 
   return item;
+
+end;
+
+export type ItemClass = {
+  name: string;
+  description: string;
+  new: (round: IRound.IRound) -> IItem.IItem;
+};
+
+function Item.listClasses(): {[string]: ItemClass}
+
+  return {
+    Avocado = require(ServerStorage.Items.Avocado) :: ItemClass;
+    Bacon = require(ServerStorage.Items.Bacon) :: ItemClass;
+    Bagel = require(ServerStorage.Items.Bagel) :: ItemClass;
+    Beef = require(ServerStorage.Items.Beef) :: ItemClass;
+    Chicken = require(ServerStorage.Items.Chicken) :: ItemClass;
+    Egg = require(ServerStorage.Items.Egg) :: ItemClass;
+    Lettuce = require(ServerStorage.Items.Lettuce) :: ItemClass;
+    Mozzarella = require(ServerStorage.Items.Mozzarella) :: ItemClass;
+    Olives = require(ServerStorage.Items.Olives) :: ItemClass;
+    Onions = require(ServerStorage.Items.Onions) :: ItemClass;
+    Pepperoni = require(ServerStorage.Items.Pepperoni) :: ItemClass;
+    Peppers = require(ServerStorage.Items.Peppers) :: ItemClass;
+    Pickles = require(ServerStorage.Items.Pickles) :: ItemClass;
+    Pork = require(ServerStorage.Items.Pork) :: ItemClass;
+    Spinach = require(ServerStorage.Items.Spinach) :: ItemClass;
+    SwissCheese = require(ServerStorage.Items.SwissCheese) :: ItemClass;
+    Tomatoes = require(ServerStorage.Items.Tomatoes) :: ItemClass;
+    Turkey = require(ServerStorage.Items.Turkey) :: ItemClass;
+    WhiteBread = require(ServerStorage.Items.WhiteBread) :: ItemClass;
+  };
+
+end;
+
+function Item.random(round: IRound.IRound): IItem.IItem
+
+  local itemNames = {};
+  local items = Item.listClasses();
+
+  for itemName in items do
+
+    table.insert(itemNames, itemName);
+
+  end;
+
+  local randomIndex = Random.new():NextInteger(1, #itemNames);
+  local itemName = itemNames[randomIndex];
+  local item = items[itemName];
+
+  return item.new(round);
 
 end;
 

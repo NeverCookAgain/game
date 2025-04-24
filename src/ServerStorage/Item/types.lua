@@ -4,16 +4,17 @@ export type ItemBaseProperties = {
   name: string;
   description: string;
   image: string;
-  status: Status;
 }
 
 export type ItemConstructorProperties = ItemBaseProperties & {
   templatePart: BasePart?;
+  status: Status?;
 }
 
 export type ItemProperties = ItemBaseProperties & {
   type: "Item";
   templatePart: BasePart;
+  status: Status;
 };
 
 export type ItemMethods = {
