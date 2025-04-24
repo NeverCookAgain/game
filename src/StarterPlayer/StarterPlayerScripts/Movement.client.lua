@@ -1,6 +1,7 @@
 --!strict
 local UserInputService = game:GetService("UserInputService");
 local ContextActionService = game:GetService("ContextActionService");
+local TweenService = game:GetService("TweenService");
 
 local animationTask: thread?;
 
@@ -34,16 +35,12 @@ local function moveCharacter(actionName, inputState)
 
 			sprite.Image = `rbxassetid://{walkCycleLeftIDs[frameNumber]}`;
 
-			if shouldMoveLeft then
+			if shouldMoveLeft or shouldMoveRight then
 
-				sprite.ImageRectSize = Vector2.new(512, 512);
-				sprite.ImageRectOffset = Vector2.zero;
+				TweenService:Create(workspace.CousinRicky.SpritePart.Attachment, TweenInfo.new(0.1), {
+					CFrame = CFrame.new(workspace.CousinRicky.SpritePart.Attachment.CFrame.Position) * CFrame.Angles(0, if shouldMoveLeft then 0 else math.rad(180), 0);
+				}):Play()
 
-			elseif shouldMoveRight then
-
-				sprite.ImageRectSize = Vector2.new(-512, 512);
-				sprite.ImageRectOffset = Vector2.new(512, 0);
-	
 			end;
 
 		end;
