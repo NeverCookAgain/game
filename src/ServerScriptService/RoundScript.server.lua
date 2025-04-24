@@ -144,6 +144,7 @@ ReplicatedStorage.Shared.Functions.AcceptCustomer.OnServerInvoke = function(play
 
   local contestant = round:findContestantFromPlayer(player);
   assert(contestant, "You aren't a contestant of this round.");
+  assert(not contestant.assignedCustomer, "You are already assigned to a customer.");
   assert(typeof(customerName) == "string", "Customer name must be a string.");
 
   local customer;
