@@ -75,19 +75,21 @@ local function addPlayerAsContestant(player: Player)
 
   round:addContestant(contestant);
 
-  contestant:addToInventory(Item.new({
-    name = "Avocado",
-    description = "Test",
-    image = "rbxassetid://72701864119182",
-    status = "Raw" :: IItem.Status
-  }, round));
+  while task.wait() do
 
-  contestant:addToInventory(Item.new({
-    name = "Avocado",
-    description = "Test",
-    image = "rbxassetid://72701864119182",
-    status = "Raw" :: IItem.Status
-  }, round));
+    if #contestant.inventory < 2 then
+
+      contestant:addToInventory(Item.new({
+        name = "Avocado",
+        description = "Test",
+        image = "rbxassetid://72701864119182",
+        status = "Raw" :: IItem.Status
+      }, round));
+
+    end;
+
+  end;
+  
 
 end;
 

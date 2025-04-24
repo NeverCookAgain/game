@@ -40,7 +40,7 @@ local function updatePrompts()
       if contestant.inventory[1] then
 
         local proximityPrompt = script.ProximityPrompt:Clone();
-        proximityPrompt.Name = "LeftHandProximityPrompt";
+        proximityPrompt.Name = "AddItemProximityPrompt";
         proximityPrompt.ActionText = `Add {contestant.inventory[1].name}`;
         proximityPrompt.KeyboardKeyCode = Enum.KeyCode.E;
         proximityPrompt.Parent = proximityPromptsPart;
@@ -48,27 +48,9 @@ local function updatePrompts()
         proximityPrompt.Triggered:Connect(function()
         
           proximityPrompt.Enabled = false;
-          activateSandwichStationBindableFunction:InvokeServer("PushLeft");
+          activateSandwichStationBindableFunction:InvokeServer("Add");
           proximityPrompt.Enabled = true;
 
-        end);
-
-      end;
-
-      if contestant.inventory[2] then
-
-        local proximityPrompt = script.ProximityPrompt:Clone();
-        proximityPrompt.Name = "RightHandProximityPrompt";
-        proximityPrompt.ActionText = `Add {contestant.inventory[2].name}`;
-        proximityPrompt.KeyboardKeyCode = Enum.KeyCode.Q;
-        proximityPrompt.UIOffset = Vector2.new(0, -100);
-        proximityPrompt.Parent = proximityPromptsPart;
-        proximityPrompt.Triggered:Connect(function()
-
-          proximityPrompt.Enabled = false;
-          activateSandwichStationBindableFunction:InvokeServer("PushRight");
-          proximityPrompt.Enabled = true;
-        
         end);
 
       end;
@@ -76,15 +58,15 @@ local function updatePrompts()
       if #stationModel:GetChildren() > 2 then
 
         local proximityPrompt = script.ProximityPrompt:Clone();
-        proximityPrompt.Name = "RemoveTopItemProximityPrompt";
+        proximityPrompt.Name = "RemoveItemProximityPrompt";
         proximityPrompt.Parent = proximityPromptsPart;
         proximityPrompt.KeyboardKeyCode = Enum.KeyCode.C;
-        proximityPrompt.ActionText = `Remove {stationModel:GetAttribute("LatestIngredient") or "unknown ingredient"}`;
+        proximityPrompt.ActionText = `Complete sandwich`;
         proximityPrompt.UIOffset = Vector2.new(if stationModel.Name:find("Left") then -100 else 100, 0);
         proximityPrompt.Triggered:Connect(function()
           
           proximityPrompt.Enabled = false;
-          activateSandwichStationBindableFunction:InvokeServer("Pop");
+          activateSandwichStationBindableFunction:InvokeServer("Complete");
           proximityPrompt.Enabled = true;
 
         end);

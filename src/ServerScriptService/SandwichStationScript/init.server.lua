@@ -30,7 +30,7 @@ if round then
       activateSandwichStationRemoteFunction.Name = `ActivateSandwichStation_{instance.Name}`;
       activateSandwichStationRemoteFunction.OnServerInvoke = function(player: Player, action: unknown)
 
-        if typeof(action) ~= "string" or (action ~= "PushLeft" and action ~= "PushRight" and action ~= "Pop" and action ~= "Complete") then
+        if typeof(action) ~= "string" or (action ~= "Add" and action ~= "Complete") then
 
           error(`Action name must be a "PushLeft", "PushRight", "Pop", or "Complete".`);
 
@@ -39,13 +39,9 @@ if round then
         local contestant = round:findContestantFromPlayer(player);
         if contestant then
 
-          if action:find("Push") then
+          if action:find("Add") then
 
-            local item = (
-              if action == "PushLeft" then contestant.inventory[1] 
-              elseif action == "PushRight" then contestant.inventory[2]
-              else nil
-            );
+            local item = contestant.inventory[#contestant.inventory];
 
             if item then
 
@@ -54,19 +50,16 @@ if round then
 
             end;
 
-          elseif action == "Pop" and sandwichStation.sandwich then
-
-            -- Remove the top-most ingredient from the sandwich.
-            local item = sandwichStation.sandwich.items[#sandwichStation.sandwich.items];
-            if item then
-
-              sandwichStation:popItem();
-
-            end;
-          
           elseif action == "Complete" then
 
             -- TODO: Get the sandwich and add it to the player's inventory.
+            if not sandwichStation.sandwich then
+
+              error("No sandwich found.");
+
+            end;
+
+            sandwichStation:completeSandwich();
 
           end;
 
