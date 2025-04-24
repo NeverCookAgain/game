@@ -8,6 +8,7 @@ local ServerStorage = game:GetService("ServerStorage");
 local Contestant = require(ServerStorage.Contestant);
 local Avocado = require(ServerStorage.Items.Avocado);
 local Round = require(ServerStorage.Round);
+local Order = require(ServerStorage.Order);
 
 local round = Round.new({
   status = "Preparing";
@@ -73,6 +74,8 @@ local function addPlayerAsContestant(player: Player)
   end);
 
   round:addContestant(contestant);
+
+  print(Order.generate("Easy", round));
 
   if #contestant.inventory < 2 then
 

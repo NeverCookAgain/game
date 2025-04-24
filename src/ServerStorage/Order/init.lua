@@ -38,7 +38,7 @@ function Order.generate(type: "Easy" | "Medium" | "Difficult", round: IRound.IRo
     item.status = "Cooked";
     table.insert(sandwich.items, item);
 
-  until (type == "Easy" and #sandwich.items == 5) or (type == "Medium" and #sandwich.items == 10) or (type == "Difficult" and #sandwich.items == 15)
+  until (type == "Easy" and #sandwich.items == 3) or (type == "Medium" and #sandwich.items == 4) or (type == "Difficult" and #sandwich.items == 5)
 
   return Order.new({
     sandwich = sandwich;

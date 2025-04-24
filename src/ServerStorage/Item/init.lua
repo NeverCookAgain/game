@@ -161,6 +161,24 @@ function Item.listClasses(): {[string]: ItemClass}
 
   return {
     Avocado = require(ServerStorage.Items.Avocado) :: ItemClass;
+    Bacon = require(ServerStorage.Items.Bacon) :: ItemClass;
+    Bagel = require(ServerStorage.Items.Bagel) :: ItemClass;
+    Beef = require(ServerStorage.Items.Beef) :: ItemClass;
+    Chicken = require(ServerStorage.Items.Chicken) :: ItemClass;
+    Egg = require(ServerStorage.Items.Egg) :: ItemClass;
+    Lettuce = require(ServerStorage.Items.Lettuce) :: ItemClass;
+    Mozzarella = require(ServerStorage.Items.Mozzarella) :: ItemClass;
+    Olives = require(ServerStorage.Items.Olives) :: ItemClass;
+    Onions = require(ServerStorage.Items.Onions) :: ItemClass;
+    Pepperoni = require(ServerStorage.Items.Pepperoni) :: ItemClass;
+    Peppers = require(ServerStorage.Items.Peppers) :: ItemClass;
+    Pickles = require(ServerStorage.Items.Pickles) :: ItemClass;
+    Pork = require(ServerStorage.Items.Pork) :: ItemClass;
+    Spinach = require(ServerStorage.Items.Spinach) :: ItemClass;
+    SwissCheese = require(ServerStorage.Items.SwissCheese) :: ItemClass;
+    Tomatoes = require(ServerStorage.Items.Tomatoes) :: ItemClass;
+    Turkey = require(ServerStorage.Items.Turkey) :: ItemClass;
+    WhiteBread = require(ServerStorage.Items.WhiteBread) :: ItemClass;
   };
 
 end;
