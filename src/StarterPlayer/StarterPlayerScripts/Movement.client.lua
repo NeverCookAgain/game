@@ -2,19 +2,77 @@
 local UserInputService = game:GetService("UserInputService");
 local ContextActionService = game:GetService("ContextActionService");
 
+local animationTask: thread?;
+
+local shouldMoveLeft = false;
+local shouldMoveRight = false;
+local shouldMoveForward = false;
+local shouldMoveBackward = false;
+
 local function moveCharacter(actionName, inputState)
 
 	local force = 30;
 
-	local shouldMoveLeft = UserInputService:IsKeyDown(Enum.KeyCode.Left) or UserInputService:IsKeyDown(Enum.KeyCode.A);
-	local shouldMoveRight = UserInputService:IsKeyDown(Enum.KeyCode.Right) or UserInputService:IsKeyDown(Enum.KeyCode.D);
-	local shouldMoveForward = UserInputService:IsKeyDown(Enum.KeyCode.Up) or UserInputService:IsKeyDown(Enum.KeyCode.W);
-	local shouldMoveBackward = UserInputService:IsKeyDown(Enum.KeyCode.Down) or UserInputService:IsKeyDown(Enum.KeyCode.S);
-	workspace.CousinRicky.PlayerCharacter.LinearVelocity.VectorVelocity = Vector3.new(
+	shouldMoveLeft = UserInputService:IsKeyDown(Enum.KeyCode.Left) or UserInputService:IsKeyDown(Enum.KeyCode.A);
+	shouldMoveRight = UserInputService:IsKeyDown(Enum.KeyCode.Right) or UserInputService:IsKeyDown(Enum.KeyCode.D);
+	shouldMoveForward = UserInputService:IsKeyDown(Enum.KeyCode.Up) or UserInputService:IsKeyDown(Enum.KeyCode.W);
+	shouldMoveBackward = UserInputService:IsKeyDown(Enum.KeyCode.Down) or UserInputService:IsKeyDown(Enum.KeyCode.S);
+
+	local linearVelocity: LinearVelocity = workspace.CousinRicky.PrimaryPart.LinearVelocity;
+	linearVelocity.VectorVelocity = Vector3.new(
 		if shouldMoveForward and shouldMoveBackward then 0 elseif shouldMoveBackward then force elseif shouldMoveForward then -force else 0, 
 		0, 
 		if shouldMoveLeft and shouldMoveRight then 0 elseif shouldMoveLeft then force elseif shouldMoveRight then -force else 0
 	);
+
+	local walkCycleLeftIDs = {138071730441626, 127157712731282, 90099424286222, 88329203120597, 110743064881685, 138805926032055, 137674659781586, 80218653204415, 72783473022560};
+	local function setAnimationFrame(frameNumber: number)
+
+		local spriteSides = {workspace.CousinRicky.SpritePart.BackGUI.ImageLabel, workspace.CousinRicky.SpritePart.FrontGUI.ImageLabel};
+
+		for _, sprite in spriteSides do
+
+			sprite.Image = `rbxassetid://{walkCycleLeftIDs[frameNumber]}`;
+
+			if shouldMoveLeft then
+
+				sprite.ImageRectSize = Vector2.new(512, 512);
+				sprite.ImageRectOffset = Vector2.zero;
+
+			elseif shouldMoveRight then
+
+				sprite.ImageRectSize = Vector2.new(-512, 512);
+				sprite.ImageRectOffset = Vector2.new(512, 0);
+	
+			end;
+
+		end;
+	
+	end;
+
+	if not animationTask and linearVelocity.VectorVelocity ~= Vector3.zero then
+
+		animationTask = task.spawn(function()
+		
+			local frameNumber = 1;
+
+			while task.wait(0.05) do
+
+				setAnimationFrame(frameNumber);
+				frameNumber = if frameNumber + 1 <= #walkCycleLeftIDs then frameNumber + 1 else 1;
+		
+			end;
+
+		end);
+
+	elseif linearVelocity.VectorVelocity == Vector3.zero and animationTask then
+
+		task.cancel(animationTask);
+		animationTask = nil;
+
+		setAnimationFrame(1);
+
+	end;
 
 end
 
