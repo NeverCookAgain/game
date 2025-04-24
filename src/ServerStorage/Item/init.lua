@@ -188,9 +188,9 @@ function Item.random(round: IRound.IRound): IItem.IItem
   local itemNames = {};
   local items = Item.listClasses();
 
-  for _, item in items do
+  for itemName in items do
 
-    table.insert(itemNames, item.name);
+    table.insert(itemNames, itemName);
 
   end;
 

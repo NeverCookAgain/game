@@ -6,6 +6,7 @@ local ServerScriptService = game:GetService("ServerScriptService");
 local ServerStorage = game:GetService("ServerStorage");
 
 local Contestant = require(ServerStorage.Contestant);
+local Customer = require(ServerStorage.Customer);
 local Avocado = require(ServerStorage.Items.Avocado);
 local Round = require(ServerStorage.Round);
 local Order = require(ServerStorage.Order);
@@ -67,6 +68,12 @@ local function addPlayerAsContestant(player: Player)
     model = player.Character;
   }, round);
 
+  contestant.CustomerAssignmentChanged:Connect(function()
+  
+    
+
+  end);
+
   contestant.InventoryChanged:Connect(function()
   
     ReplicatedStorage.Shared.Events.ContestantInventoryChanged:FireClient(player);
@@ -74,8 +81,6 @@ local function addPlayerAsContestant(player: Player)
   end);
 
   round:addContestant(contestant);
-
-  print(Order.generate("Easy", round));
 
   if #contestant.inventory < 2 then
 
@@ -96,6 +101,21 @@ end);
 for _, player in Players:GetPlayers() do
 
   coroutine.wrap(addPlayerAsContestant)(player);
+
+end;
+
+local customers = {};
+local customerModels = {workspace.CustomerA, workspace.CustomerB, workspace.CustomerC, workspace.CustomerD};
+for _, customerModel in customerModels do
+
+  local customer = Customer.new({
+    model = customerModel;
+  }, round);
+
+  local order = Order.generate("Easy", round);
+  customer:setOrder(order);
+
+  table.insert(customers, customer);
 
 end;
 

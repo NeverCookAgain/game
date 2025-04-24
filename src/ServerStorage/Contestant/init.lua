@@ -2,6 +2,7 @@
 
 local ServerStorage = game:GetService("ServerStorage");
 
+local ICustomer = require(ServerStorage.Customer.types);
 local IRound = require(ServerStorage.Round.types);
 local IItem = require(ServerStorage.Item.types);
 local IContestant = require(script.types);
@@ -12,6 +13,7 @@ local Contestant = {};
 function Contestant.new(properties: IContestant.ContestantProperties, round: IRound.IRound): IContestant.IContestant
 
   local inventoryChangedEvent = Instance.new("BindableEvent");
+  local customerAssignmentChangedEvent = Instance.new("BindableEvent");
 
   local function addToInventory(self: IContestant.IContestant, item: IItem.IItem | ISandwich.ISandwich): ()
 
@@ -36,6 +38,13 @@ function Contestant.new(properties: IContestant.ContestantProperties, round: IRo
 
   end;
 
+  local function setAssignedCustomer(self: IContestant.IContestant, customer: ICustomer.ICustomer?): ()
+
+    self.assignedCustomer = customer;
+    customerAssignmentChangedEvent:Fire(customer);
+
+  end;
+
   local contestant: IContestant.IContestant = {
     player = properties.player;
     model = properties.model;
@@ -43,7 +52,9 @@ function Contestant.new(properties: IContestant.ContestantProperties, round: IRo
     inventory = {};
     addToInventory = addToInventory;
     removeFromInventory = removeFromInventory;
+    setAssignedCustomer = setAssignedCustomer;
     InventoryChanged = inventoryChangedEvent.Event;
+    CustomerAssignmentChanged = customerAssignmentChangedEvent.Event;
   };
 
   return contestant;
