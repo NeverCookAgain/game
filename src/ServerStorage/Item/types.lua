@@ -5,7 +5,6 @@ export type ItemBaseProperties = {
   description: string;
   image: string;
   status: Status;
-  part: BasePart?;
 }
 
 export type ItemConstructorProperties = ItemBaseProperties & {
@@ -13,12 +12,14 @@ export type ItemConstructorProperties = ItemBaseProperties & {
 }
 
 export type ItemProperties = ItemBaseProperties & {
+  type: "Item";
   templatePart: BasePart;
 };
 
 export type ItemMethods = {
   setStatus: (item: IItem, newStatus: Status) -> ();
-  drop: (item: IItem, origin: Vector3, direction: Vector3) -> ();
+  createPart: (item: IItem) -> BasePart;
+  drop: (item: IItem, origin: CFrame, direction: Vector3) -> BasePart;
 };
 
 export type ItemEvents = {

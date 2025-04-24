@@ -3,16 +3,17 @@
 local ServerStorage = game:GetService("ServerStorage");
 
 local IItem = require(ServerStorage.Item.types);
+local ISandwich = require(ServerStorage.Sandwich.types);
 
 export type SandwichStationProperties = {
   model: Model;
-  sandwich: {IItem.IItem};
+  sandwich: ISandwich.ISandwich?;
 };
 
 export type SandwichStationMethods = {
-  pushItem: (self: ISandwichStation, item: IItem.IItem) -> ();
+  pushItem: (self: ISandwichStation, item: IItem.IItem | ISandwich.ISandwich) -> ();
   popItem: (self: ISandwichStation) -> IItem.IItem;
-  completeSandwich: (self: ISandwichStation) -> {IItem.IItem};
+  completeSandwich: (self: ISandwichStation) -> ISandwich.ISandwich | IItem.IItem;
   updateSandwichModel: (self: ISandwichStation) -> ();
 };
 

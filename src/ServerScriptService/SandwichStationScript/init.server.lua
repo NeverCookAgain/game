@@ -18,7 +18,6 @@ if round then
 
       local sandwichStation = SandwichStation.new({
         model = instance;
-        sandwich = {};
       }, round);
 
       sandwichStation.SandwichChanged:Connect(function()
@@ -31,43 +30,53 @@ if round then
       activateSandwichStationRemoteFunction.Name = `ActivateSandwichStation_{instance.Name}`;
       activateSandwichStationRemoteFunction.OnServerInvoke = function(player: Player, action: unknown)
 
-        if typeof(action) ~= "string" or (action ~= "PushLeft" and action ~= "PushRight" and action ~= "Pop" and action ~= "Complete") then
+        if typeof(action) ~= "string" or (action ~= "Add" and action ~= "Complete") then
 
-          error(`Action name must be a "PushLeft", "PushRight", "Pop", or "Complete".`);
+          error(`Action name must be a "Add" or "Complete".`);
+
+        end;
+
+        local sandwichStationPrimaryPart = sandwichStation.model.PrimaryPart;
+        if not sandwichStationPrimaryPart then
+
+          error("Sandwich station needs a PrimaryPart.");
 
         end;
 
         local contestant = round:findContestantFromPlayer(player);
         if contestant then
 
-          if action:find("Push") then
+          if action:find("Add") then
 
-            local item = (
-              if action == "PushLeft" then contestant.inventory[1] 
-              elseif action == "PushRight" then contestant.inventory[2]
-              else nil
-            );
+            local item = contestant.inventory[#contestant.inventory];
 
             if item then
 
-              contestant:removeItemFromInventory(item);
+              contestant:removeFromInventory(item);
               sandwichStation:pushItem(item);
 
             end;
 
-          elseif action == "Pop" then
-
-            -- Remove the top-most ingredient from the sandwich.
-            local item = sandwichStation.sandwich[#sandwichStation.sandwich];
-            if item then
-
-              sandwichStation:popItem();
-
-            end;
-          
           elseif action == "Complete" then
 
             -- TODO: Get the sandwich and add it to the player's inventory.
+            if not sandwichStation.sandwich then
+
+              error("No sandwich found.");
+
+            end;
+
+            local sandwich = sandwichStation:completeSandwich();
+
+            if sandwich.type == "Sandwich" then
+
+              sandwich:drop(sandwichStationPrimaryPart.CFrame, Vector3.new(0, 1, 0) * 5);
+
+            elseif sandwich.type == "Item" then
+
+              sandwich:drop(sandwichStationPrimaryPart.CFrame, Vector3.new(0, 1, 0) * 5);
+
+            end;
 
           end;
 
