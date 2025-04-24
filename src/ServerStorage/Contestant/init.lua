@@ -2,23 +2,25 @@
 
 local ServerStorage = game:GetService("ServerStorage");
 
-local Contestant = {};
 local IRound = require(ServerStorage.Round.types);
 local IItem = require(ServerStorage.Item.types);
 local IContestant = require(script.types);
+local ISandwich = require(ServerStorage.Sandwich.types);
+
+local Contestant = {};
 
 function Contestant.new(properties: IContestant.ContestantProperties, round: IRound.IRound): IContestant.IContestant
 
   local inventoryChangedEvent = Instance.new("BindableEvent");
 
-  local function addItemToInventory(self: IContestant.IContestant, item: IItem.IItem): ()
+  local function addToInventory(self: IContestant.IContestant, item: IItem.IItem | ISandwich.ISandwich): ()
 
     table.insert(self.inventory, item);
     inventoryChangedEvent:Fire();
 
   end;
 
-  local function removeItemFromInventory(self: IContestant.IContestant, item: IItem.IItem): ()
+  local function removeFromInventory(self: IContestant.IContestant, item: IItem.IItem | ISandwich.ISandwich): ()
 
     for index = #self.inventory, 1, -1 do
 
@@ -39,8 +41,8 @@ function Contestant.new(properties: IContestant.ContestantProperties, round: IRo
     model = properties.model;
     inventorySlots = properties.inventorySlots;
     inventory = {};
-    addItemToInventory = addItemToInventory;
-    removeItemFromInventory = removeItemFromInventory;
+    addToInventory = addToInventory;
+    removeFromInventory = removeFromInventory;
     InventoryChanged = inventoryChangedEvent.Event;
   };
 

@@ -77,7 +77,7 @@ function Item.new(properties: IItem.ItemConstructorProperties, round: IRound.IRo
 
         part:Destroy();
         self.part = nil;
-        contestant:addItemToInventory(self);
+        contestant:addToInventory(self);
 
       end;
     
@@ -138,6 +138,7 @@ function Item.new(properties: IItem.ItemConstructorProperties, round: IRound.IRo
   updateImages(frontGUI);
 
   local item: IItem.IItem = {
+    type = "Item" :: "Item";
     name = properties.name;
     description = properties.description;
     image = properties.image;

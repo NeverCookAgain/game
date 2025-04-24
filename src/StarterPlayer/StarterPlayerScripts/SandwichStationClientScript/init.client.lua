@@ -73,13 +73,13 @@ local function updatePrompts()
 
       end;
 
-      if #stationModel:FindFirstChild("Sandwich"):GetChildren() > 1 then
+      if #stationModel:GetChildren() > 2 then
 
         local proximityPrompt = script.ProximityPrompt:Clone();
         proximityPrompt.Name = "RemoveTopItemProximityPrompt";
         proximityPrompt.Parent = proximityPromptsPart;
         proximityPrompt.KeyboardKeyCode = Enum.KeyCode.C;
-        proximityPrompt.ActionText = `Remove {stationModel:FindFirstChild("Sandwich"):GetAttribute("LatestIngredient") or "unknown ingredient"}`;
+        proximityPrompt.ActionText = `Remove {stationModel:GetAttribute("LatestIngredient") or "unknown ingredient"}`;
         proximityPrompt.UIOffset = Vector2.new(if stationModel.Name:find("Left") then -100 else 100, 0);
         proximityPrompt.Triggered:Connect(function()
           

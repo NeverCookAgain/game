@@ -2,9 +2,11 @@
 
 local ServerStorage = game:GetService("ServerStorage");
 
+local ISandwich = require(ServerStorage.Sandwich.types);
 local ISandwichStation = require(script.types);
 local IRound = require(ServerStorage.Round.types);
 local IItem = require(ServerStorage.Item.types);
+local Sandwich = require(ServerStorage.Sandwich);
 
 local SandwichStation = {};
 
@@ -13,17 +15,9 @@ function SandwichStation.new(properties: ISandwichStation.SandwichStationPropert
   local sandwichChangedEvent = Instance.new("BindableEvent");
   local sandwichCompletedEvent = Instance.new("BindableEvent");
   
-  local sandwichParts: {BasePart} = {};
+  local sandwichModel: Model? = nil;
 
   local function updateSandwichModel(self: ISandwichStation.ISandwichStation)
-
-    for _, sandwichPart in sandwichParts do
-
-      sandwichPart:Destroy();
-
-    end;
-
-    sandwichParts = {};
 
     if not self.model.PrimaryPart then
 
@@ -31,31 +25,63 @@ function SandwichStation.new(properties: ISandwichStation.SandwichStationPropert
 
     end;
 
-    local sandwichModel = self.model:FindFirstChild("Sandwich");
-    if not sandwichModel then
+    local sandwichLocationPart = self.model:FindFirstChild("SandwichLocation");
+    if not sandwichLocationPart then
 
       error(`Sandwich Station {self.model.Name} must have a "Sandwich" model.`)
 
     end;
 
-    sandwichModel:SetAttribute("LatestIngredient", nil);
+    if sandwichModel then
 
-    for index, item in self.sandwich do
+      sandwichModel:Destroy();
+      sandwichModel = nil;
 
-      local itemPart = item.templatePart:Clone();
-      itemPart.CFrame = CFrame.Angles(0, 0, math.rad(90)) + self.model.PrimaryPart.CFrame.Position + Vector3.new(0, (index - 1) * 0.1, 0);
-      itemPart.Anchored = true;
-      itemPart.Parent = self.model:FindFirstChild("Sandwich");
-      sandwichModel:SetAttribute("LatestIngredient", item.name);
-      table.insert(sandwichParts, itemPart);
+    end;
+
+    if self.sandwich then
+
+      local newSandwichModel = self.sandwich:createModel();
+      sandwichModel = newSandwichModel;
+      newSandwichModel:SetAttribute("LatestIngredient", nil);
+      newSandwichModel:PivotTo(self.model.PrimaryPart.CFrame);
+      newSandwichModel.Parent = self.model;
+
+      -- for index, item in self.sandwich.items do
+
+      --   local itemPart = item.templatePart:Clone();
+      --   itemPart.CFrame = CFrame.Angles(0, 0, math.rad(90)) + self.model.PrimaryPart.CFrame.Position + Vector3.new(0, (index - 1) * 0.1, 0);
+      --   itemPart.Anchored = true;
+      --   itemPart.Parent = self.model:FindFirstChild("Sandwich");
+      --   sandwichModel:SetAttribute("LatestIngredient", item.name);
+      --   table.insert(sandwichParts, itemPart);
+
+      -- end;
 
     end;
     
   end;
 
-  local function pushItem(self: ISandwichStation.ISandwichStation, item: IItem.IItem): ()
+  local function pushItem(self: ISandwichStation.ISandwichStation, item: IItem.IItem | ISandwich.ISandwich): ()
 
-    table.insert(self.sandwich, item);
+    local sandwich;
+    if item.type == "Sandwich" then
+      
+      sandwich = item;
+
+    else 
+      
+      sandwich = self.sandwich or Sandwich.new({
+        name = "Sandwich";
+        description = "Test";
+        status = "Raw" :: "Raw"
+      }, round);
+      
+      table.insert(sandwich.items, item);
+
+    end;
+
+    self.sandwich = sandwich;
     self:updateSandwichModel();
     sandwichChangedEvent:Fire();
 
@@ -63,15 +89,21 @@ function SandwichStation.new(properties: ISandwichStation.SandwichStationPropert
 
   local function popItem(self: ISandwichStation.ISandwichStation): IItem.IItem
 
+    if not self.sandwich then
+
+      error("No sandwich available.");
+
+    end;
+
     -- Remove the item from the sandwich array.
-    local item = self.sandwich[#self.sandwich];
+    local item = self.sandwich.items[#self.sandwich.items];
     if not item then
 
       error(`Sandwich Station {self.model.Name} doesn't have an item to pop.`);
 
     end;
 
-    table.remove(self.sandwich, #self.sandwich);
+    table.remove(self.sandwich.items, #self.sandwich.items);
     self:updateSandwichModel();
     sandwichChangedEvent:Fire();
 
@@ -90,10 +122,16 @@ function SandwichStation.new(properties: ISandwichStation.SandwichStationPropert
 
   end;
 
-  local function completeSandwich(self: ISandwichStation.ISandwichStation): {IItem.IItem}
+  local function completeSandwich(self: ISandwichStation.ISandwichStation): ISandwich.ISandwich
 
     local sandwich = self.sandwich;
-    self.sandwich = {};
+    if not sandwich then
+
+      error("There's no available sandwich yet.");
+      
+    end;
+
+    self.sandwich = nil;
     self:updateSandwichModel();
 
     sandwichCompletedEvent:Fire();
@@ -104,7 +142,7 @@ function SandwichStation.new(properties: ISandwichStation.SandwichStationPropert
 
   local toaster: ISandwichStation.ISandwichStation = {
     model = properties.model;
-    sandwich = {};
+    sandwich = properties.sandwich;
     completeSandwich = completeSandwich;
     pushItem = pushItem;
     popItem = popItem;

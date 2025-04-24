@@ -3,17 +3,18 @@
 local ServerStorage = game:GetService("ServerStorage");
 
 local IItem = require(ServerStorage.Item.types);
+local ISandwich = require(ServerStorage.Sandwich.types);
 
 export type ContestantProperties = {
   player: Player?;
   inventorySlots: number;
   model: Model?;
-  inventory: {IItem.IItem};
+  inventory: {IItem.IItem | ISandwich.ISandwich};
 };
 
 export type ContestantMethods = {
-  addItemToInventory: (self: IContestant, item: IItem.IItem) -> ();
-  removeItemFromInventory: (self: IContestant, item: IItem.IItem) -> ();
+  addToInventory: (self: IContestant, item: IItem.IItem | ISandwich.ISandwich) -> ();
+  removeFromInventory: (self: IContestant, item: IItem.IItem | ISandwich.ISandwich) -> ();
 };
 
 export type ContestantEvents = {

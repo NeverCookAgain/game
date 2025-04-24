@@ -18,7 +18,6 @@ if round then
 
       local sandwichStation = SandwichStation.new({
         model = instance;
-        sandwich = {};
       }, round);
 
       sandwichStation.SandwichChanged:Connect(function()
@@ -50,15 +49,15 @@ if round then
 
             if item then
 
-              contestant:removeItemFromInventory(item);
+              contestant:removeFromInventory(item);
               sandwichStation:pushItem(item);
 
             end;
 
-          elseif action == "Pop" then
+          elseif action == "Pop" and sandwichStation.sandwich then
 
             -- Remove the top-most ingredient from the sandwich.
-            local item = sandwichStation.sandwich[#sandwichStation.sandwich];
+            local item = sandwichStation.sandwich.items[#sandwichStation.sandwich.items];
             if item then
 
               sandwichStation:popItem();

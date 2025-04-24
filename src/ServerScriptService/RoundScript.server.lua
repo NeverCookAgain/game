@@ -75,14 +75,14 @@ local function addPlayerAsContestant(player: Player)
 
   round:addContestant(contestant);
 
-  contestant:addItemToInventory(Item.new({
+  contestant:addToInventory(Item.new({
     name = "Avocado",
     description = "Test",
     image = "rbxassetid://72701864119182",
     status = "Raw" :: IItem.Status
   }, round));
 
-  contestant:addItemToInventory(Item.new({
+  contestant:addToInventory(Item.new({
     name = "Avocado",
     description = "Test",
     image = "rbxassetid://72701864119182",
@@ -111,11 +111,19 @@ ReplicatedStorage.Shared.Functions.ActivateItem.OnServerInvoke = function(player
     local item = contestant.inventory[slot];
     if item then
 
-      contestant:removeItemFromInventory(item);
+      contestant:removeFromInventory(item);
       
       if contestant.model and contestant.model.PrimaryPart then
         
-        item:drop(contestant.model.PrimaryPart.CFrame.Position, -contestant.model.PrimaryPart.CFrame.LookVector * 5);
+        if item.type == "Item" then
+
+          item:drop(contestant.model.PrimaryPart.CFrame.Position, -contestant.model.PrimaryPart.CFrame.LookVector * 5);
+
+        elseif item.type == "Sandwich" then
+
+          item:drop(contestant.model.PrimaryPart.CFrame.Position, -contestant.model.PrimaryPart.CFrame.LookVector * 5);
+
+        end;
 
       end;
 

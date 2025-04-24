@@ -13,6 +13,7 @@ export type ItemConstructorProperties = ItemBaseProperties & {
 }
 
 export type ItemProperties = ItemBaseProperties & {
+  type: "Item";
   templatePart: BasePart;
 };
 
