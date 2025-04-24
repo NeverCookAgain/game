@@ -63,7 +63,7 @@ local function updatePrompts()
 
       end;
 
-      if #stationModel:GetChildren() > 2 then
+      if #stationModel:GetChildren() > 3 then
 
         local proximityPrompt = script.ProximityPrompt:Clone();
         proximityPrompt.Name = "RemoveItemProximityPrompt";

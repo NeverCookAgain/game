@@ -32,6 +32,13 @@ function Sandwich.new(properties: ISandwich.SandwichConstructorProperties, round
 
       end;
 
+      local proximityPrompt = part:FindFirstChild("ProximityPrompt");
+      if proximityPrompt and proximityPrompt:IsA("ProximityPrompt") then
+
+        proximityPrompt.Enabled = false;
+
+      end;
+
       local weldConstraint = Instance.new("WeldConstraint");
       weldConstraint.Part0 = part;
       weldConstraint.Part1 = sandwichModel.PrimaryPart;

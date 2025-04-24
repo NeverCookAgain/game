@@ -62,7 +62,7 @@ local function addPlayerAsContestant(player: Player)
   local contestant = Contestant.new({
     player = player;
     inventory = {};
-    inventorySlots = 2;
+    inventorySlots = 5;
     model = player.Character;
   }, round);
 
