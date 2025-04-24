@@ -139,7 +139,7 @@ function Item.new(properties: IItem.ItemConstructorProperties, round: IRound.IRo
     name = properties.name;
     description = properties.description;
     image = properties.image;
-    status = properties.status;
+    status = properties.status or ("Raw" :: "Raw");
     templatePart = properties.templatePart or script.Part;
     createPart = createPart;
     setStatus = setStatus;
@@ -148,6 +148,39 @@ function Item.new(properties: IItem.ItemConstructorProperties, round: IRound.IRo
   };
 
   return item;
+
+end;
+
+export type ItemClass = {
+  name: string;
+  description: string;
+  new: (round: IRound.IRound) -> IItem.IItem;
+};
+
+function Item.listClasses(): {[string]: ItemClass}
+
+  return {
+    Avocado = require(ServerStorage.Items.Avocado) :: ItemClass;
+  };
+
+end;
+
+function Item.random(round: IRound.IRound): IItem.IItem
+
+  local itemNames = {};
+  local items = Item.listClasses();
+
+  for _, item in items do
+
+    table.insert(itemNames, item.name);
+
+  end;
+
+  local randomIndex = Random.new():NextInteger(1, #itemNames);
+  local itemName = itemNames[randomIndex];
+  local item = items[itemName];
+
+  return item.new(round);
 
 end;
 
