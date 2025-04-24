@@ -34,27 +34,14 @@ local function OrderSection(properties: OrderSectionProperties)
     UIListLayout = React.createElement("UIListLayout", {
       SortOrder = Enum.SortOrder.LayoutOrder;
     });
-    IngredientList = React.createElement("Frame", {
+    LabelContainer = React.createElement("Frame", {
       AutomaticSize = Enum.AutomaticSize.XY;
       BackgroundTransparency = 1;
       LayoutOrder = 1;
       Size = UDim2.new();
     }, {
       UIListLayout = React.createElement("UIListLayout", {
-        SortOrder = Enum.SortOrder.LayoutOrder;
-      });
-      UIPadding = React.createElement("UIPadding", {
-        PaddingLeft = UDim.new(0, 25);
-      });
-      Ingredients = React.createElement(React.Fragment, {}, ingredientSections);
-    });
-    LabelContainer = React.createElement("Frame", {
-      AutomaticSize = Enum.AutomaticSize.XY;
-      BackgroundTransparency = 1;
-      LayoutOrder = 2;
-      Size = UDim2.new();
-    }, {
-      UIListLayout = React.createElement("UIListLayout", {
+        FillDirection = Enum.FillDirection.Horizontal;
         SortOrder = Enum.SortOrder.LayoutOrder;
       });
       ImageLabel = React.createElement("ImageLabel", {
@@ -63,7 +50,7 @@ local function OrderSection(properties: OrderSectionProperties)
         ImageRectOffset = Vector2.new(100, 100);
         ImageRectSize = Vector2.new(800, 800);
         LayoutOrder = 1;
-        Size = UDim2.new(0, 300, 0, 300);
+        Size = UDim2.new(0, 25, 0, 25);
       });
       TextLabel = React.createElement("TextLabel", {
         LayoutOrder = 2;
@@ -74,6 +61,20 @@ local function OrderSection(properties: OrderSectionProperties)
         Text = properties.order.sandwich.name;
         TextSize = 30;
       });
+    });
+    IngredientList = React.createElement("Frame", {
+      AutomaticSize = Enum.AutomaticSize.XY;
+      BackgroundTransparency = 1;
+      LayoutOrder = 2;
+      Size = UDim2.new();
+    }, {
+      UIListLayout = React.createElement("UIListLayout", {
+        SortOrder = Enum.SortOrder.LayoutOrder;
+      });
+      UIPadding = React.createElement("UIPadding", {
+        PaddingLeft = UDim.new(0, 25);
+      });
+      Ingredients = React.createElement(React.Fragment, {}, ingredientSections);
     });
   })
 

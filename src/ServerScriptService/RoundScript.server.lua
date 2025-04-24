@@ -108,8 +108,11 @@ local customers = {};
 local customerModels = {workspace.CustomerA, workspace.CustomerB, workspace.CustomerC, workspace.CustomerD};
 for _, customerModel in customerModels do
 
+  local customerImages = {"rbxassetid://136955129612174", "rbxassetid://121007848481264", "rbxassetid://85190412089778", "rbxassetid://72181972813178"};
+
   local customer = Customer.new({
     model = customerModel;
+    image = customerImages[Random.new():NextInteger(1, #customerImages)]
   }, round);
 
   local order = Order.generate("Easy", round);

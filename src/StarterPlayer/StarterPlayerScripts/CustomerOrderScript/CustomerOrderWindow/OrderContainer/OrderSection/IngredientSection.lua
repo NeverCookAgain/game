@@ -12,6 +12,7 @@ export type IngredientSectionProperties = {
 local function IngredientSection(properties: IngredientSectionProperties)
 
   return React.createElement("Frame", {
+    AutomaticSize = Enum.AutomaticSize.XY;
     BackgroundTransparency = 1;
     LayoutOrder = 1; 
     Size = UDim2.new();
@@ -26,7 +27,7 @@ local function IngredientSection(properties: IngredientSectionProperties)
       ImageRectOffset = Vector2.new(100, 100);
       ImageRectSize = Vector2.new(800, 800);
       LayoutOrder = 1;
-      Size = UDim2.new(0, 300, 0, 300);
+      Size = UDim2.new(0, 15, 0, 15);
     });
     TextLabel = React.createElement("TextLabel", {
       AutomaticSize = Enum.AutomaticSize.XY;

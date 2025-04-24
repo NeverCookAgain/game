@@ -20,10 +20,13 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt)
     local customer = ReplicatedStorage.Shared.Functions.GetCustomer:InvokeServer(possibleCustomerModel.Name);
     if customer.order and not screenGUI then
 
+      ProximityPromptService.Enabled = false;
+
       local newScreenGUI = Instance.new("ScreenGui");
       screenGUI = newScreenGUI;
       newScreenGUI.Name = "CustomerOrder";
       newScreenGUI.ScreenInsets = Enum.ScreenInsets.None;
+      newScreenGUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling;
       newScreenGUI.Parent = Players.LocalPlayer.PlayerGui;
 
       local customerOrderRoot = ReactRoblox.createRoot(newScreenGUI);
@@ -31,7 +34,9 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt)
         customer = customer;
         onClose = function()
 
+          ProximityPromptService.Enabled = true;
           newScreenGUI:Destroy();
+          customerOrderRoot:unmount();
           screenGUI = nil;
 
         end;

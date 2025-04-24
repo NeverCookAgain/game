@@ -1,8 +1,10 @@
 --!strict
 
+local Lighting = game:GetService("Lighting");
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
 local React = require(ReplicatedStorage.Shared.Packages.react);
+local ReactRoblox = require(ReplicatedStorage.Shared.Packages["react-roblox"]);
 local OrderContainer = require(script.OrderContainer);
 
 export type CustomerOrderWindowProperties = {
@@ -35,7 +37,11 @@ local function CustomerOrderWindow(properties: CustomerOrderWindowProperties)
     });
     OrderContainer = React.createElement(OrderContainer, {
       order = properties.customer.order;
+      onClose = properties.onClose;
     });
+    Blur = ReactRoblox.createPortal(React.createElement("BlurEffect", {
+      Size = 12;
+    }), Lighting);
   })
 
 end;

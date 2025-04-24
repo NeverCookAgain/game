@@ -40,26 +40,42 @@ function Customer.new(properties: ICustomer.CustomerConstructorProperties, round
     statusPart.Parent = self.model;
 
     local takeOrderProximityPrompt = script.TakeOrderProximityPrompt:Clone();
-    takeOrderProximityPrompt.Triggered:Connect(function(triggeringPlayer: Player)
-    
-      local contestant = round:findContestantFromPlayer(triggeringPlayer);
-      if contestant and not contestant.assignedCustomer then
-
-        takeOrderProximityPrompt:Destroy();
-        
-        contestant:setAssignedCustomer(self); 
-
-      end;
-
-    end);
     takeOrderProximityPrompt.Parent = self.model.PrimaryPart;
 
   end;
+
+  local function updateImages(surfaceGUI: Instance?)
+
+    if not surfaceGUI then
+
+      error("BackGUI and FrontGUI required.");
+
+    end;
+
+    local itemImageLabel = surfaceGUI:FindFirstChild("ImageLabel");
+    if not itemImageLabel or not itemImageLabel:IsA("ImageLabel") then
+
+      error(`{surfaceGUI.Name} needs an ImageLabel.`);
+
+    end;
+
+    itemImageLabel.Image = properties.image;
+    
+  end;
+
+  local spritePart = properties.model:FindFirstChild("SpritePart");
+  assert(spritePart, "Character model must have primary part.");
+
+  local backGUI = spritePart:FindFirstChild("BackGUI");
+  local frontGUI = spritePart:FindFirstChild("FrontGUI");
+  updateImages(backGUI);
+  updateImages(frontGUI);
 
   local customer: ICustomer.ICustomer = {
     type = "Customer" :: "Customer";
     order = properties.order;
     model = properties.model;
+    image = properties.image;
     setOrder = setOrder;
   };
 
