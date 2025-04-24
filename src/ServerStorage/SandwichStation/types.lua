@@ -13,7 +13,7 @@ export type SandwichStationProperties = {
 export type SandwichStationMethods = {
   pushItem: (self: ISandwichStation, item: IItem.IItem | ISandwich.ISandwich) -> ();
   popItem: (self: ISandwichStation) -> IItem.IItem;
-  completeSandwich: (self: ISandwichStation) -> ISandwich.ISandwich;
+  completeSandwich: (self: ISandwichStation) -> ISandwich.ISandwich | IItem.IItem;
   updateSandwichModel: (self: ISandwichStation) -> ();
 };
 

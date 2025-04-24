@@ -115,14 +115,14 @@ function SandwichStation.new(properties: ISandwichStation.SandwichStationPropert
 
     end;
 
-    local force = primaryPart.CFrame:VectorToObjectSpace(primaryPart.Position - primaryPart.Position) * 1000;
-    item:drop(primaryPart.CFrame.Position, force);
+    -- local force = primaryPart.CFrame:VectorToObjectSpace(primaryPart.Position - primaryPart.Position) * 1000;
+    item:drop(primaryPart.CFrame, Vector3.zero);
 
     return item;
 
   end;
 
-  local function completeSandwich(self: ISandwichStation.ISandwichStation): ISandwich.ISandwich
+  local function completeSandwich(self: ISandwichStation.ISandwichStation): ISandwich.ISandwich | IItem.IItem
 
     local sandwich = self.sandwich;
     if not sandwich then
@@ -136,7 +136,7 @@ function SandwichStation.new(properties: ISandwichStation.SandwichStationPropert
 
     sandwichCompletedEvent:Fire();
 
-    return sandwich;
+    return if #sandwich.items == 1 then sandwich.items[1] else sandwich;
 
   end;
 

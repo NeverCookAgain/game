@@ -4,12 +4,9 @@ local ServerStorage = game:GetService("ServerStorage");
 
 local IItem = require(ServerStorage.Item.types);
 
-export type Status = "Raw" | "Cooked" | "Burnt";
-
 export type SandwichBaseProperties = {
   name: string;
   description: string;
-  status: Status;
 }
 
 export type SandwichConstructorProperties = SandwichBaseProperties & {
@@ -23,8 +20,7 @@ export type SandwichProperties = SandwichBaseProperties & {
 
 export type SandwichMethods = {
   createModel: (item: ISandwich) -> Model;
-  setStatus: (item: ISandwich, newStatus: Status) -> ();
-  drop: (item: ISandwich, origin: Vector3, direction: Vector3) -> Model;
+  drop: (item: ISandwich, origin: CFrame, direction: Vector3) -> Model;
 };
 
 export type SandwichEvents = {

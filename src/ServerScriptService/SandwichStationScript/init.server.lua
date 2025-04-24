@@ -32,7 +32,14 @@ if round then
 
         if typeof(action) ~= "string" or (action ~= "Add" and action ~= "Complete") then
 
-          error(`Action name must be a "PushLeft", "PushRight", "Pop", or "Complete".`);
+          error(`Action name must be a "Add" or "Complete".`);
+
+        end;
+
+        local sandwichStationPrimaryPart = sandwichStation.model.PrimaryPart;
+        if not sandwichStationPrimaryPart then
+
+          error("Sandwich station needs a PrimaryPart.");
 
         end;
 
@@ -59,7 +66,17 @@ if round then
 
             end;
 
-            sandwichStation:completeSandwich();
+            local sandwich = sandwichStation:completeSandwich();
+
+            if sandwich.type == "Sandwich" then
+
+              sandwich:drop(sandwichStationPrimaryPart.CFrame, Vector3.new(0, 1, 0) * 5);
+
+            elseif sandwich.type == "Item" then
+
+              sandwich:drop(sandwichStationPrimaryPart.CFrame, Vector3.new(0, 1, 0) * 5);
+
+            end;
 
           end;
 

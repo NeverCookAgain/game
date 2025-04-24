@@ -5,22 +5,15 @@ local ServerStorage = game:GetService("ServerStorage");
 local ISandwich = require(script.types);
 local IRound = require(ServerStorage.Round.types);
 
-local Item = {};
+local Sandwich = {};
 
 type ISandwich = ISandwich.ISandwich;
 
-function Item.new(properties: ISandwich.SandwichConstructorProperties, round: IRound.IRound): ISandwich
+function Sandwich.new(properties: ISandwich.SandwichConstructorProperties, round: IRound.IRound): ISandwich
 
   local statusChangedEvent = Instance.new("BindableEvent");
   local spinProcess: thread? = nil;
   local triggerEvent: RBXScriptConnection;
-
-  local function setStatus(self: ISandwich, newStatus: ISandwich.Status): ()
-
-    self.status = newStatus;
-    statusChangedEvent:Fire();
-
-  end;
 
   local function createModel(self: ISandwich): Model
 
@@ -28,7 +21,7 @@ function Item.new(properties: ISandwich.SandwichConstructorProperties, round: IR
     
     for index, item in self.items do
     
-      local part = item.templatePart:Clone();
+      local part = item:createPart();
       part.CFrame = CFrame.Angles(0, 0, math.rad(90)) + sandwichModel.PrimaryPart.CFrame.Position + Vector3.new(0, (index - 1) * 0.1, 0);
       part.Parent = sandwichModel;
 
@@ -50,7 +43,7 @@ function Item.new(properties: ISandwich.SandwichConstructorProperties, round: IR
 
   end;
 
-  local function drop(self: ISandwich, origin: Vector3, direction: Vector3): Model
+  local function drop(self: ISandwich, origin: CFrame, direction: Vector3): Model
 
     local sandwichModel = self:createModel();
     if not sandwichModel.PrimaryPart then
@@ -66,8 +59,9 @@ function Item.new(properties: ISandwich.SandwichConstructorProperties, round: IR
       
     end;
 
+    proximityPrompt.Enabled = true;
     proximityPrompt.ObjectText = self.name;
-    proximityPrompt.ActionText = if self.status == "Burnt" then "Congratulations" else "Pick it up"
+    proximityPrompt.ActionText = "Pick it up";
 
     if triggerEvent then
 
@@ -89,35 +83,16 @@ function Item.new(properties: ISandwich.SandwichConstructorProperties, round: IR
 
         end;
 
+        sandwichModel:Destroy();
         contestant:addToInventory(self);
 
       end;
     
     end);
 
-    sandwichModel:MoveTo(origin);
+    sandwichModel:PivotTo(origin);
     sandwichModel.Parent = workspace;
     sandwichModel.PrimaryPart:ApplyImpulse(direction);
-
-    task.wait(0.1);
-
-    spinProcess = task.spawn(function()
-    
-      while task.wait() do
-
-        local alignOrientation = sandwichModel.PrimaryPart:FindFirstChild("AlignOrientation");
-        if not alignOrientation or not alignOrientation:IsA("AlignOrientation") then
-
-          warn("An AlignOrientation should be in every dropped item.")
-          break;
-
-        end;
-
-        alignOrientation.CFrame = sandwichModel.PrimaryPart.CFrame * CFrame.Angles(0, math.rad(1), 0)
-
-      end;
-
-    end);
 
     return sandwichModel;
 
@@ -128,9 +103,7 @@ function Item.new(properties: ISandwich.SandwichConstructorProperties, round: IR
     name = properties.name;
     items = properties.items or {};
     description = properties.description;
-    status = properties.status;
     createModel = createModel;
-    setStatus = setStatus;
     drop = drop;
     StatusChanged = statusChangedEvent.Event;
   };
@@ -139,4 +112,4 @@ function Item.new(properties: ISandwich.SandwichConstructorProperties, round: IR
 
 end;
 
-return Item;
+return Sandwich;

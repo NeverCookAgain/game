@@ -5,6 +5,7 @@ local ServerStorage = game:GetService("ServerStorage");
 local IItem = require(ServerStorage.Item.types);
 local IToaster = require(script.types);
 local IRound = require(ServerStorage.Round.types);
+local ISandwich = require(ServerStorage.Sandwich.types);
 
 local Toaster = {};
 
@@ -17,7 +18,7 @@ function Toaster.new(properties: IToaster.ToasterProperties, round: IRound.IRoun
   local proximityPrompt = script.ProximityPrompt:Clone();
   local humSound: Sound? = nil;
 
-  local function setItem(self: IToaster.IToaster, newItem: IItem.IItem?): ()
+  local function setItem(self: IToaster.IToaster, newItem: (IItem.IItem | ISandwich.ISandwich)?): ()
 
     if toastProcess then
 
@@ -63,8 +64,17 @@ function Toaster.new(properties: IToaster.ToasterProperties, round: IRound.IRoun
 
       end;
 
-      local force = primaryPart.CFrame:VectorToObjectSpace(primaryPart.Position - handle.PrimaryPart.Position) * 1000;
-      self.item:drop(handle.PrimaryPart.Position, force);
+      local force = primaryPart.CFrame:VectorToObjectSpace(primaryPart.Position - handle.PrimaryPart.Position) * 1;
+
+      if self.item.type == "Sandwich" then
+
+        self.item:drop(handle.PrimaryPart.CFrame, Vector3.zero);
+
+      else
+
+        self.item:drop(handle.PrimaryPart.CFrame, force);
+
+      end;
 
     end;
 
@@ -83,16 +93,64 @@ function Toaster.new(properties: IToaster.ToasterProperties, round: IRound.IRoun
       humSound = newHumSound;
 
       toastProcess = task.spawn(function()
-      
-        while self.item.status ~= "Burnt" do
+        
+        proximityPrompt.ActionText = "raw";
+        if self.item.type == "Item" then
 
-          task.wait(1);
-          self.item:setStatus(if self.item.status == "Cooked" then "Burnt" else "Cooked");
-          if self.item.status == "Cooked" then
+          while self.item.status ~= "Burnt" do
 
-            proximityPrompt.ActionText = "Cooked to perfection"
+            task.wait(1);
+            self.item:setStatus(if self.item.status == "Cooked" then "Burnt" else "Cooked");
+            if self.item.status == "Cooked" then
+
+              proximityPrompt.ActionText = "Cooked to perfection"
+
+            end;
 
           end;
+
+        elseif self.item.type == "Sandwich" then
+
+          local uncookedItems = {};
+          local highestStatus = "Raw";
+          repeat
+
+            uncookedItems = {};
+
+            for _, item in self.item.items do
+              
+              if (highestStatus == "Raw" and item.status == "Cooked") or (highestStatus == "Cooked" and item.status == "Burnt") then
+
+                highestStatus = item.status;
+                proximityPrompt.ActionText = item.status;
+
+              end;
+
+              if item.status ~= "Burnt" then
+
+                table.insert(uncookedItems, item);
+
+              end;
+
+            end;
+
+            if uncookedItems[1] then
+              
+              task.wait(1)
+
+              for _, uncookedItem in uncookedItems do
+
+                if uncookedItem.status ~= "Burnt" then
+      
+                  uncookedItem:setStatus(if uncookedItem.status == "Cooked" then "Burnt" else "Cooked");
+
+                end;
+
+              end;
+
+            end;
+
+          until #uncookedItems == 0;
 
         end;
 
@@ -113,8 +171,6 @@ function Toaster.new(properties: IToaster.ToasterProperties, round: IRound.IRoun
         fire = newFire;
 
       end);
-
-      proximityPrompt.ActionText = "raw"
 
     else
 
@@ -154,7 +210,7 @@ function Toaster.new(properties: IToaster.ToasterProperties, round: IRound.IRoun
       elseif #contestant.inventory > 0 then
 
         local item = contestant.inventory[#contestant.inventory];
-        contestant:removeItemFromInventory(item);
+        contestant:removeFromInventory(item);
         toaster:setItem(item);
 
       end;

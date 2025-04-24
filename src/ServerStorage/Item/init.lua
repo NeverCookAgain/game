@@ -12,6 +12,7 @@ function Item.new(properties: IItem.ItemConstructorProperties, round: IRound.IRo
   local statusChangedEvent = Instance.new("BindableEvent");
   local spinProcess: thread? = nil;
   local triggerEvent: RBXScriptConnection;
+  local droppedPart: BasePart? = nil;
 
   local function setStatus(self: IItem.IItem, newStatus: IItem.Status): ()
 
@@ -20,30 +21,51 @@ function Item.new(properties: IItem.ItemConstructorProperties, round: IRound.IRo
 
   end;
 
-  local function drop(self: IItem.IItem, origin: Vector3, direction: Vector3): BasePart
+  local function createPart(self: IItem.IItem): BasePart
 
-    local part = self.part or self.templatePart:Clone();
-    self.part = part;
+    local part = self.templatePart:Clone();
+    part.Massless = true;
 
-    local function setGUIEffect(instance: Instance?)
-      
-      if instance and instance:IsA("SurfaceGui") then
+    local function updateImages(surfaceGUI: Instance?)
 
-        local ingredientImageLabel = instance:FindFirstChild("IngredientImageLabel");
-        if ingredientImageLabel and ingredientImageLabel:IsA("ImageLabel") then
+      if not surfaceGUI then
 
-          ingredientImageLabel.ImageColor3 = if self.status == "Burnt" then Color3.fromRGB(20, 20, 20) elseif self.status == "Cooked" then Color3.fromRGB(230, 208, 114) else Color3.new(1, 1, 1);
-
-        end;
+        error("BackGUI and FrontGUI required.");
 
       end;
 
+      local itemImageLabel = surfaceGUI:FindFirstChild("ItemImageLabel");
+      if not itemImageLabel or not itemImageLabel:IsA("ImageLabel") then
+
+        error(`{surfaceGUI.Name} needs an "ItemImageLabel".`);
+
+      end;
+
+      itemImageLabel.ImageColor3 = if self.status == "Burnt" then Color3.fromRGB(20, 20, 20) elseif self.status == "Cooked" then Color3.fromRGB(230, 208, 114) else Color3.new(1, 1, 1);
+      itemImageLabel.Image = properties.image;
+      
     end;
+    
+    local smoke = Instance.new("Smoke");
+    smoke.Color = Color3.new(0, 0, 0);
+    smoke.Size = 1;
+    smoke.RiseVelocity = 2;
+    smoke.Opacity = 0.1;
+    smoke.Parent = part;
 
     local backGUI = part:FindFirstChild("BackGUI");
     local frontGUI = part:FindFirstChild("FrontGUI");
-    setGUIEffect(backGUI);
-    setGUIEffect(frontGUI);
+    updateImages(backGUI);
+    updateImages(frontGUI);
+
+    return part;
+
+  end;
+
+  local function drop(self: IItem.IItem, origin: CFrame, direction: Vector3): BasePart
+
+    local part = droppedPart or self.templatePart:Clone();
+    droppedPart = part;
 
     local proximityPrompt = part:FindFirstChild("ProximityPrompt");
     if not proximityPrompt or not proximityPrompt:IsA("ProximityPrompt") then
@@ -52,6 +74,7 @@ function Item.new(properties: IItem.ItemConstructorProperties, round: IRound.IRo
       
     end;
 
+    proximityPrompt.Enabled = true;
     proximityPrompt.ObjectText = self.name;
     proximityPrompt.ActionText = if self.status == "Burnt" then "Congratulations" else "Pick it up"
 
@@ -76,66 +99,21 @@ function Item.new(properties: IItem.ItemConstructorProperties, round: IRound.IRo
         end;
 
         part:Destroy();
-        self.part = nil;
+        droppedPart = nil;
         contestant:addToInventory(self);
 
       end;
     
     end);
 
-    part.Position = origin;
+    part.CFrame = origin;
     part.Parent = workspace;
     part:SetNetworkOwner();
     part:ApplyImpulse(direction);
 
-    task.wait(0.1);
-
-    spinProcess = task.spawn(function()
-    
-      while task.wait() do
-
-        local alignOrientation = part:FindFirstChild("AlignOrientation");
-        if not alignOrientation or not alignOrientation:IsA("AlignOrientation") then
-
-          warn("An AlignOrientation should be in every dropped item.")
-          break;
-
-        end;
-
-        alignOrientation.CFrame = part.CFrame * CFrame.Angles(0, math.rad(1), 0)
-
-      end;
-
-    end);
-
     return part;
 
   end;
-
-  local templatePart = properties.templatePart or script.Part;
-  local function updateImages(surfaceGUI: SurfaceGui?)
-
-    if not surfaceGUI then
-
-      error("SurfaceGUI required.");
-
-    end;
-
-    local itemImageLabel = surfaceGUI:FindFirstChild("ItemImageLabel");
-    if not itemImageLabel or not itemImageLabel:IsA("ImageLabel") then
-
-      error(`{surfaceGUI.Name} needs an "ItemImageLabel".`);
-
-    end;
-
-    itemImageLabel.Image = properties.image;
-    
-  end;
-  
-  local backGUI = templatePart:FindFirstChild("BackGUI");
-  local frontGUI = templatePart:FindFirstChild("FrontGUI");
-  updateImages(backGUI);
-  updateImages(frontGUI);
 
   local item: IItem.IItem = {
     type = "Item" :: "Item";
@@ -143,7 +121,8 @@ function Item.new(properties: IItem.ItemConstructorProperties, round: IRound.IRo
     description = properties.description;
     image = properties.image;
     status = properties.status;
-    templatePart = templatePart;
+    templatePart = properties.templatePart or script.Part;
+    createPart = createPart;
     setStatus = setStatus;
     drop = drop;
     StatusChanged = statusChangedEvent.Event;

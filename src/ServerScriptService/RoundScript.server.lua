@@ -75,18 +75,21 @@ local function addPlayerAsContestant(player: Player)
 
   round:addContestant(contestant);
 
-  while task.wait() do
+  if #contestant.inventory < 2 then
 
-    if #contestant.inventory < 2 then
+    contestant:addToInventory(Item.new({
+      name = "Avocado",
+      description = "Test",
+      image = "rbxassetid://72701864119182",
+      status = "Raw" :: IItem.Status
+    }, round));
 
-      contestant:addToInventory(Item.new({
-        name = "Avocado",
-        description = "Test",
-        image = "rbxassetid://72701864119182",
-        status = "Raw" :: IItem.Status
-      }, round));
-
-    end;
+    contestant:addToInventory(Item.new({
+      name = "Avocado",
+      description = "Test",
+      image = "rbxassetid://72701864119182",
+      status = "Raw" :: IItem.Status
+    }, round));
 
   end;
   
@@ -119,11 +122,11 @@ ReplicatedStorage.Shared.Functions.ActivateItem.OnServerInvoke = function(player
         
         if item.type == "Item" then
 
-          item:drop(contestant.model.PrimaryPart.CFrame.Position, -contestant.model.PrimaryPart.CFrame.LookVector * 5);
+          item:drop(contestant.model.PrimaryPart.CFrame, -contestant.model.PrimaryPart.CFrame.LookVector * 5);
 
         elseif item.type == "Sandwich" then
 
-          item:drop(contestant.model.PrimaryPart.CFrame.Position, -contestant.model.PrimaryPart.CFrame.LookVector * 5);
+          item:drop(contestant.model.PrimaryPart.CFrame, -contestant.model.PrimaryPart.CFrame.LookVector * 5);
 
         end;
 

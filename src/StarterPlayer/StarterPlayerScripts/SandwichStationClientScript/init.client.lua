@@ -3,7 +3,15 @@
 local Players = game:GetService("Players");
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
+local events: {RBXScriptConnection} = {};
+
 local function updatePrompts()
+
+  for _, event in events do
+
+    event:Disconnect();
+
+  end;
 
   local round = ReplicatedStorage.Shared.Functions.GetRound:InvokeServer();
   local contestant;
@@ -45,13 +53,13 @@ local function updatePrompts()
         proximityPrompt.KeyboardKeyCode = Enum.KeyCode.E;
         proximityPrompt.Parent = proximityPromptsPart;
         proximityPrompt.UIOffset = Vector2.new(0, 100);
-        proximityPrompt.Triggered:Connect(function()
+        table.insert(events, proximityPrompt.Triggered:Connect(function()
         
           proximityPrompt.Enabled = false;
           activateSandwichStationBindableFunction:InvokeServer("Add");
-          proximityPrompt.Enabled = true;
+          updatePrompts();
 
-        end);
+        end));
 
       end;
 
@@ -62,14 +70,14 @@ local function updatePrompts()
         proximityPrompt.Parent = proximityPromptsPart;
         proximityPrompt.KeyboardKeyCode = Enum.KeyCode.C;
         proximityPrompt.ActionText = `Complete sandwich`;
-        proximityPrompt.UIOffset = Vector2.new(if stationModel.Name:find("Left") then -100 else 100, 0);
-        proximityPrompt.Triggered:Connect(function()
+        proximityPrompt.UIOffset = Vector2.new(if stationModel.Name:find("Left") then 100 else -100, 0);
+        table.insert(events, proximityPrompt.Triggered:Connect(function()
           
           proximityPrompt.Enabled = false;
           activateSandwichStationBindableFunction:InvokeServer("Complete");
-          proximityPrompt.Enabled = true;
+          updatePrompts();
 
-        end);
+        end));
 
       end;
 
