@@ -98,6 +98,25 @@ function Item.new(properties: IItem.ItemConstructorProperties, round: IRound.IRo
 
         end;
 
+        local soundPart = Instance.new("Part");
+        soundPart.Transparency = 1;
+        soundPart.Anchored = true;
+        soundPart.CanCollide = false;
+        soundPart.CFrame = part.CFrame;
+        soundPart.Parent = workspace;
+        
+        local sound = Instance.new("Sound");
+        sound.SoundId = "rbxassetid://6324790483";
+        sound.Volume = 0.6;
+        sound.Parent = soundPart;
+        sound.Ended:Once(function()
+        
+          soundPart:Destroy();
+          sound:Destroy();
+
+        end);
+        sound:Play();
+
         part:Destroy();
         droppedPart = nil;
         contestant:addToInventory(self);

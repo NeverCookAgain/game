@@ -83,6 +83,25 @@ function Sandwich.new(properties: ISandwich.SandwichConstructorProperties, round
 
         end;
 
+        local soundPart = Instance.new("Part");
+        soundPart.Transparency = 1;
+        soundPart.Anchored = true;
+        soundPart.CanCollide = false;
+        soundPart.CFrame = sandwichModel.PrimaryPart.CFrame;
+        soundPart.Parent = workspace;
+        
+        local sound = Instance.new("Sound");
+        sound.SoundId = "rbxassetid://6324790483";
+        sound.Parent = soundPart;
+        sound.Volume = 0.6;
+        sound.Ended:Once(function()
+        
+          soundPart:Destroy();
+          sound:Destroy();
+
+        end);
+        sound:Play();
+
         sandwichModel:Destroy();
         contestant:addToInventory(self);
 

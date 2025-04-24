@@ -88,7 +88,7 @@ function Toaster.new(properties: IToaster.ToasterProperties, round: IRound.IRoun
       newHumSound.Looped = true;
       newHumSound.PlaybackRegionsEnabled = true;
       newHumSound.LoopRegion = NumberRange.new(2, 3);
-      newHumSound.Volume = 0.4;
+      newHumSound.Volume = 0.2;
       newHumSound:Play();
       humSound = newHumSound;
 
