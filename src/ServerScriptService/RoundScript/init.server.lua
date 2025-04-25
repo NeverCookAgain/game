@@ -227,7 +227,7 @@ ReplicatedStorage.Shared.Functions.ActivateItem.OnServerInvoke = function(player
 end;
 
 local startTimeMilliseconds = DateTime.now().UnixTimestampMillis;
-local completionTimeMilliseconds = startTimeMilliseconds + (90 * 1000);
+local completionTimeMilliseconds = startTimeMilliseconds + (script:GetAttribute("Debug_CompletionTimeMilliseconds") or (90 * 1000));
 round.startTimeMilliseconds = startTimeMilliseconds;
 round.completionTimeMilliseconds = completionTimeMilliseconds;
 round:setStatus("Ongoing");

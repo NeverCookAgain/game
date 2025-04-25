@@ -14,6 +14,8 @@ local shouldMoveBackward = false;
 
 local player = Players.LocalPlayer;
 
+player.CharacterAdded:Wait();
+
 local function moveCharacter(actionName, inputState)
 
 	local force = 30;

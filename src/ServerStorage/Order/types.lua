@@ -8,7 +8,8 @@ export type Difficulty = "Easy" | "Medium" | "Hard";
 
 export type OrderBaseProperties = {
   difficulty: Difficulty;
-  sandwich: ISandwich.ISandwich;
+  requestedSandwich: ISandwich.ISandwich;
+  actualSandwich: ISandwich.ISandwich?;
 }
 
 export type OrderConstructorProperties = OrderBaseProperties & {
@@ -20,7 +21,7 @@ export type OrderProperties = OrderBaseProperties & {
 };
 
 export type OrderMethods = {
-  
+  setActualSandwich: (self: IOrder, sandwich: ISandwich.ISandwich) -> ();
 };
 
 export type OrderEvents = {
