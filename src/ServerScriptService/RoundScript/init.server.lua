@@ -11,10 +11,7 @@ local Avocado = require(ServerStorage.Items.Avocado);
 local Round = require(ServerStorage.Round);
 local Order = require(ServerStorage.Order);
 
-local round = Round.new({
-  status = "Preparing";
-  contestants = {};
-});
+local round = Round.new({});
 
 Round.setSharedRound(round);
 
@@ -54,6 +51,12 @@ round.RoundChanged:Connect(function()
   end;
 
   ReplicatedStorage.Shared.Events.RoundChanged:FireAllClients(round);
+
+end);
+
+round.EventsChanged:Connect(function()
+
+  ReplicatedStorage.Shared.Events.RoundEventsChanged:FireAllClients(round.events);
 
 end);
 

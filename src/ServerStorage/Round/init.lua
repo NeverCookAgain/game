@@ -4,6 +4,7 @@ local ServerStorage = game:GetService("ServerStorage");
 
 local IRound = require(script.types);
 local IContestant = require(ServerStorage.Contestant.types);
+local IEvent = require(ServerStorage.Event.types);
 
 local sharedRound: IRound.IRound? = nil;
 local sharedRoundChangedBindableEvent: BindableEvent = Instance.new("BindableEvent");
@@ -13,10 +14,11 @@ local Round = {
   SharedRoundChanged = sharedRoundChangedEvent;
 };
 
-function Round.new(properties: IRound.RoundProperties): IRound.IRound
+function Round.new(properties: IRound.RoundConstructorProperties): IRound.IRound
 
   local roundChangedEvent = Instance.new("BindableEvent");
   local contestantsChangedEvent = Instance.new("BindableEvent");
+  local eventsChangedEvent = Instance.new("BindableEvent");
 
   local function setStatus(self: IRound.IRound, newStatus: IRound.RoundStatus): ()
 
@@ -48,14 +50,42 @@ function Round.new(properties: IRound.RoundProperties): IRound.IRound
 
   end;
 
+  local function addEvent(self: IRound.IRound, event: IEvent.IEvent): ()
+
+    table.insert(self.events, event);
+    eventsChangedEvent:Fire(self.events);
+
+  end;
+
+  local function removeEvent(self: IRound.IRound, event: IEvent.IEvent): ()
+
+    for index = #self.events, 1, -1 do
+
+      if self.events[index] == event then
+
+        table.remove(self.events, index);
+        eventsChangedEvent:Fire(self.events);
+        break;
+
+      end;
+
+    end;
+
+
+  end;
+
   local round: IRound.IRound = {
-    status = properties.status;
-    contestants = {};
+    status = properties.status or "Preparing" :: "Preparing";
+    contestants = properties.contestants or {};
+    events = properties.events or {};
+    addEvent = addEvent;
     addContestant = addContestant;
-    setStatus = setStatus;
     findContestantFromPlayer = findContestantFromPlayer;
+    removeEvent = removeEvent;
+    setStatus = setStatus;
     ContestantsChanged = contestantsChangedEvent.Event;
     RoundChanged = roundChangedEvent.Event;
+    EventsChanged = eventsChangedEvent.Event;
   };
 
   return round;
