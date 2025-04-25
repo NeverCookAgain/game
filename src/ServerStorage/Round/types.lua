@@ -3,11 +3,21 @@
 local ServerStorage = game:GetService("ServerStorage");
 
 local IContestant = require(ServerStorage.Contestant.types);
+local IEvent = require(ServerStorage.Event.types);
 
 export type RoundStatus = "Preparing" | "Ongoing" | "Ended";
 
-export type RoundProperties = {
+export type RoundBaseProperties = {}
+
+export type RoundConstructorProperties = RoundBaseProperties & {
+  status: RoundStatus?;
+  events: {IEvent.IEvent}?;
+  contestants: {IContestant.IContestant}?;
+}
+
+export type RoundProperties = RoundBaseProperties & {
   status: RoundStatus;
+  events: {IEvent.IEvent};
   contestants: {IContestant.IContestant};
   startTimeMilliseconds: number?;
   completionTimeMilliseconds: number?;
@@ -15,6 +25,8 @@ export type RoundProperties = {
 
 export type RoundMethods = {
   addContestant: (self: IRound, contestant: IContestant.IContestant) -> ();
+  addEvent: (self: IRound, event: IEvent.IEvent) -> ();
+  removeEvent: (self: IRound, event: IEvent.IEvent) -> ();
   setStatus: (self: IRound, newStatus: RoundStatus) -> ();
   findContestantFromPlayer: (self: IRound, targetPlayer: Player) -> IContestant.IContestant?;
 };
@@ -22,6 +34,7 @@ export type RoundMethods = {
 export type RoundEvents = {
   ContestantsChanged: RBXScriptSignal;
   RoundChanged: RBXScriptSignal;
+  EventsChanged: RBXScriptSignal<{IEvent.IEvent}>;
 }
 
 export type IRound = RoundProperties & RoundMethods & RoundEvents;
