@@ -1,11 +1,33 @@
 --!strict
+
+local Players = game:GetService("Players");
+
 local camera = workspace.CurrentCamera;
 
-camera.CameraSubject = workspace.CousinRicky.PrimaryPart;
 camera.CameraType = Enum.CameraType.Scriptable;
 
-while task.wait() do
+local cameraThread: thread? = nil;
 
-	camera.CFrame = workspace.CousinRicky.CameraPart.CFrame;
+Players.LocalPlayer.CharacterAdded:Connect(function()
 
-end
+	camera.CameraSubject = Players.LocalPlayer.Character.PrimaryPart;
+
+	if cameraThread then
+
+		task.cancel(cameraThread);
+		cameraThread = nil;
+
+	end;
+
+	cameraThread = task.spawn(function()
+
+		while task.wait() do
+
+			camera.CFrame = Players.LocalPlayer.Character.CameraPart.CFrame;
+		
+		end
+
+	end);
+
+end);
+

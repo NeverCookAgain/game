@@ -59,7 +59,24 @@ end);
 
 local function addPlayerAsContestant(player: Player)
 
-  player.Character = workspace.CousinRicky;
+  local spawnLocations: {SpawnLocation} = workspace:FindFirstChild("SpawnLocations"):GetChildren();
+
+  local character = script.Character:Clone();
+
+  character.Name = player.Name;
+  player.Character = character;
+  character:PivotTo(spawnLocations[Random.new():NextInteger(1, #spawnLocations)].CFrame);
+  character.Parent = workspace;
+
+  for _, part in character:GetDescendants() do
+
+    if part:IsA("BasePart") then
+
+      part:SetNetworkOwner(player);
+
+    end;
+
+  end;
 
   local contestant = Contestant.new({
     player = player;

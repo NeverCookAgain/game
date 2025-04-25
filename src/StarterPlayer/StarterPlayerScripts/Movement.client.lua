@@ -1,4 +1,6 @@
 --!strict
+
+local Players = game:GetService("Players");
 local UserInputService = game:GetService("UserInputService");
 local ContextActionService = game:GetService("ContextActionService");
 local TweenService = game:GetService("TweenService");
@@ -10,6 +12,8 @@ local shouldMoveRight = false;
 local shouldMoveForward = false;
 local shouldMoveBackward = false;
 
+local player = Players.LocalPlayer;
+
 local function moveCharacter(actionName, inputState)
 
 	local force = 30;
@@ -19,7 +23,7 @@ local function moveCharacter(actionName, inputState)
 	shouldMoveForward = UserInputService:IsKeyDown(Enum.KeyCode.Up) or UserInputService:IsKeyDown(Enum.KeyCode.W);
 	shouldMoveBackward = UserInputService:IsKeyDown(Enum.KeyCode.Down) or UserInputService:IsKeyDown(Enum.KeyCode.S);
 
-	local linearVelocity: LinearVelocity = workspace.CousinRicky.PrimaryPart.LinearVelocity;
+	local linearVelocity: LinearVelocity = player.Character.PrimaryPart.LinearVelocity;
 	linearVelocity.VectorVelocity = Vector3.new(
 		if shouldMoveForward and shouldMoveBackward then 0 elseif shouldMoveBackward then force elseif shouldMoveForward then -force else 0, 
 		0, 
@@ -29,7 +33,7 @@ local function moveCharacter(actionName, inputState)
 	local walkCycleLeftIDs = {138071730441626, 127157712731282, 90099424286222, 88329203120597, 110743064881685, 138805926032055, 137674659781586, 80218653204415, 72783473022560};
 	local function setAnimationFrame(frameNumber: number)
 
-		local spriteSides = {workspace.CousinRicky.SpritePart.BackGUI.ImageLabel, workspace.CousinRicky.SpritePart.FrontGUI.ImageLabel};
+		local spriteSides = {player.Character.SpritePart.BackGUI.ImageLabel, player.Character.SpritePart.FrontGUI.ImageLabel};
 
 		for _, sprite in spriteSides do
 
@@ -37,8 +41,8 @@ local function moveCharacter(actionName, inputState)
 
 			if shouldMoveLeft or shouldMoveRight then
 
-				TweenService:Create(workspace.CousinRicky.SpritePart.Attachment, TweenInfo.new(0.1), {
-					CFrame = CFrame.new(workspace.CousinRicky.SpritePart.Attachment.CFrame.Position) * CFrame.Angles(0, if shouldMoveLeft then 0 else math.rad(180), 0);
+				TweenService:Create(player.Character.SpritePart.Attachment, TweenInfo.new(0.1), {
+					CFrame = CFrame.new(player.Character.SpritePart.Attachment.CFrame.Position) * CFrame.Angles(0, if shouldMoveLeft then 0 else math.rad(180), 0);
 				}):Play()
 
 			end;
