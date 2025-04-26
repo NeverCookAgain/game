@@ -20,8 +20,10 @@ local function stopFollowingPlayer()
 
 end;
 
-Players.LocalPlayer.CharacterAdded:Connect(function()
+local function updateCamera()
 
+	if not Players.LocalPlayer.Character then return end
+	
 	camera.CameraSubject = Players.LocalPlayer.Character.PrimaryPart;
 
 	stopFollowingPlayer();
@@ -36,7 +38,10 @@ Players.LocalPlayer.CharacterAdded:Connect(function()
 
 	end);
 
-end);
+end;
+
+Players.LocalPlayer.CharacterAdded:Connect(updateCamera);
+updateCamera();
 
 ReplicatedStorage.Shared.Events.RoundChanged.OnClientEvent:Connect(function(round)
 	

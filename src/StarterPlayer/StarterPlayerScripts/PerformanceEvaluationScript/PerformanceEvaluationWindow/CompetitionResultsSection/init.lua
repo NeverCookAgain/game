@@ -106,7 +106,7 @@ local function CompetitionResultsSection(properties: ContestantsSectionPropertie
     ContestantRowSection = React.createElement("Frame", {
       AutomaticSize = Enum.AutomaticSize.Y;
       BackgroundTransparency = 1;
-      LayoutOrder = 2; 
+      LayoutOrder = 2;
       Size = UDim2.new(1, 0, 0, 0);
     }, {
       UIListLayout = React.createElement("UIListLayout", {

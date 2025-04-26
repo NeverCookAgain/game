@@ -14,7 +14,11 @@ local shouldMoveBackward = false;
 
 local player = Players.LocalPlayer;
 
-player.CharacterAdded:Wait();
+if not player.Character then
+
+	player.CharacterAdded:Wait();
+
+end;
 
 local function moveCharacter(actionName, inputState)
 
