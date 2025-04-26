@@ -24,6 +24,7 @@ local function checkRoundStatus()
     screenGUI.Name = "PerformanceEvaluationWindow";
     screenGUI.ScreenInsets = Enum.ScreenInsets.None;
     screenGUI.Parent = Players.LocalPlayer.PlayerGui;
+    screenGUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling;
 
     local root = ReactRoblox.createRoot(screenGUI);
     root:render(React.createElement(PerformanceEvaluationWindow, {

@@ -87,7 +87,11 @@ local function addPlayerAsContestant(player: Player)
     inventory = {};
     inventorySlots = 5;
     model = player.Character;
-    headshotImage = "rbxassetid://132812371775588";
+    headshotImages = {
+      default = "rbxassetid://132812371775588";
+      happy = "rbxassetid://72985907419460";
+      sad = "rbxassetid://112655319908614";
+    };
   }, round);
 
   contestant.CustomerAssignmentChanged:Connect(function()
@@ -120,7 +124,11 @@ round:addContestant(Contestant.new({
   id = 0;
   inventory = {};
   inventorySlots = 5;
-  headshotImage = "rbxassetid://132812371775588";
+  headshotImages = {
+    default = "rbxassetid://132812371775588";
+    happy = "rbxassetid://72985907419460";
+    sad = "rbxassetid://112655319908614";
+  };
 }, round));
 
 Players.PlayerAdded:Connect(function(player: Player)

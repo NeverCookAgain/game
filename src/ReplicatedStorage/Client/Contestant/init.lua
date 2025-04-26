@@ -3,7 +3,6 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
 local IRound = require(ReplicatedStorage.Client.Round.types);
-local IItem = require(ReplicatedStorage.Client.Item.types);
 local IContestant = require(script.types);
 
 local Contestant = {};
@@ -54,7 +53,7 @@ function Contestant.new(properties: IContestant.ContestantProperties, round: IRo
   local contestant: IContestant.IContestant = {
     type = "Contestant" :: "Contestant";
     id = properties.id;
-    headshotImage = properties.headshotImage;
+    headshotImages = properties.headshotImages;
     player = properties.player;
     model = properties.model;
     inventorySlots = properties.inventorySlots;

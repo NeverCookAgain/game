@@ -11,7 +11,11 @@ export type ContestantBaseProperties = {
   player: Player?;
   inventorySlots: number;
   model: Model?;
-  headshotImage: string;
+  headshotImages: {
+    default: string;
+    happy: string;
+    sad: string;
+  };
   id: number;
 };
 

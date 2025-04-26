@@ -3,15 +3,16 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
 local React = require(ReplicatedStorage.Shared.Packages.react);
+local IContestant = require(ReplicatedStorage.Client.Contestant.types);
+
 local ContestantData = require(script.ContestantData);
 
 export type ContestantsSectionProperties = {
-  contestants: {any};
+  contestants: {IContestant.IContestant};
 }
 
 local function ContestantHypeSection(properties: ContestantsSectionProperties)
 
-  local shouldShowFinalScore, setShouldShowFinalScore = React.useState(false);
   local calculatingContestants, setCalculatingContestants = React.useState(properties.contestants);
 
   React.useEffect(function()
@@ -29,9 +30,8 @@ local function ContestantHypeSection(properties: ContestantsSectionProperties)
 
     table.insert(ContestantDatas, React.createElement(ContestantData, {
       contestant = contestant;
-      layoutOrder = contestant.layoutOrder;
-      shouldShowFinalScore = shouldShowFinalScore;
-      key = index;  
+      layoutOrder = index;
+      key = contestant.id;  
     }));
 
   end;
