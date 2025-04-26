@@ -83,6 +83,7 @@ local function addPlayerAsContestant(player: Player)
 
   local contestant = Contestant.new({
     player = player;
+    id = player.UserId;
     inventory = {};
     inventorySlots = 5;
     model = player.Character;
@@ -116,6 +117,7 @@ end;
 
 
 round:addContestant(Contestant.new({
+  id = 0;
   inventory = {};
   inventorySlots = 5;
   headshotImage = "rbxassetid://132812371775588";

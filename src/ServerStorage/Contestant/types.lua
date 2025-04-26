@@ -7,6 +7,7 @@ local IItem = require(ServerStorage.Item.types);
 local ISandwich = require(ServerStorage.Sandwich.types);
 
 export type ContestantBaseProperties = {
+  id: number;
   assignedCustomer: ICustomer.ICustomer?;
   player: Player?;
   inventorySlots: number;

@@ -11,6 +11,8 @@ export type ContestantsSectionProperties = {
 
 local function CompetitionResultsSection(properties: ContestantsSectionProperties)
 
+  local selectedContestant, setSelectedContestant = React.useState(nil :: IContestant.IContestant?);
+
   local contestantScores = {};
   local loserButtons = {};
   local bestContestant = nil;
@@ -18,44 +20,62 @@ local function CompetitionResultsSection(properties: ContestantsSectionPropertie
 
     contestantScores[contestant] = contestant:getOrderAccuracy();
     
+    local function insertLoserButton(losingContestant: IContestant.IContestant)
+      
+      local button = React.createElement("TextButton", {
+        AutomaticSize = Enum.AutomaticSize.XY;
+        BackgroundTransparency = 1;
+        LayoutOrder = #loserButtons + 1;
+        Size = UDim2.new();
+        Text = "";
+        key = contestant.id;
+        [React.Event.Activated] = function()
+
+          setSelectedContestant(losingContestant);
+
+        end;
+      }, {
+        UIListLayout = React.createElement("UIListLayout", {
+          Padding = UDim.new(0, 15);
+          SortOrder = Enum.SortOrder.LayoutOrder;
+          FillDirection = Enum.FillDirection.Horizontal;
+          VerticalAlignment = Enum.VerticalAlignment.Center;
+        });
+        LoserImageLabel = React.createElement("ImageLabel", {
+          BackgroundTransparency = 1;
+          Image = properties.contestants[2].headshotImage;
+          Size = UDim2.new(0, 60, 0, 60);
+          ImageTransparency = 0.5;
+        });
+        LoserScoreTextLabel = React.createElement("TextLabel", {
+          AutomaticSize = Enum.AutomaticSize.XY;
+          BackgroundTransparency = 1;
+          FontFace = Font.fromName("Kalam", Enum.FontWeight.Bold);
+          LayoutOrder = 1;
+          Size = UDim2.new();
+          Text = contestantScores[bestContestant];
+          TextSize = 30;
+          TextColor3 = Color3.new();
+        });
+      });
+
+      table.insert(loserButtons, button);
+
+    end;
+
     if bestContestant == nil or contestantScores[contestant] > contestantScores[bestContestant] then
 
       if bestContestant then
 
-        table.insert(loserButtons, React.createElement("TextButton", {
-          AutomaticSize = Enum.AutomaticSize.XY;
-          BackgroundTransparency = 1;
-          LayoutOrder = #loserButtons + 1;
-          Size = UDim2.new();
-          Text = "";
-          key = contestant.id;
-        }, {
-          UIListLayout = React.createElement("UIListLayout", {
-            Padding = UDim.new(0, 15);
-            SortOrder = Enum.SortOrder.LayoutOrder;
-            FillDirection = Enum.FillDirection.Horizontal;
-            VerticalAlignment = Enum.VerticalAlignment.Center;
-          });
-          LoserImageLabel = React.createElement("ImageLabel", {
-            BackgroundTransparency = 1;
-            Image = properties.contestants[2].headshotImage;
-            Size = UDim2.new(0, 60, 0, 60);
-          });
-          LoserScoreTextLabel = React.createElement("TextLabel", {
-            AutomaticSize = Enum.AutomaticSize.XY;
-            BackgroundTransparency = 1;
-            FontFace = Font.fromName("Kalam", Enum.FontWeight.Bold);
-            LayoutOrder = 1;
-            Size = UDim2.new();
-            Text = contestantScores[bestContestant];
-            TextSize = 30;
-            TextColor3 = Color3.new();
-          });
-        }));
+        insertLoserButton(bestContestant);
 
       end;
 
       bestContestant = contestant;
+
+    else
+
+      insertLoserButton(contestant);
 
     end;
 
@@ -79,7 +99,7 @@ local function CompetitionResultsSection(properties: ContestantsSectionPropertie
       FontFace = Font.fromName("Kalam", Enum.FontWeight.Bold);
       LayoutOrder = 1;
       Size = UDim2.new();
-      Text = if bestContestant.player then bestContestant.player.Name else "Unknown player";
+      Text = if selectedContestant and selectedContestant.player then selectedContestant.player.Name elseif bestContestant.player then bestContestant.player.Name else "Unknown player";
       TextSize = 30;
       TextColor3 = Color3.new();
     });
@@ -115,6 +135,11 @@ local function CompetitionResultsSection(properties: ContestantsSectionPropertie
         LayoutOrder = 2;
         Image = properties.contestants[1].headshotImage;
         Size = UDim2.new(0, 100, 0, 100);
+        [React.Event.Activated] = function()
+
+          setSelectedContestant(bestContestant);
+
+        end;
       });
       SelectedContestantDetailsSection = React.createElement("Frame", {
         AutomaticSize = Enum.AutomaticSize.XY;
@@ -132,7 +157,7 @@ local function CompetitionResultsSection(properties: ContestantsSectionPropertie
           FontFace = Font.fromName("Kalam");
           LayoutOrder = 1;
           Size = UDim2.new();
-          Text = "Score: 100%";
+          Text = (selectedContestant or bestContestant):getOrderAccuracy();
           TextSize = 30;
           TextColor3 = Color3.new();
         });

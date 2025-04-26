@@ -22,6 +22,8 @@ export type ContestantConstructorProperties = ContestantBaseProperties & {
 
 export type ContestantProperties = ContestantBaseProperties & {
   type: "Contestant";
+  servedCustomers: {ICustomer.ICustomer};
+  inventory: {IItem.IItem | ISandwich.ISandwich};
 };
 
 export type ContestantMethods = {

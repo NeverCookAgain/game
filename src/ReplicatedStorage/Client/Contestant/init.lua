@@ -21,6 +21,12 @@ function Contestant.new(properties: IContestant.ContestantProperties, round: IRo
 
       for _, item in customer.order.requestedSandwich.items do
       
+        if customer.order.actualSandwich == nil then
+
+          continue;
+
+        end;
+
         local itemAccuracy = 0;
         for possibleItemIndex, possibleItem in customer.order.actualSandwich.items do
 
@@ -52,11 +58,13 @@ function Contestant.new(properties: IContestant.ContestantProperties, round: IRo
     player = properties.player;
     model = properties.model;
     inventorySlots = properties.inventorySlots;
+    inventory = properties.inventory or {};
+    servedCustomers = properties.servedCustomers or {};
     getOrderAccuracy = getOrderAccuracy;
     InventoryChanged = inventoryChangedEvent.Event;
   };
 
-  ReplicatedStorage.Shared.Functions.ContestantInventoryChanged:Connect(function(newInventory: {IItem.IItem | ISandwich.ISandwich})
+  ReplicatedStorage.Shared.Events.ContestantInventoryChanged.OnClientEvent:Connect(function(newInventory: unknown)
 
     inventoryChangedEvent:Fire(newInventory);
 
