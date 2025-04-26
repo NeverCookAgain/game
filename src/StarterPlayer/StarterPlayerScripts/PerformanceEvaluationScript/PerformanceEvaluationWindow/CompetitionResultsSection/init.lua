@@ -82,6 +82,7 @@ local function CompetitionResultsSection(properties: ContestantsSectionPropertie
   end;
 
   -- Show the results.
+  local correctSandwichIngredientCount = (selectedContestant or bestContestant):getOrderAccuracy();
   return React.createElement("Frame", {
     AutomaticSize = Enum.AutomaticSize.Y;
     BackgroundTransparency = 1;
@@ -151,13 +152,23 @@ local function CompetitionResultsSection(properties: ContestantsSectionPropertie
           Padding = UDim.new(0, 15);
           SortOrder = Enum.SortOrder.LayoutOrder;
         });
+        FinalScoreTextLabel = React.createElement("TextLabel", {
+          AutomaticSize = Enum.AutomaticSize.XY;
+          BackgroundTransparency = 1;
+          FontFace = Font.fromName("Kalam", Enum.FontWeight.Bold);
+          LayoutOrder = 1;
+          Size = UDim2.new();
+          Text = "FINAL SCORE";
+          TextSize = 22;
+          TextColor3 = Color3.new();
+        });
         ScoreTextLabel = React.createElement("TextLabel", {
           AutomaticSize = Enum.AutomaticSize.XY;
           BackgroundTransparency = 1;
-          FontFace = Font.fromName("Kalam");
-          LayoutOrder = 1;
+          FontFace = Font.fromName("Kalam", Enum.FontWeight.Bold);
+          LayoutOrder = 2;
           Size = UDim2.new();
-          Text = (selectedContestant or bestContestant):getOrderAccuracy();
+          Text = correctSandwichIngredientCount;
           TextSize = 30;
           TextColor3 = Color3.new();
         });
