@@ -3,12 +3,63 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
 local React = require(ReplicatedStorage.Shared.Packages.react);
+local IContestant = require(ReplicatedStorage.Client.Contestant.types);
 
 export type ContestantsSectionProperties = {
-  contestants: {any};
+  contestants: {IContestant.IContestant};
 }
 
 local function CompetitionResultsSection(properties: ContestantsSectionProperties)
+
+  local contestantScores = {};
+  local loserButtons = {};
+  local bestContestant = nil;
+  for _, contestant in properties.contestants do
+
+    contestantScores[contestant] = contestant:getOrderAccuracy();
+    
+    if bestContestant == nil or contestantScores[contestant] > contestantScores[bestContestant] then
+
+      if bestContestant then
+
+        table.insert(loserButtons, React.createElement("TextButton", {
+          AutomaticSize = Enum.AutomaticSize.XY;
+          BackgroundTransparency = 1;
+          LayoutOrder = #loserButtons + 1;
+          Size = UDim2.new();
+          Text = "";
+          key = contestant.id;
+        }, {
+          UIListLayout = React.createElement("UIListLayout", {
+            Padding = UDim.new(0, 15);
+            SortOrder = Enum.SortOrder.LayoutOrder;
+            FillDirection = Enum.FillDirection.Horizontal;
+            VerticalAlignment = Enum.VerticalAlignment.Center;
+          });
+          LoserImageLabel = React.createElement("ImageLabel", {
+            BackgroundTransparency = 1;
+            Image = properties.contestants[2].headshotImage;
+            Size = UDim2.new(0, 60, 0, 60);
+          });
+          LoserScoreTextLabel = React.createElement("TextLabel", {
+            AutomaticSize = Enum.AutomaticSize.XY;
+            BackgroundTransparency = 1;
+            FontFace = Font.fromName("Kalam", Enum.FontWeight.Bold);
+            LayoutOrder = 1;
+            Size = UDim2.new();
+            Text = contestantScores[bestContestant];
+            TextSize = 30;
+            TextColor3 = Color3.new();
+          });
+        }));
+
+      end;
+
+      bestContestant = contestant;
+
+    end;
+
+  end;
 
   -- Show the results.
   return React.createElement("Frame", {
@@ -28,7 +79,7 @@ local function CompetitionResultsSection(properties: ContestantsSectionPropertie
       FontFace = Font.fromName("Kalam", Enum.FontWeight.Bold);
       LayoutOrder = 1;
       Size = UDim2.new();
-      Text = "WINNER_NAME!";
+      Text = if bestContestant.player then bestContestant.player.Name else "Unknown player";
       TextSize = 30;
       TextColor3 = Color3.new();
     });
@@ -57,64 +108,7 @@ local function CompetitionResultsSection(properties: ContestantsSectionPropertie
         UIListLayout = React.createElement("UIListLayout", {
           SortOrder = Enum.SortOrder.LayoutOrder;
         });
-        LoserButton = React.createElement("TextButton", {
-          AutomaticSize = Enum.AutomaticSize.XY;
-          BackgroundTransparency = 1;
-          LayoutOrder = 1;
-          Size = UDim2.new();
-          Text = "";
-        }, {
-          UIListLayout = React.createElement("UIListLayout", {
-            Padding = UDim.new(0, 15);
-            SortOrder = Enum.SortOrder.LayoutOrder;
-            FillDirection = Enum.FillDirection.Horizontal;
-            VerticalAlignment = Enum.VerticalAlignment.Center;
-          });
-          LoserImageLabel = React.createElement("ImageLabel", {
-            BackgroundTransparency = 1;
-            Image = properties.contestants[2].headshotImage;
-            Size = UDim2.new(0, 60, 0, 60);
-          });
-          LoserNameTextLabel = React.createElement("TextLabel", {
-            AutomaticSize = Enum.AutomaticSize.XY;
-            BackgroundTransparency = 1;
-            FontFace = Font.fromName("Kalam", Enum.FontWeight.Bold);
-            LayoutOrder = 1;
-            Size = UDim2.new();
-            Text = "0";
-            TextSize = 30;
-            TextColor3 = Color3.new();
-          });
-        });
-        LoserButton2 = React.createElement("TextButton", {
-          AutomaticSize = Enum.AutomaticSize.XY;
-          BackgroundTransparency = 1;
-          LayoutOrder = 1;
-          Size = UDim2.new();
-          Text = "";
-        }, {
-          UIListLayout = React.createElement("UIListLayout", {
-            Padding = UDim.new(0, 15);
-            SortOrder = Enum.SortOrder.LayoutOrder;
-            FillDirection = Enum.FillDirection.Horizontal;
-            VerticalAlignment = Enum.VerticalAlignment.Center;
-          });
-          LoserImageLabel = React.createElement("ImageLabel", {
-            BackgroundTransparency = 1;
-            Image = properties.contestants[2].headshotImage;
-            Size = UDim2.new(0, 60, 0, 60);
-          });
-          LoserNameTextLabel = React.createElement("TextLabel", {
-            AutomaticSize = Enum.AutomaticSize.XY;
-            BackgroundTransparency = 1;
-            FontFace = Font.fromName("Kalam", Enum.FontWeight.Bold);
-            LayoutOrder = 1;
-            Size = UDim2.new();
-            Text = "0";
-            TextSize = 30;
-            TextColor3 = Color3.new();
-          });
-        });
+        LoserButtons = React.createElement(React.Fragment, {}, loserButtons);
       });
       WinnerHeadshotButton = React.createElement("ImageButton", {
         BackgroundTransparency = 1;

@@ -5,11 +5,19 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
 local React = require(ReplicatedStorage.Shared.Packages.react);
 local ReactRoblox = require(ReplicatedStorage.Shared.Packages["react-roblox"]);
+local Round = require(ReplicatedStorage.Client.Round);
+
 local PerformanceEvaluationWindow = require(script.PerformanceEvaluationWindow);
 
 local function checkRoundStatus()
 
-  local round = ReplicatedStorage.Shared.Functions.GetRound:InvokeServer();
+  local round = Round.getFromServerRound();
+  if not round then
+
+    return;
+
+  end;
+
   if round.status == "Ended" then
 
     local screenGUI = Instance.new("ScreenGui");

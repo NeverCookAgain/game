@@ -141,11 +141,9 @@ for _, customerModel in customerModels do
 
   local customer = Customer.new({
     model = customerModel;
-    image = customerImages[Random.new():NextInteger(1, #customerImages)]
+    image = customerImages[Random.new():NextInteger(1, #customerImages)];
+    order = Order.generate("Easy", round);
   }, round);
-
-  local order = Order.generate("Easy", round);
-  customer:setOrder(order);
 
   table.insert(customers, customer);
 

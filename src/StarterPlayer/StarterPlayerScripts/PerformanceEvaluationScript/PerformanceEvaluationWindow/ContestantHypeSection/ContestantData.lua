@@ -12,40 +12,6 @@ export type ContestantPerformanceSectionProperties = {
 
 local function ContestantHypeSection(properties: ContestantPerformanceSectionProperties)
 
-  -- Calculate accuracy.
-  local overallAccuracy = 0;
-  local totalItemCount = 0;
-  local finishedItemCount = 0;
-
-  for _, customer in properties.contestant.servedCustomers do
-
-    for _, item in customer.order.requestedSandwich.items do
-    
-      local itemAccuracy = 0;
-      for possibleItemIndex, possibleItem in customer.order.actualSandwich.items do
-
-        if possibleItem.name == item.name then
-          
-          itemAccuracy = if possibleItem.status == item.status then 1 else 0;
-          table.remove(customer.order.actualSandwich.items, possibleItemIndex);
-          break;
-
-        end;
-
-      end;
-      finishedItemCount += itemAccuracy;
-
-    end;
-
-    totalItemCount += #customer.order.requestedSandwich.items;
-
-  end;
-
-  overallAccuracy = finishedItemCount / totalItemCount;
-
-  -- Calculate final score.
-  local finalScore = math.floor(finishedItemCount);
-
   local shownFinalScore, setShownFinalScore = React.useState(0);
   React.useEffect(function()
 

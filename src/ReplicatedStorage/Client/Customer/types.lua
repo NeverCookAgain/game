@@ -1,8 +1,8 @@
 --!strict
 
-local ServerStorage = game:GetService("ServerStorage");
+local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
-local IOrder = require(ServerStorage.Order.types);
+local IOrder = require(ReplicatedStorage.Client.Order.types);
 
 export type CustomerBaseProperties = {
   order: IOrder.IOrder;
@@ -19,7 +19,7 @@ export type CustomerProperties = CustomerBaseProperties & {
 };
 
 export type CustomerMethods = {
-  setOrder: (self: ICustomer, order: IOrder.IOrder) -> ();
+
 };
 
 export type CustomerEvents = {

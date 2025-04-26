@@ -5,11 +5,13 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
 local React = require(ReplicatedStorage.Shared.Packages.react);
 local ReactRoblox = require(ReplicatedStorage.Shared.Packages["react-roblox"]);
+local IContestant = require(ReplicatedStorage.Client.Contestant.types);
+
 local ContestantHypeSection = require(script.ContestantHypeSection);
 local CompetitionResultsSection = require(script.CompetitionResultsSection);
 
 export type PerformanceEvaluationWindowProperties = {
-  contestants: {any};
+  contestants: {IContestant.IContestant};
 }
 
 local function PerformanceEvaluationWindow(properties: PerformanceEvaluationWindowProperties)
