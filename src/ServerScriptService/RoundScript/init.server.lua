@@ -118,19 +118,6 @@ local function addPlayerAsContestant(player: Player)
 
 end;
 
-
-
-round:addContestant(Contestant.new({
-  id = 0;
-  inventory = {};
-  inventorySlots = 5;
-  headshotImages = {
-    default = "rbxassetid://132812371775588";
-    happy = "rbxassetid://72985907419460";
-    sad = "rbxassetid://112655319908614";
-  };
-}, round));
-
 Players.PlayerAdded:Connect(function(player: Player)
   
   addPlayerAsContestant(player)
