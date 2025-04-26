@@ -13,4 +13,9 @@ screenGUI.ScreenInsets = Enum.ScreenInsets.None;
 screenGUI.Parent = Players.LocalPlayer:WaitForChild("PlayerGui");
 
 local root = ReactRoblox.createRoot(screenGUI);
-root:render(React.createElement(InventoryContainer));
+root:render(React.createElement(InventoryContainer, {
+  onClose = function()
+    root:unmount();
+    screenGUI:Destroy();
+  end;
+}));

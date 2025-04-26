@@ -83,9 +83,15 @@ local function addPlayerAsContestant(player: Player)
 
   local contestant = Contestant.new({
     player = player;
+    id = player.UserId;
     inventory = {};
     inventorySlots = 5;
     model = player.Character;
+    headshotImages = {
+      default = "rbxassetid://132812371775588";
+      happy = "rbxassetid://72985907419460";
+      sad = "rbxassetid://112655319908614";
+    };
   }, round);
 
   contestant.CustomerAssignmentChanged:Connect(function()
@@ -132,11 +138,9 @@ for _, customerModel in customerModels do
 
   local customer = Customer.new({
     model = customerModel;
-    image = customerImages[Random.new():NextInteger(1, #customerImages)]
+    image = customerImages[Random.new():NextInteger(1, #customerImages)];
+    order = Order.generate("Easy", round);
   }, round);
-
-  local order = Order.generate("Easy", round);
-  customer:setOrder(order);
 
   table.insert(customers, customer);
 
@@ -227,7 +231,7 @@ ReplicatedStorage.Shared.Functions.ActivateItem.OnServerInvoke = function(player
 end;
 
 local startTimeMilliseconds = DateTime.now().UnixTimestampMillis;
-local completionTimeMilliseconds = startTimeMilliseconds + (90 * 1000);
+local completionTimeMilliseconds = startTimeMilliseconds + (script:GetAttribute("Debug_CompletionTimeMilliseconds") or (90 * 1000));
 round.startTimeMilliseconds = startTimeMilliseconds;
 round.completionTimeMilliseconds = completionTimeMilliseconds;
 round:setStatus("Ongoing");

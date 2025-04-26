@@ -10,15 +10,23 @@ local ISandwich = require(ServerStorage.Sandwich.types);
 
 local Contestant = {};
 
-function Contestant.new(properties: IContestant.ContestantProperties, round: IRound.IRound): IContestant.IContestant
+function Contestant.new(properties: IContestant.ContestantConstructorProperties, round: IRound.IRound): IContestant.IContestant
 
   local inventoryChangedEvent = Instance.new("BindableEvent");
   local customerAssignmentChangedEvent = Instance.new("BindableEvent");
+  local customerServedEvent = Instance.new("BindableEvent");
 
   local function addToInventory(self: IContestant.IContestant, item: IItem.IItem | ISandwich.ISandwich): ()
 
     table.insert(self.inventory, item);
     inventoryChangedEvent:Fire();
+
+  end;
+
+  local function addServedCustomer(self: IContestant.IContestant, customer: ICustomer.ICustomer): ()
+
+    table.insert(self.servedCustomers, customer);
+    customerServedEvent:Fire(customer);
 
   end;
 
@@ -46,13 +54,18 @@ function Contestant.new(properties: IContestant.ContestantProperties, round: IRo
   end;
 
   local contestant: IContestant.IContestant = {
+    id = properties.id;
     player = properties.player;
     model = properties.model;
     inventorySlots = properties.inventorySlots;
-    inventory = {};
+    inventory = properties.inventory or {};
+    servedCustomers = properties.servedCustomers or {};
+    headshotImages = properties.headshotImages;
+    addServedCustomer = addServedCustomer;
     addToInventory = addToInventory;
     removeFromInventory = removeFromInventory;
     setAssignedCustomer = setAssignedCustomer;
+    CustomerServed = customerServedEvent.Event;
     InventoryChanged = inventoryChangedEvent.Event;
     CustomerAssignmentChanged = customerAssignmentChangedEvent.Event;
   };

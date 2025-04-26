@@ -1,8 +1,8 @@
 --!strict
 
-local ServerStorage = game:GetService("ServerStorage");
+local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
-local ISandwich = require(ServerStorage.Sandwich.types);
+local ISandwich = require(ReplicatedStorage.Client.Sandwich.types);
 
 export type Difficulty = "Easy" | "Medium" | "Hard";
 
@@ -21,7 +21,7 @@ export type OrderProperties = OrderBaseProperties & {
 };
 
 export type OrderMethods = {
-  setActualSandwich: (self: IOrder, sandwich: ISandwich.ISandwich) -> ();
+
 };
 
 export type OrderEvents = {

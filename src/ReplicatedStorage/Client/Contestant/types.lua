@@ -1,17 +1,37 @@
 --!strict
 
-local ServerStorage = game:GetService("ServerStorage");
+local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
-local IItem = require(ServerStorage.Item.types);
+local IItem = require(ReplicatedStorage.Client.Item.types);
+local ICustomer = require(ReplicatedStorage.Client.Customer.types);
+local ISandwich = require(ReplicatedStorage.Client.Sandwich.types);
 
-export type ContestantProperties = {
+export type ContestantBaseProperties = {
+  assignedCustomer: ICustomer.ICustomer?;
   player: Player?;
   inventorySlots: number;
+  model: Model?;
+  headshotImages: {
+    default: string;
+    happy: string;
+    sad: string;
+  };
+  id: number;
+};
+
+export type ContestantConstructorProperties = ContestantBaseProperties & {
+  servedCustomers: {ICustomer.ICustomer}?;
+  inventory: {IItem.IItem | ISandwich.ISandwich}?;
+}
+
+export type ContestantProperties = ContestantBaseProperties & {
+  type: "Contestant";
+  servedCustomers: {ICustomer.ICustomer};
+  inventory: {IItem.IItem | ISandwich.ISandwich};
 };
 
 export type ContestantMethods = {
-  addItemToInventory: (self: IContestant, item: IItem.IItem) -> ();
-  removeItemFromInventory: (self: IContestant, item: IItem.IItem) -> ();
+  getOrderAccuracy: (self: IContestant) -> (number, number);
 };
 
 export type ContestantEvents = {
