@@ -1,15 +1,30 @@
 --!strict
 
+local Lighting = game:GetService("Lighting");
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
 local React = require(ReplicatedStorage.Shared.Packages.react);
-local ContestantList = require(script.ContestantList);
+local ReactRoblox = require(ReplicatedStorage.Shared.Packages["react-roblox"]);
+local ContestantHypeSection = require(script.ContestantHypeSection);
+local CompetitionResultsSection = require(script.CompetitionResultsSection);
 
 export type PerformanceEvaluationWindowProperties = {
   contestants: {any};
 }
 
 local function PerformanceEvaluationWindow(properties: PerformanceEvaluationWindowProperties)
+
+  local shouldShowResults, setShouldShowResults = React.useState(false);
+
+  React.useEffect(function()
+  
+    task.delay(3, function()
+    
+      setShouldShowResults(true);
+
+    end);
+
+  end, {});
 
   -- Show the results.
   return React.createElement("Frame", {
@@ -25,14 +40,15 @@ local function PerformanceEvaluationWindow(properties: PerformanceEvaluationWind
       Size = UDim2.new(0, 500, 0, 300);
     }, {
       UIListLayout = React.createElement("UIListLayout", {
-        HorizontalAlignment = Enum.HorizontalAlignment.Center;
         Padding = UDim.new(0, 15);
+        HorizontalAlignment = Enum.HorizontalAlignment.Center;
         SortOrder = Enum.SortOrder.LayoutOrder;
-        FillDirection = Enum.FillDirection.Horizontal;
       });
       UIPadding = React.createElement("UIPadding", {
-        PaddingLeft = UDim.new(0, 10);
-        PaddingRight = UDim.new(0, 10);
+        PaddingTop = UDim.new(0, 15);
+        PaddingBottom = UDim.new(0, 15);
+        PaddingLeft = UDim.new(0, 15);
+        PaddingRight = UDim.new(0, 15);
       });
       Title = React.createElement("TextLabel", {
         AutomaticSize = Enum.AutomaticSize.XY;
@@ -42,12 +58,22 @@ local function PerformanceEvaluationWindow(properties: PerformanceEvaluationWind
         Size = UDim2.new();
         Text = "And the winner is...";
         TextSize = 30;
-        TextColor3 = Color3.fromRGB(255, 255, 255);
+        TextColor3 = Color3.new();
       });
-      ContestantList = React.createElement(ContestantList, {
-        contestants = properties.contestants;
-      });
+      ContestantHypeSection = if not shouldShowResults then
+        React.createElement(ContestantHypeSection, {
+          contestants = properties.contestants;
+        })
+      else nil;
+      CompetitionResultsSection = if shouldShowResults then
+        React.createElement(CompetitionResultsSection, {
+          contestants = properties.contestants;
+        })
+      else nil;
     });
+    Blur = ReactRoblox.createPortal(React.createElement("BlurEffect", {
+      Size = 12;
+    }), Lighting);
   })
 
 end;

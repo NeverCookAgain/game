@@ -59,6 +59,7 @@ function Contestant.new(properties: IContestant.ContestantConstructorProperties,
     inventorySlots = properties.inventorySlots;
     inventory = properties.inventory or {};
     servedCustomers = properties.servedCustomers or {};
+    headshotImage = properties.headshotImage;
     addServedCustomer = addServedCustomer;
     addToInventory = addToInventory;
     removeFromInventory = removeFromInventory;

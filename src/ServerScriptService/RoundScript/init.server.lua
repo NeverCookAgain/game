@@ -86,6 +86,7 @@ local function addPlayerAsContestant(player: Player)
     inventory = {};
     inventorySlots = 5;
     model = player.Character;
+    headshotImage = "rbxassetid://132812371775588";
   }, round);
 
   contestant.CustomerAssignmentChanged:Connect(function()
@@ -111,6 +112,14 @@ local function addPlayerAsContestant(player: Player)
   
 
 end;
+
+
+
+round:addContestant(Contestant.new({
+  inventory = {};
+  inventorySlots = 5;
+  headshotImage = "rbxassetid://132812371775588";
+}, round));
 
 Players.PlayerAdded:Connect(function(player: Player)
   

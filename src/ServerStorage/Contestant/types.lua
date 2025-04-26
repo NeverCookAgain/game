@@ -11,6 +11,7 @@ export type ContestantBaseProperties = {
   player: Player?;
   inventorySlots: number;
   model: Model?;
+  headshotImage: string;
 }
 
 export type ContestantConstructorProperties = ContestantBaseProperties & {
