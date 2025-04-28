@@ -22,18 +22,18 @@ local foodItems = {
 local foodItems = ReplicatedStorage.Shared.Functions.GetIngredients:InvokeServer();
 
 local itemsPerPage = 8
-local currentPage = 1
 
 local function FridgeContainer(props)
 	local startOpen = props.startOpen or false
 	local isOpen, setIsOpen = React.useState(startOpen)
+	local currentPage, setCurrentPage = React.useState(1)
 
 	React.useEffect(function()
 		setIsOpen(startOpen)
 	end, {startOpen})
 
 	local function updatePage(offset: number)
-		currentPage = math.clamp(currentPage + offset, 1, math.ceil(#foodItems / itemsPerPage))
+		setCurrentPage(math.clamp(currentPage + offset, 1, math.ceil(#foodItems / itemsPerPage)))
 	end
 
 	if not isOpen then
@@ -52,7 +52,7 @@ local function FridgeContainer(props)
 			Image = foodItem.image,
 			[React.Event.MouseButton1Click] = function()
 				ReplicatedStorage.Shared.Functions.AddIngredientToInventory:InvokeServer(foodItem.name);
-				setIsOpen(false)
+				props.onClose();
 			end,
 		}))
 	end
@@ -121,7 +121,7 @@ local function FridgeContainer(props)
 			Position = UDim2.new(1, -60, 0, 10),  
 			Image = "rbxassetid://111357809643186", 
 			[React.Event.MouseButton1Click] = function()
-				setIsOpen(false) 
+				props.onClose();
 			end,
 			ZIndex = 2;
 		}),

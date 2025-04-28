@@ -48,11 +48,11 @@ local function setupProximityPrompts()
 			prompt.Triggered:Connect(function()
 			
 				root:render(React.createElement(FridgeContainer, {
-          startOpen = true
+          startOpen = true;
 					onClose = function()
 
 						root:unmount();
-						
+
 					end;
         }))
 
