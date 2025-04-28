@@ -7,16 +7,19 @@ local React = require(ReplicatedStorage.Shared.Packages.react)
 
 
 local foodItems = {
-	{name = "Bacon", image = "rbxassetid://119291517667506"},
-	{name = "Egg", image = "rbxassetid://119291517667506"},
-	{name = "Lettuce", image = "rbxassetid://116432356075981"},
-	{name = "Mozzarella", image = "rbxassetid://102197708436798"},
-	{name = "Peppers", image = "rbxassetid://78110205863275"},
-	{name = "Spinach", image = "rbxassetid://78528226368164"},
-	{name = "Tomatoes", image = "rbxassetid://88812451859977"},
-	{name = "White Bread", image = "rbxassetid://118064158632179"},
+	{name = "Bacon", image = ""},
+	{name = "Egg", image = ""},
+	{name = "Lettuce", image = ""},
+	{name = "Mozzarella", image = ""},
+	{name = "Peppers", image = ""},
+	{name = "Spinach", image = ""},
+	{name = "Tomatoes", image = ""},
+	{name = "White Bread", image = ""},
 	
 }
+
+
+local foodItems = ReplicatedStorage.Shared.Functions.GetIngredients:InvokeServer();
 
 local itemsPerPage = 8
 local currentPage = 1
@@ -45,17 +48,19 @@ local function FridgeContainer(props)
 		local foodItem = foodItems[i]
 		table.insert(displayedItems, React.createElement("ImageButton", {
 			Name = foodItem.name,
-			Size = UDim2.new(0, 100, 0, 100),
+			Size = UDim2.new(0, 120, 0, 120),
 			Image = foodItem.image,
 			[React.Event.MouseButton1Click] = function()
-				print("Added " .. foodItem.name .. " to inventory!")
+				ReplicatedStorage.Shared.Functions.AddIngredientToInventory:InvokeServer(foodItem.name);
 				setIsOpen(false)
 			end,
 		}))
 	end
 
 	return React.createElement("Frame", {
-		Size = UDim2.fromScale(1, 1),
+		AnchorPoint = Vector2.new(0.5, 0.5),
+		Position = UDim2.new(0.5, 0, 0.5, 0),
+		Size = UDim2.new(0, 666, 0, 237),
 		BackgroundTransparency = 1,
 	}, {
 		
@@ -63,6 +68,7 @@ local function FridgeContainer(props)
 			Size = UDim2.fromScale(1, 1),
 			Image = "rbxassetid://137018338177172", 
 			BackgroundTransparency = 1,
+			ZIndex = 1;
 		}),
 
 	
@@ -70,7 +76,25 @@ local function FridgeContainer(props)
 			Size = UDim2.fromScale(1, 0.75),
 			Position = UDim2.fromScale(0, 0.1),
 			BackgroundTransparency = 1,
-		}, displayedItems),
+			ZIndex = 2;
+		}, {
+			UIPadding = React.createElement("UIPadding", {
+				PaddingTop = UDim.new(0, 15),
+				PaddingBottom = UDim.new(0, 15),
+				PaddingLeft = UDim.new(0, 60),
+				PaddingRight = UDim.new(0, 60),
+			}),
+			UIGridLayout = React.createElement("UIGridLayout", {
+				CellSize = UDim2.new(0, 90, 0, 90),
+				CellPadding = UDim2.new(0, 5, 0, 5),
+				SortOrder = Enum.SortOrder.LayoutOrder,
+				FillDirection = Enum.FillDirection.Horizontal,
+				HorizontalAlignment = Enum.HorizontalAlignment.Center,
+				VerticalAlignment = Enum.VerticalAlignment.Center,
+				FillDirectionMaxCells = 4,
+			}),
+			Items = React.createElement(React.Fragment, {}, displayedItems);
+		}),
 
 		nextButton = React.createElement("ImageButton", {
 			Size = UDim2.new(0, 50, 0, 50),
@@ -79,6 +103,7 @@ local function FridgeContainer(props)
 			[React.Event.MouseButton1Click] = function()
 				updatePage(1)
 			end,
+			ZIndex = 2;
 		}),
 
 		prevButton = React.createElement("ImageButton", {
@@ -88,6 +113,7 @@ local function FridgeContainer(props)
 			[React.Event.MouseButton1Click] = function()
 				updatePage(-1)
 			end,
+			ZIndex = 2;
 		}),
 
 		closeButton = React.createElement("ImageButton", {
@@ -97,6 +123,7 @@ local function FridgeContainer(props)
 			[React.Event.MouseButton1Click] = function()
 				setIsOpen(false) 
 			end,
+			ZIndex = 2;
 		}),
 	})
 end

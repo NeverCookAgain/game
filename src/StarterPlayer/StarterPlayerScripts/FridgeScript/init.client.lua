@@ -14,14 +14,20 @@ local fridges = workspace.Restaurant:WaitForChild("Fridges")
 local proximityPromptTemplate = script:WaitForChild("ProximityPrompt")
 local events: {RBXScriptConnection} = {}
 
+local screenGUI = Instance.new("ScreenGui")
+screenGUI.Name = "FridgeScreen"
+screenGUI.ResetOnSpawn = false
+screenGUI.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
+screenGUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+screenGUI.ScreenInsets = Enum.ScreenInsets.None;
+local root = ReactRoblox.createRoot(screenGUI);
+
 local function setupProximityPrompts()
 	
 	for _, conn in events do
 		conn:Disconnect()
 	end
 	table.clear(events)
-
-
 
 	for _, fridge in fridges:GetChildren() do
 
@@ -39,20 +45,19 @@ local function setupProximityPrompts()
 			prompt.ActionText = "Open Fridge"
 			prompt.KeyboardKeyCode = Enum.KeyCode.E
 			prompt.UIOffset = Vector2.new(0, 100)
-
-      local screenGUI = Instance.new("ScreenGui")
-      screenGUI.Name = "FridgeScreen"
-      screenGUI.ResetOnSpawn = false
-      screenGUI.Parent = Players.LocalPlayer:WaitForChild("PlayerGui")
-      
-      OpenFridgeEvent.OnClientEvent:Connect(function()
-        root:render(React.createElement(FridgeContainer, {
+			prompt.Triggered:Connect(function()
+			
+				root:render(React.createElement(FridgeContainer, {
           startOpen = true
+					onClose = function()
+
+						root:unmount();
+						
+					end;
         }))
-      end)
-					OpenFridgeEvent:FireClient(Players.LocalPlayer)
-				end
-			end
+
+			end);
+
 			table.insert(events, connection)
 		end
 	end
