@@ -6,6 +6,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
 local React = require(ReplicatedStorage.Shared.Packages.react);
 local ReactRoblox = require(ReplicatedStorage.Shared.Packages["react-roblox"]);
+local ICustomer = require(ReplicatedStorage.Client.Customer.types);
+local Round = require(ReplicatedStorage.Client.Round);
 
 local CustomerOrderWindow = require(script.CustomerOrderWindow);
 
@@ -17,8 +19,26 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt)
   local customerNames = {"CustomerA", "CustomerB", "CustomerC", "CustomerD"};
   if possibleCustomerModel and table.find(customerNames, possibleCustomerModel.Name) then
 
-    local customer = ReplicatedStorage.Shared.Functions.GetCustomer:InvokeServer(possibleCustomerModel.Name);
-    if customer.order and not screenGUI then
+    local round = Round.getFromServerRound();
+    if not round then
+
+      return;
+
+    end;
+    local contestant = round:findContestantFromPlayer(Players.LocalPlayer);
+    if not contestant then
+
+      return;
+
+    end;
+
+    local customer = ReplicatedStorage.Shared.Functions.GetCustomer:InvokeServer(possibleCustomerModel.Name) :: ICustomer.ICustomer;
+    if contestant.assignedCustomer and contestant.assignedCustomer.model.Name == possibleCustomerModel.Name then
+
+      ReplicatedStorage.Shared.Functions.DeliverSandwich:InvokeServer();
+      prompt.ActionText = "Take order";
+    
+    elseif customer.order and not screenGUI then
 
       ProximityPromptService.Enabled = false;
 
@@ -45,6 +65,9 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt)
         onAccept = function()
 
           ReplicatedStorage.Shared.Functions.AcceptCustomer:InvokeServer(possibleCustomerModel.Name);
+          prompt.ActionText = "Deliver sandwich";
+          prompt.Enabled = true;
+
           closeGUI();
 
         end;

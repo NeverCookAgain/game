@@ -53,6 +53,7 @@ function Contestant.new(properties: IContestant.ContestantProperties, round: IRo
   local contestant: IContestant.IContestant = {
     type = "Contestant" :: "Contestant";
     id = properties.id;
+    assignedCustomer = properties.assignedCustomer;
     headshotImages = properties.headshotImages;
     player = properties.player;
     model = properties.model;
