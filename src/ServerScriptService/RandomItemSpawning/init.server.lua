@@ -1,4 +1,4 @@
-
+--!strict
 
 local Players = game:GetService("Players");
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
@@ -23,6 +23,7 @@ until round;
 while round.status ~= "Ongoing" do
 
   task.wait();
+  hasSpawnedSpatula = true
 
 end;
 
@@ -31,9 +32,10 @@ local function getRandomPoint()
   local position = KitchenSpawn.Position
   
   local randomX = position.X + math.random(-size.X/2, size.X/2)
+  local randomY = position.Y + math.random(-size.Y/2, size.Y/2)
   local randomZ = position.Z + math.random(-size.Z/2, size.Z/2)
 
-  return Vector3.new(randomX, randomZ)
+  return Vector3.new(randomX,, randomY, randomZ)
 
 end
 
