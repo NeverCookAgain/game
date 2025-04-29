@@ -3,11 +3,12 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
 local React = require(ReplicatedStorage.Shared.Packages.react);
+local IOrder = require(ReplicatedStorage.Client.Order.types);
 
 local IngredientSection = require(script.IngredientSection);
 
 export type OrderSectionProperties = {
-  order: any;
+  order: IOrder.IOrder;
   layoutOrder: number;
 }
 
@@ -15,7 +16,7 @@ local function OrderSection(properties: OrderSectionProperties)
 
   local ingredientSections = {};
   
-  for index, ingredient in properties.order.sandwich.items do
+  for index, ingredient in properties.order.requestedSandwich.items do
 
     table.insert(ingredientSections, React.createElement(IngredientSection, {
       key = index;
@@ -58,7 +59,7 @@ local function OrderSection(properties: OrderSectionProperties)
         BackgroundTransparency = 1;
         Size = UDim2.new();
         FontFace = Font.fromName("Kalam");
-        Text = properties.order.sandwich.name;
+        Text = properties.order.requestedSandwich.name;
         TextSize = 30;
       });
     });

@@ -9,7 +9,7 @@ local IRound = require(ServerStorage.Round.types);
 local Bacon = {
   name = "Bacon";
   description = "TBD";
-  image = "";
+  image = "rbxassetid://119291517667506";
 };
 
 function Bacon.new(round: IRound.IRound): IItem.IItem
