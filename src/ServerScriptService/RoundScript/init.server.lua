@@ -133,9 +133,9 @@ end;
 
 local customers = {};
 local customerModels = {workspace.CustomerA, workspace.CustomerB, workspace.CustomerC, workspace.CustomerD};
-for _, customerModel in customerModels do
+local customerImages = {"rbxassetid://136955129612174", "rbxassetid://121007848481264", "rbxassetid://85190412089778", "rbxassetid://72181972813178"};
 
-  local customerImages = {"rbxassetid://136955129612174", "rbxassetid://121007848481264", "rbxassetid://85190412089778", "rbxassetid://72181972813178"};
+for _, customerModel in customerModels do
 
   local customer = Customer.new({
     model = customerModel;
@@ -188,16 +188,40 @@ ReplicatedStorage.Shared.Functions.AcceptCustomer.OnServerInvoke = function(play
 
   contestant:setAssignedCustomer(customer);
 
-  if customer.model.PrimaryPart then
+  if customer.model.PrimaryPart and not customer.model.PrimaryPart:FindFirstChild("ProximityPrompt") then
     
     local proximityPrompt = customer.model.PrimaryPart:FindFirstChild("TakeOrderProximityPrompt");
-    if proximityPrompt then
+    if proximityPrompt and proximityPrompt:IsA("ProximityPrompt") then
 
-      proximityPrompt:Destroy();
+      proximityPrompt.Enabled = false;
 
     end;
 
   end;
+
+end;
+
+ReplicatedStorage.Shared.Functions.DeliverSandwich.OnServerInvoke = function(player)
+
+  local contestant = round:findContestantFromPlayer(player);
+  assert(contestant, "You aren't a contestant of this round.");
+  assert(contestant.assignedCustomer, "You don't have a customer assigned.");
+
+  -- Set the order.
+  contestant.assignedCustomer.order:setActualSandwich(contestant.assignedCustomer.order.requestedSandwich);
+
+  -- Reset the customer so the contestant can take a new order.
+  local newCustomer = Customer.new({
+    model = contestant.assignedCustomer.model;
+    image = customerImages[Random.new():NextInteger(1, #customerImages)];
+    order = Order.generate("Easy", round);
+  }, round);
+
+  table.remove(customers, table.find(customers, contestant.assignedCustomer));
+  table.insert(customers, newCustomer);
+  table.insert(contestant.servedCustomers, contestant.assignedCustomer);
+
+  contestant:setAssignedCustomer();
 
 end;
 

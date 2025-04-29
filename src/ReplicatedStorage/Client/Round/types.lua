@@ -21,7 +21,7 @@ export type RoundProperties = RoundBaseProperties & {
 };
 
 export type RoundMethods = {
-
+  findContestantFromPlayer: (self: IRound, player: Player) -> IContestant.IContestant?;
 };
 
 export type RoundEvents = {

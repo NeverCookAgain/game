@@ -79,6 +79,12 @@ function Customer.new(properties: ICustomer.CustomerConstructorProperties, round
     setOrder = setOrder;
   };
 
+  if properties.order then
+
+    customer:setOrder(properties.order);
+
+  end;
+
   return customer;
 
 end;
