@@ -202,4 +202,19 @@ function Item.random(round: IRound.IRound): IItem.IItem
 
 end;
 
+function Item.get(itemName: string, round: IRound.IRound): IItem.IItem
+
+  local items = Item.listClasses();
+  local item = items[itemName];
+
+  if not item then
+
+    error(`Item {itemName} not found.`);
+
+  end;
+
+  return item.new(round);
+
+end;
+
 return Item;

@@ -8,6 +8,7 @@ local ServerStorage = game:GetService("ServerStorage");
 local Contestant = require(ServerStorage.Contestant);
 local Customer = require(ServerStorage.Customer);
 local Avocado = require(ServerStorage.Items.Avocado);
+local Item = require(ServerStorage.Item);
 local Round = require(ServerStorage.Round);
 local Order = require(ServerStorage.Order);
 
@@ -227,6 +228,43 @@ ReplicatedStorage.Shared.Functions.ActivateItem.OnServerInvoke = function(player
     end;
 
   end;
+
+end;
+
+ReplicatedStorage.Shared.Functions.AddIngredientToInventory.OnServerInvoke = function(player, ingredientName: unknown)
+
+  local contestant = round:findContestantFromPlayer(player);
+  assert(contestant, "You aren't a contestant of this round.");
+  assert(typeof(ingredientName) == "string", "Ingredient name must be a string.");
+
+  if contestant then
+
+    local item = Item.get(ingredientName);
+    contestant:addToInventory(item);
+    print("Added item to inventory: " .. item.name);
+
+  end;
+
+end;
+
+ReplicatedStorage.Shared.Functions.GetIngredients.OnServerInvoke = function(player)
+
+  local contestant = round:findContestantFromPlayer(player);
+  assert(contestant, "You aren't a contestant of this round.");
+
+  local itemClasses = Item.listClasses();
+  local possibleIngredients = {};
+  for _, itemClass in itemClasses do
+
+    if itemClass ~= "Item" and itemClass ~= "Sandwich" then
+
+      table.insert(possibleIngredients, itemClass);
+
+    end;
+
+  end;
+
+  return possibleIngredients;
 
 end;
 

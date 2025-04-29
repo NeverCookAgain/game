@@ -9,7 +9,7 @@ local IRound = require(ServerStorage.Round.types);
 local Onions = {
   name = "Onions";
   description = "TBD";
-  image = "";
+  image = "rbxassetid://91758362897629";
 };
 
 function Onions.new(round: IRound.IRound): IItem.IItem
