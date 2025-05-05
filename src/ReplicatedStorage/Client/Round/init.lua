@@ -32,7 +32,8 @@ function Round.new(properties: IRound.RoundConstructorProperties): IRound.IRound
 
   local round: IRound.IRound = {
     status = properties.status or "Preparing" :: "Preparing";
-    contestants = properties.contestants or {};
+    contestants = properties.contestants;
+    customers = properties.customers;
     findContestantFromPlayer = findContestantFromPlayer;
     ContestantsChanged = contestantsChangedEvent.Event;
     RoundChanged = roundChangedEvent.Event;

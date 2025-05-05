@@ -15,15 +15,26 @@ function Order.new(properties: IOrder.OrderConstructorProperties): IOrder.IOrder
   local function setActualSandwich(self: IOrder.IOrder, sandwich: ISandwich.ISandwich): ()
 
     self.actualSandwich = sandwich;
+    self.deliveredTimeMilliseconds = DateTime.now().UnixTimestampMillis;
+
+  end;
+
+  local function setAssignedChefID(self: IOrder.IOrder, assignedChefID: string?): ()
+
+    self.assignedChefID = assignedChefID;
+    self.assignedTimeMilliseconds = DateTime.now().UnixTimestampMillis;
 
   end;
 
   local order: IOrder.IOrder = {
     type = "Order" :: "Order";
+    assignedChefID = properties.assignedChefID;
+    customerID = properties.customerID;
     difficulty = properties.difficulty;
     requestedSandwich = properties.requestedSandwich;
     actualSandwich = properties.actualSandwich;
     setActualSandwich = setActualSandwich;
+    setAssignedChefID = setAssignedChefID;
   };
 
   return order;

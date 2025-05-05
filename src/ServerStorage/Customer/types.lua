@@ -5,7 +5,6 @@ local ServerStorage = game:GetService("ServerStorage");
 local IOrder = require(ServerStorage.Order.types);
 
 export type CustomerBaseProperties = {
-  assignedChefID: string?;
   order: IOrder.IOrder;
   image: string;
   model: Model;
@@ -22,7 +21,6 @@ export type CustomerProperties = CustomerBaseProperties & {
 
 export type CustomerMethods = {
   setOrder: (self: ICustomer, order: IOrder.IOrder) -> ();
-  setAssignedChefID: (self: ICustomer, chefID: string?) -> ();
 };
 
 export type CustomerEvents = {

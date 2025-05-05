@@ -145,13 +145,13 @@ for _, customerModel in customerModels do
 
 end;
 
-ReplicatedStorage.Shared.Functions.GetCustomer.OnServerInvoke = function(player, customerName: unknown)
+ReplicatedStorage.Shared.Functions.GetCustomer.OnServerInvoke = function(player, customerID: unknown)
 
-  assert(typeof(customerName) == "string", "Customer name must be a string.");
+  assert(typeof(customerID) == "string", "Customer ID must be a string.");
 
   for _, customer in round.customers do
 
-    if customer.model.Name == customerName then
+    if customer.id == customerID then
 
       return customer;
 
@@ -163,17 +163,17 @@ ReplicatedStorage.Shared.Functions.GetCustomer.OnServerInvoke = function(player,
 
 end;
 
-ReplicatedStorage.Shared.Functions.AcceptCustomer.OnServerInvoke = function(player, customerName: unknown)
+ReplicatedStorage.Shared.Functions.AcceptCustomer.OnServerInvoke = function(player, customerID: unknown)
 
   local contestant = round:findContestantFromPlayer(player);
   assert(contestant, "You aren't a contestant of this round.");
   assert(not contestant.assignedCustomerID, "You are already assigned to a customer.");
-  assert(typeof(customerName) == "string", "Customer name must be a string.");
+  assert(typeof(customerID) == "string", "Customer name must be a string.");
 
   local customer;
   for _, possibleCustomer in round.customers do
 
-    if possibleCustomer.model.Name == customerName then
+    if possibleCustomer.id == customerID then
 
       customer = possibleCustomer;
       break;
@@ -185,6 +185,7 @@ ReplicatedStorage.Shared.Functions.AcceptCustomer.OnServerInvoke = function(play
   assert(customer, "Customer not found.");
 
   contestant:setAssignedCustomerID(customer.id);
+  customer.order:setAssignedChefID(contestant.id);
 
   if customer.model.PrimaryPart and not customer.model.PrimaryPart:FindFirstChild("ProximityPrompt") then
     
@@ -263,7 +264,7 @@ ReplicatedStorage.Shared.Functions.AddIngredientToInventory.OnServerInvoke = fun
 
     local item = Item.get(ingredientName, round);
     contestant:addToInventory(item);
-    print("Added item to inventory: " .. item.name);
+    print(`Added item to inventory: {item.name}`);
 
   end;
 

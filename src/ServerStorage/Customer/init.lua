@@ -64,12 +64,6 @@ function Customer.new(properties: ICustomer.CustomerConstructorProperties, round
     
   end;
 
-  local function setAssignedChefID(self: ICustomer.ICustomer, assignedChefID: string?): ()
-
-    self.assignedChefID = assignedChefID;
-
-  end;
-
   local spritePart = properties.model:FindFirstChild("SpritePart");
   assert(spritePart, "Character model must have primary part.");
 
@@ -81,12 +75,10 @@ function Customer.new(properties: ICustomer.CustomerConstructorProperties, round
   local customer: ICustomer.ICustomer = {
     type = "Customer" :: "Customer";
     id = properties.id or HttpService:GenerateGUID(false);
-    assignedChefID = properties.assignedChefID;
     order = properties.order;
     model = properties.model;
     image = properties.image;
     setOrder = setOrder;
-    setAssignedChefID = setAssignedChefID;
   };
 
   if properties.order then
@@ -94,6 +86,8 @@ function Customer.new(properties: ICustomer.CustomerConstructorProperties, round
     customer:setOrder(properties.order);
 
   end;
+
+  customer.model:SetAttribute("CustomerID", customer.id);
 
   return customer;
 

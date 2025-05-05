@@ -32,8 +32,26 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt)
 
     end;
 
-    local customer = ReplicatedStorage.Shared.Functions.GetCustomer:InvokeServer(possibleCustomerModel.Name) :: ICustomer.ICustomer;
-    if contestant.assignedCustomer and contestant.assignedCustomer.model.Name == possibleCustomerModel.Name then
+    local customerID = possibleCustomerModel:GetAttribute("CustomerID");
+    local customer = ReplicatedStorage.Shared.Functions.GetCustomer:InvokeServer(customerID) :: ICustomer.ICustomer;
+
+    local assignedCustomer;
+    if contestant.assignedCustomerID then
+
+      for _, possibleCustomer in round.customers do
+
+        if possibleCustomer.model.Name == possibleCustomerModel.Name then
+
+          assignedCustomer = possibleCustomer;
+          break;
+
+        end;
+
+      end;
+
+    end;
+
+    if assignedCustomer then
 
       ReplicatedStorage.Shared.Functions.DeliverSandwich:InvokeServer();
       prompt.ActionText = "Take order";
@@ -64,7 +82,7 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt)
         customer = customer;
         onAccept = function()
 
-          ReplicatedStorage.Shared.Functions.AcceptCustomer:InvokeServer(possibleCustomerModel.Name);
+          ReplicatedStorage.Shared.Functions.AcceptCustomer:InvokeServer(customerID);
           prompt.ActionText = "Deliver sandwich";
           prompt.Enabled = true;
 
