@@ -138,10 +138,13 @@ for _, customerModel in customerModels do
   local customer = Customer.new({
     model = customerModel;
     image = customerImages[Random.new():NextInteger(1, #customerImages)];
-    order = Order.generate("Easy", round);
+    status = "Thinking" :: "Thinking";
   }, round);
 
   table.insert(round.customers, customer);
+
+  local order = Order.generate("Easy", customer.id, round);
+  customer:setOrder(order);
 
 end;
 
@@ -183,6 +186,7 @@ ReplicatedStorage.Shared.Functions.AcceptCustomer.OnServerInvoke = function(play
   end;
 
   assert(customer, "Customer not found.");
+  assert(customer.order, "Customer doesn't have an order.");
 
   contestant:setAssignedCustomerID(customer.id);
   customer.order:setAssignedChefID(contestant.id);
@@ -209,16 +213,20 @@ ReplicatedStorage.Shared.Functions.DeliverSandwich.OnServerInvoke = function(pla
   -- Set the order.
   local customer = round:findCustomerFromID(contestant.assignedCustomerID);
   assert(customer, "Customer not found.");
+  assert(customer.order, "Customer doesn't have an order.");
   customer.order:setActualSandwich(customer.order.requestedSandwich);
 
   -- Reset the customer so the contestant can take a new order.
   local newCustomer = Customer.new({
     model = customer.model;
     image = customerImages[Random.new():NextInteger(1, #customerImages)];
-    order = Order.generate("Easy", round);
+    status = "Thinking" :: "Thinking";
   }, round);
 
   table.insert(round.customers, newCustomer);
+
+  local order = Order.generate("Easy", newCustomer.id, round);
+  newCustomer:setOrder(order);
 
   contestant:setAssignedCustomerID();
 

@@ -8,7 +8,7 @@ export type Difficulty = "Easy" | "Medium" | "Hard";
 
 export type OrderBaseProperties = {
   difficulty: Difficulty;
-  customerID: string?;
+  customerID: string;
   assignedChefID: string?;
   requestedSandwich: ISandwich.ISandwich;
   actualSandwich: ISandwich.ISandwich?;

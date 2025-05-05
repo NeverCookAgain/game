@@ -10,12 +10,20 @@ local Sandwich = require(ServerStorage.Sandwich);
 
 local Order = {};
 
-function Order.new(properties: IOrder.OrderConstructorProperties): IOrder.IOrder
+function Order.new(properties: IOrder.OrderConstructorProperties, round: IRound.IRound): IOrder.IOrder
+
+  local customer = round:findCustomerFromID(properties.customerID);
+  assert(customer, "Customer not found.");
 
   local function setActualSandwich(self: IOrder.IOrder, sandwich: ISandwich.ISandwich): ()
 
     self.actualSandwich = sandwich;
     self.deliveredTimeMilliseconds = DateTime.now().UnixTimestampMillis;
+
+    
+
+    customer:updateStatus();
+
 
   end;
 
@@ -23,6 +31,8 @@ function Order.new(properties: IOrder.OrderConstructorProperties): IOrder.IOrder
 
     self.assignedChefID = assignedChefID;
     self.assignedTimeMilliseconds = DateTime.now().UnixTimestampMillis;
+
+    customer:updateStatus();
 
   end;
 
@@ -41,7 +51,7 @@ function Order.new(properties: IOrder.OrderConstructorProperties): IOrder.IOrder
 
 end;
 
-function Order.generate(difficulty: IOrder.Difficulty, round: IRound.IRound): IOrder.IOrder
+function Order.generate(difficulty: IOrder.Difficulty, customerID: string, round: IRound.IRound): IOrder.IOrder
 
   local sandwich = Sandwich.new({
     name = `{difficulty} Sandwich`;
@@ -63,8 +73,9 @@ function Order.generate(difficulty: IOrder.Difficulty, round: IRound.IRound): IO
 
   return Order.new({
     requestedSandwich = sandwich;
-    difficulty = difficulty
-  });
+    difficulty = difficulty;
+    customerID = customerID;
+  }, round);
 
 end;
 

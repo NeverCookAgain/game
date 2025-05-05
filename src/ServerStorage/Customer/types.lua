@@ -5,9 +5,10 @@ local ServerStorage = game:GetService("ServerStorage");
 local IOrder = require(ServerStorage.Order.types);
 
 export type CustomerBaseProperties = {
-  order: IOrder.IOrder;
+  order: IOrder.IOrder?;
   image: string;
   model: Model;
+  status: "Thinking" | "Waiting" | "Assigned" | "Served";
 }
 
 export type CustomerConstructorProperties = CustomerBaseProperties & {
@@ -21,6 +22,7 @@ export type CustomerProperties = CustomerBaseProperties & {
 
 export type CustomerMethods = {
   setOrder: (self: ICustomer, order: IOrder.IOrder) -> ();
+  updateStatus: (self: ICustomer) -> ();
 };
 
 export type CustomerEvents = {
