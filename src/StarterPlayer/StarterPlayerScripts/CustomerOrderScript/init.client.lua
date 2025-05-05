@@ -36,12 +36,13 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt)
     local customer = ReplicatedStorage.Shared.Functions.GetCustomer:InvokeServer(customerID) :: ICustomer.ICustomer;
 
     local assignedCustomer;
-    if contestant.assignedCustomerID then
+    if contestant.assignedCustomerID and customerID == contestant.assignedCustomerID then
 
       for _, possibleCustomer in round.customers do
 
-        if possibleCustomer.model.Name == possibleCustomerModel.Name then
+        if possibleCustomer.id == customerID then
 
+          print("match");
           assignedCustomer = possibleCustomer;
           break;
 
