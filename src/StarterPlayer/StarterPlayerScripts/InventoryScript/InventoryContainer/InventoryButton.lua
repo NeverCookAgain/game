@@ -12,25 +12,11 @@ export type Item = {
 export type InventoryButtonProperties = {
   layoutOrder: number;
   item: Item?;
+  isSelected: boolean;
+  onSelect: () -> ();
 }
 
 local function InventoryButton(properties: InventoryButtonProperties)
-
-  local isActivated, setIsActivated = React.useState(false);
-  React.useEffect(function()
-  
-    task.spawn(function()
-    
-      if isActivated then
-
-        ReplicatedStorage.Shared.Functions.ActivateItem:InvokeServer(properties.layoutOrder);
-        setIsActivated(false);
-
-      end;
-
-    end);
-
-  end, {isActivated});
 
   return React.createElement("TextButton", {
     AnchorPoint = Vector2.new(1, 1);
@@ -41,7 +27,7 @@ local function InventoryButton(properties: InventoryButtonProperties)
     LayoutOrder = properties.layoutOrder;
     [React.Event.Activated] = function()
 
-      setIsActivated(true);
+      properties.onSelect();
 
     end;
   }, {

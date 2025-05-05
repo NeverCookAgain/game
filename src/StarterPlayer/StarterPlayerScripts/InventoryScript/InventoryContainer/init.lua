@@ -3,7 +3,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
 local React = require(ReplicatedStorage.Shared.Packages.react);
-local InventoryButton = require(script.Parent.InventoryButton);
+local InventoryButton = require(script.InventoryButton);
 
 export type InventoryContainerProperties = {
   onClose: () -> ();
@@ -58,6 +58,7 @@ local function InventoryContainer(properties: InventoryContainerProperties)
 
   end, {});
 
+  local selectedItemSlot, setSelectedItemSlot = React.useState(0);
   local inventoryButtons = {};
   for index = 1, inventorySlots do
 
@@ -65,6 +66,12 @@ local function InventoryContainer(properties: InventoryContainerProperties)
       key = index;
       layoutOrder = index;
       item = inventory[index];
+      isSelected = selectedItemSlot == index;
+      onSelect = function()
+
+        setSelectedItemSlot(index);
+
+      end;
     });
     table.insert(inventoryButtons, inventoryButton);
 

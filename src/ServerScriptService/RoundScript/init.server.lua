@@ -235,30 +235,10 @@ end;
 ReplicatedStorage.Shared.Functions.ActivateItem.OnServerInvoke = function(player, slot)
 
   local contestant = round:findContestantFromPlayer(player);
-  if contestant then
+  assert(contestant, "You aren't a contestant of this round.");
 
-    local item = contestant.inventory[slot];
-    if item then
-
-      contestant:removeFromInventory(item);
-      
-      if contestant.model and contestant.model.PrimaryPart then
-        
-        if item.type == "Item" then
-
-          item:drop(contestant.model.PrimaryPart.CFrame, -contestant.model.PrimaryPart.CFrame.LookVector * 5);
-
-        elseif item.type == "Sandwich" then
-
-          item:drop(contestant.model.PrimaryPart.CFrame, -contestant.model.PrimaryPart.CFrame.LookVector * 5);
-
-        end;
-
-      end;
-
-    end;
-
-  end;
+  local item = contestant.inventory[slot];
+  assert(item, "Item not found.");
 
 end;
 
