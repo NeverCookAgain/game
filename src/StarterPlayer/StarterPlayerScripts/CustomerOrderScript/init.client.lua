@@ -42,7 +42,6 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt)
 
         if possibleCustomer.id == customerID then
 
-          print("match");
           assignedCustomer = possibleCustomer;
           break;
 
