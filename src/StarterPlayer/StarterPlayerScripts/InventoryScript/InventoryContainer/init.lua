@@ -36,6 +36,7 @@ local function InventoryContainer(properties: InventoryContainerProperties)
 
   local inventory, setInventory = React.useState({});
   local inventorySlots, setInventorySlots = React.useState(0);
+  local selectedItemSlot: number?, setSelectedItemSlot = React.useState(nil :: number?);
   React.useEffect(function()
   
     local function refreshInventory()
@@ -43,6 +44,15 @@ local function InventoryContainer(properties: InventoryContainerProperties)
       local contestant = ReplicatedStorage.Shared.Functions.GetContestant:InvokeServer();
       setInventory(contestant.inventory);
       setInventorySlots(contestant.inventorySlots);
+      if not selectedItemSlot and #contestant.inventory > 0 then
+
+        setSelectedItemSlot(1);
+
+      else
+
+        setSelectedItemSlot();
+      
+      end;
 
     end;
 
@@ -58,14 +68,34 @@ local function InventoryContainer(properties: InventoryContainerProperties)
 
   end, {});
 
-  local selectedItemSlot, setSelectedItemSlot = React.useState(0);
+  React.useEffect(function()
+  
+    ReplicatedStorage.Client.Functions.GetSelectedItem.OnInvoke = function()
+
+      return inventory[selectedItemSlot];
+
+    end;
+
+    ReplicatedStorage.Client.Events.SelectedItemChanged:Fire(inventory[selectedItemSlot]);
+    ReplicatedStorage.Shared.Events.SelectedItemChanged:FireServer(selectedItemSlot);
+
+    return function()
+
+      ReplicatedStorage.Client.Functions.GetSelectedItem.OnInvoke = nil;
+
+    end;
+
+  end, {inventory :: unknown, selectedItemSlot});
+
   local inventoryButtons = {};
   for index = 1, inventorySlots do
+
+    local item = inventory[index];
 
     local inventoryButton = React.createElement(InventoryButton, {
       key = index;
       layoutOrder = index;
-      item = inventory[index];
+      item = item;
       isSelected = selectedItemSlot == index;
       onSelect = function()
 

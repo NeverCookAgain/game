@@ -242,6 +242,17 @@ ReplicatedStorage.Shared.Functions.ActivateItem.OnServerInvoke = function(player
 
 end;
 
+ReplicatedStorage.Shared.Events.SelectedItemChanged.OnServerEvent:Connect(function(player, slot: unknown)
+
+  local contestant = round:findContestantFromPlayer(player);
+  assert(contestant, "You aren't a contestant of this round.");
+  assert(slot == nil or typeof(slot) == "number", "Slot must be a number or nil.");
+
+  local item = if slot then contestant.inventory[slot :: number] else nil;
+  contestant:setSelectedItem(item);
+
+end);
+
 ReplicatedStorage.Shared.Functions.AddIngredientToInventory.OnServerInvoke = function(player, ingredientName: unknown)
 
   local contestant = round:findContestantFromPlayer(player);

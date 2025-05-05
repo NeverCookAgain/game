@@ -16,6 +16,7 @@ export type ContestantBaseProperties = {
     happy: string;
     sad: string;
   };
+  selectedItem: (IItem.IItem | ISandwich.ISandwich)?;
 }
 
 export type ContestantConstructorProperties = ContestantBaseProperties & {
@@ -31,6 +32,7 @@ export type ContestantProperties = ContestantBaseProperties & {
 export type ContestantMethods = {
   setAssignedCustomerID: (self: IContestant, customerID: string?) -> ();
   addToInventory: (self: IContestant, item: IItem.IItem | ISandwich.ISandwich) -> ();
+  setSelectedItem: (self: IContestant, item: (IItem.IItem | ISandwich.ISandwich)?) -> ();
   removeFromInventory: (self: IContestant, item: IItem.IItem | ISandwich.ISandwich) -> ();
 };
 

@@ -30,6 +30,13 @@ function Contestant.new(properties: IContestant.ContestantConstructorProperties,
       if self.inventory[index] == item then
 
         table.remove(self.inventory, index);
+        
+        if self.selectedItem == item then
+
+          self.selectedItem = nil;
+
+        end;
+
         inventoryChangedEvent:Fire();
         break;
 
@@ -46,6 +53,31 @@ function Contestant.new(properties: IContestant.ContestantConstructorProperties,
 
   end;
 
+  local function setSelectedItem(self: IContestant.IContestant, item: (IItem.IItem | ISandwich.ISandwich)?): ()
+
+    if item then
+
+      -- Verify that the item is in the inventory.
+      local found = false;
+      for _, inventoryItem in ipairs(self.inventory) do
+
+        if inventoryItem == item then
+
+          found = true;
+          break;
+
+        end;
+
+      end;
+
+      assert(found, "Item not found in inventory.");
+
+    end;
+
+    self.selectedItem = item;
+
+  end;
+
   local contestant: IContestant.IContestant = {
     id = properties.id or HttpService:GenerateGUID(false);
     player = properties.player;
@@ -54,7 +86,9 @@ function Contestant.new(properties: IContestant.ContestantConstructorProperties,
     inventory = properties.inventory or {};
     headshotImages = properties.headshotImages;
     assignedCustomerID = properties.assignedCustomerID;
+    selectedItem = properties.selectedItem;
     addToInventory = addToInventory;
+    setSelectedItem = setSelectedItem;
     removeFromInventory = removeFromInventory;
     setAssignedCustomerID = setAssignedCustomerID;
     CustomerServed = customerServedEvent.Event;
