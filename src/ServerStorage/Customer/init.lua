@@ -1,6 +1,7 @@
 --!strict
 
 local ServerStorage = game:GetService("ServerStorage");
+local HttpService = game:GetService("HttpService");
 
 local ICustomer = require(script.types);
 local IRound = require(ServerStorage.Round.types);
@@ -63,6 +64,12 @@ function Customer.new(properties: ICustomer.CustomerConstructorProperties, round
     
   end;
 
+  local function setAssignedChefID(self: ICustomer.ICustomer, assignedChefID: string?): ()
+
+    self.assignedChefID = assignedChefID;
+
+  end;
+
   local spritePart = properties.model:FindFirstChild("SpritePart");
   assert(spritePart, "Character model must have primary part.");
 
@@ -73,10 +80,13 @@ function Customer.new(properties: ICustomer.CustomerConstructorProperties, round
 
   local customer: ICustomer.ICustomer = {
     type = "Customer" :: "Customer";
+    id = properties.id or HttpService:GenerateGUID(false);
+    assignedChefID = properties.assignedChefID;
     order = properties.order;
     model = properties.model;
     image = properties.image;
     setOrder = setOrder;
+    setAssignedChefID = setAssignedChefID;
   };
 
   if properties.order then

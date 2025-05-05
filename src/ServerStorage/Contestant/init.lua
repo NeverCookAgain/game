@@ -1,8 +1,8 @@
 --!strict
 
 local ServerStorage = game:GetService("ServerStorage");
+local HttpService = game:GetService("HttpService");
 
-local ICustomer = require(ServerStorage.Customer.types);
 local IRound = require(ServerStorage.Round.types);
 local IItem = require(ServerStorage.Item.types);
 local IContestant = require(script.types);
@@ -23,13 +23,6 @@ function Contestant.new(properties: IContestant.ContestantConstructorProperties,
 
   end;
 
-  local function addServedCustomer(self: IContestant.IContestant, customer: ICustomer.ICustomer): ()
-
-    table.insert(self.servedCustomers, customer);
-    customerServedEvent:Fire(customer);
-
-  end;
-
   local function removeFromInventory(self: IContestant.IContestant, item: IItem.IItem | ISandwich.ISandwich): ()
 
     for index = #self.inventory, 1, -1 do
@@ -46,25 +39,24 @@ function Contestant.new(properties: IContestant.ContestantConstructorProperties,
 
   end;
 
-  local function setAssignedCustomer(self: IContestant.IContestant, customer: ICustomer.ICustomer?): ()
+  local function setAssignedCustomerID(self: IContestant.IContestant, customerID: string?): ()
 
-    self.assignedCustomer = customer;
-    customerAssignmentChangedEvent:Fire(customer);
+    self.assignedCustomerID = customerID;
+    customerAssignmentChangedEvent:Fire(customerID);
 
   end;
 
   local contestant: IContestant.IContestant = {
-    id = properties.id;
+    id = properties.id or HttpService:GenerateGUID(false);
     player = properties.player;
     model = properties.model;
     inventorySlots = properties.inventorySlots;
     inventory = properties.inventory or {};
-    servedCustomers = properties.servedCustomers or {};
     headshotImages = properties.headshotImages;
-    addServedCustomer = addServedCustomer;
+    assignedCustomerID = properties.assignedCustomerID;
     addToInventory = addToInventory;
     removeFromInventory = removeFromInventory;
-    setAssignedCustomer = setAssignedCustomer;
+    setAssignedCustomerID = setAssignedCustomerID;
     CustomerServed = customerServedEvent.Event;
     InventoryChanged = inventoryChangedEvent.Event;
     CustomerAssignmentChanged = customerAssignmentChangedEvent.Event;

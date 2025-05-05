@@ -84,7 +84,6 @@ local function addPlayerAsContestant(player: Player)
 
   local contestant = Contestant.new({
     player = player;
-    id = player.UserId;
     inventory = {};
     inventorySlots = 5;
     model = player.Character;
@@ -131,7 +130,6 @@ for _, player in Players:GetPlayers() do
 
 end;
 
-local customers = {};
 local customerModels = {workspace.CustomerA, workspace.CustomerB, workspace.CustomerC, workspace.CustomerD};
 local customerImages = {"rbxassetid://136955129612174", "rbxassetid://121007848481264", "rbxassetid://85190412089778", "rbxassetid://72181972813178"};
 
@@ -143,7 +141,7 @@ for _, customerModel in customerModels do
     order = Order.generate("Easy", round);
   }, round);
 
-  table.insert(customers, customer);
+  table.insert(round.customers, customer);
 
 end;
 
@@ -151,7 +149,7 @@ ReplicatedStorage.Shared.Functions.GetCustomer.OnServerInvoke = function(player,
 
   assert(typeof(customerName) == "string", "Customer name must be a string.");
 
-  for _, customer in customers do
+  for _, customer in round.customers do
 
     if customer.model.Name == customerName then
 
@@ -169,11 +167,11 @@ ReplicatedStorage.Shared.Functions.AcceptCustomer.OnServerInvoke = function(play
 
   local contestant = round:findContestantFromPlayer(player);
   assert(contestant, "You aren't a contestant of this round.");
-  assert(not contestant.assignedCustomer, "You are already assigned to a customer.");
+  assert(not contestant.assignedCustomerID, "You are already assigned to a customer.");
   assert(typeof(customerName) == "string", "Customer name must be a string.");
 
   local customer;
-  for _, possibleCustomer in customers do
+  for _, possibleCustomer in round.customers do
 
     if possibleCustomer.model.Name == customerName then
 
@@ -186,7 +184,7 @@ ReplicatedStorage.Shared.Functions.AcceptCustomer.OnServerInvoke = function(play
 
   assert(customer, "Customer not found.");
 
-  contestant:setAssignedCustomer(customer);
+  contestant:setAssignedCustomerID(customer.id);
 
   if customer.model.PrimaryPart and not customer.model.PrimaryPart:FindFirstChild("ProximityPrompt") then
     
@@ -205,23 +203,23 @@ ReplicatedStorage.Shared.Functions.DeliverSandwich.OnServerInvoke = function(pla
 
   local contestant = round:findContestantFromPlayer(player);
   assert(contestant, "You aren't a contestant of this round.");
-  assert(contestant.assignedCustomer, "You don't have a customer assigned.");
+  assert(contestant.assignedCustomerID, "You don't have a customer assigned.");
 
   -- Set the order.
-  contestant.assignedCustomer.order:setActualSandwich(contestant.assignedCustomer.order.requestedSandwich);
+  local customer = round:findCustomerFromID(contestant.assignedCustomerID);
+  assert(customer, "Customer not found.");
+  customer.order:setActualSandwich(customer.order.requestedSandwich);
 
   -- Reset the customer so the contestant can take a new order.
   local newCustomer = Customer.new({
-    model = contestant.assignedCustomer.model;
+    model = customer.model;
     image = customerImages[Random.new():NextInteger(1, #customerImages)];
     order = Order.generate("Easy", round);
   }, round);
 
-  table.remove(customers, table.find(customers, contestant.assignedCustomer));
-  table.insert(customers, newCustomer);
-  table.insert(contestant.servedCustomers, contestant.assignedCustomer);
+  table.insert(round.customers, newCustomer);
 
-  contestant:setAssignedCustomer();
+  contestant:setAssignedCustomerID();
 
 end;
 
@@ -263,7 +261,7 @@ ReplicatedStorage.Shared.Functions.AddIngredientToInventory.OnServerInvoke = fun
 
   if contestant then
 
-    local item = Item.get(ingredientName);
+    local item = Item.get(ingredientName, round);
     contestant:addToInventory(item);
     print("Added item to inventory: " .. item.name);
 
@@ -280,11 +278,7 @@ ReplicatedStorage.Shared.Functions.GetIngredients.OnServerInvoke = function(play
   local possibleIngredients = {};
   for _, itemClass in itemClasses do
 
-    if itemClass ~= "Item" and itemClass ~= "Sandwich" then
-
-      table.insert(possibleIngredients, itemClass);
-
-    end;
+    table.insert(possibleIngredients, itemClass);
 
   end;
 
