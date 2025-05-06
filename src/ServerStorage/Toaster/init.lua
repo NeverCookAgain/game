@@ -207,9 +207,9 @@ function Toaster.new(properties: IToaster.ToasterProperties, round: IRound.IRoun
 
         toaster:setItem();
 
-      elseif #contestant.inventory > 0 then
+      elseif contestant.selectedItem then
 
-        local item = contestant.inventory[#contestant.inventory];
+        local item = contestant.selectedItem;
         contestant:removeFromInventory(item);
         toaster:setItem(item);
 

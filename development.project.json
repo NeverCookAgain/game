@@ -1,5 +1,5 @@
 {
-  "name": "Never Cook Again (Development)",
+  "name": "Never Cook Again: Game (Development)",
   "globIgnorePaths": ["**/*.production.lua", "**/*.staging.lua", "**/*.development.lua"],
   "tree": {
     "$className": "DataModel",

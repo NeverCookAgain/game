@@ -1,6 +1,5 @@
 --!strict
 
-local ReplicatedStorage = game:GetService("ReplicatedStorage");
 local ServerStorage = game:GetService("ServerStorage");
 
 local Round = require(ServerStorage.Round);
@@ -16,7 +15,7 @@ end;
 
 if round then
 
-  local toaster = Toaster.new({
+  Toaster.new({
     model = workspace:FindFirstChild("Toaster");
   }, round);
 

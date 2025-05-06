@@ -4,6 +4,7 @@ local ServerStorage = game:GetService("ServerStorage");
 
 local IRound = require(script.types);
 local IContestant = require(ServerStorage.Contestant.types);
+local ICustomer = require(ServerStorage.Customer.types);
 local IEvent = require(ServerStorage.Event.types);
 
 local sharedRound: IRound.IRound? = nil;
@@ -74,13 +75,31 @@ function Round.new(properties: IRound.RoundConstructorProperties): IRound.IRound
 
   end;
 
+  local function findCustomerFromID(self: IRound.IRound, customerID: string): ICustomer.ICustomer?
+
+    for _, customer in self.customers do
+
+      if customer.id == customerID then
+
+        return customer;
+
+      end;
+
+    end;
+
+    return;
+
+  end;
+
   local round: IRound.IRound = {
     status = properties.status or "Preparing" :: "Preparing";
     contestants = properties.contestants or {};
+    customers = properties.customers or {};
     events = properties.events or {};
     addEvent = addEvent;
     addContestant = addContestant;
     findContestantFromPlayer = findContestantFromPlayer;
+    findCustomerFromID = findCustomerFromID;
     removeEvent = removeEvent;
     setStatus = setStatus;
     ContestantsChanged = contestantsChangedEvent.Event;

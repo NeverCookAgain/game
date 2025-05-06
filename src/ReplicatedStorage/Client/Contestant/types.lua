@@ -7,7 +7,7 @@ local ICustomer = require(ReplicatedStorage.Client.Customer.types);
 local ISandwich = require(ReplicatedStorage.Client.Sandwich.types);
 
 export type ContestantBaseProperties = {
-  assignedCustomer: ICustomer.ICustomer?;
+  assignedCustomerID: string?;
   player: Player?;
   inventorySlots: number;
   model: Model?;
@@ -16,7 +16,7 @@ export type ContestantBaseProperties = {
     happy: string;
     sad: string;
   };
-  id: number;
+  id: string;
 };
 
 export type ContestantConstructorProperties = ContestantBaseProperties & {

@@ -1,6 +1,7 @@
 export type Status = "Raw" | "Cooked" | "Burnt";
 
 export type ItemProperties = {
+  type: "Item";
   name: string;
   description: string;
   status: Status;
@@ -9,7 +10,6 @@ export type ItemProperties = {
 
 export type ItemMethods = {
   setStatus: (item: IItem, newStatus: Status) -> ();
-  drop: (item: IItem, origin: Vector3, direction: Vector3) -> ();
 };
 
 export type ItemEvents = {

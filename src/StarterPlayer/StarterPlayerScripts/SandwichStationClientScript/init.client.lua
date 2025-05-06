@@ -1,6 +1,5 @@
 --!strict
 
-local Players = game:GetService("Players");
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
 local events: {RBXScriptConnection} = {};
@@ -13,18 +12,7 @@ local function updatePrompts()
 
   end;
 
-  local round = ReplicatedStorage.Shared.Functions.GetRound:InvokeServer();
-  local contestant;
-  for _, possibleContestant in round.contestants do
-
-    if possibleContestant.player == Players.LocalPlayer then
-
-      contestant = possibleContestant;
-      break;
-
-    end;
-
-  end;
+  local item = ReplicatedStorage.Client.Functions.GetSelectedItem:Invoke();
 
   for _, stationModel in workspace.SandwichStations:GetChildren() do
 
@@ -45,11 +33,11 @@ local function updatePrompts()
 
       local activateSandwichStationBindableFunction = ReplicatedStorage.Shared.Functions.DynamicFunctions:FindFirstChild(`ActivateSandwichStation_{stationModel.Name}`);
 
-      if contestant.inventory[1] then
+      if item then
 
         local proximityPrompt = script.ProximityPrompt:Clone();
         proximityPrompt.Name = "AddItemProximityPrompt";
-        proximityPrompt.ActionText = `Add {contestant.inventory[1].name}`;
+        proximityPrompt.ActionText = `Add {item.name}`;
         proximityPrompt.KeyboardKeyCode = Enum.KeyCode.E;
         proximityPrompt.Parent = proximityPromptsPart;
         proximityPrompt.UIOffset = Vector2.new(0, 100);
@@ -89,4 +77,5 @@ end;
 
 ReplicatedStorage.Shared.Events.SandwichStationChanged.OnClientEvent:Connect(updatePrompts);
 ReplicatedStorage.Shared.Events.ContestantInventoryChanged.OnClientEvent:Connect(updatePrompts);
+ReplicatedStorage.Client.Events.SelectedItemChanged.Event:Connect(updatePrompts);
 updatePrompts();
