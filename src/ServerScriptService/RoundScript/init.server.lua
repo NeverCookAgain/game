@@ -11,6 +11,7 @@ local Avocado = require(ServerStorage.Items.Avocado);
 local Item = require(ServerStorage.Item);
 local Round = require(ServerStorage.Round);
 local Order = require(ServerStorage.Order);
+local Sandwich = require(ServerStorage.Sandwich);
 
 local round = Round.new({});
 
@@ -207,12 +208,31 @@ ReplicatedStorage.Shared.Functions.DeliverSandwich.OnServerInvoke = function(pla
   local contestant = round:findContestantFromPlayer(player);
   assert(contestant, "You aren't a contestant of this round.");
   assert(contestant.assignedCustomerID, "You don't have a customer assigned.");
+  assert(contestant.selectedItem, "You don't have a sandwich selected.");
 
   -- Set the order.
+  local item = contestant.selectedItem;
+  contestant:removeFromInventory(item);
+  
+  local sandwich;
+  if item.type == "Sandwich" then
+
+    sandwich = item;
+  
+  else
+
+    sandwich = Sandwich.new({
+      items = {item};
+      name = "Easy";
+      type = "Sandwich";
+    }, round);
+
+  end;
+
   local customer = round:findCustomerFromID(contestant.assignedCustomerID);
   assert(customer, "Customer not found.");
   assert(customer.order, "Customer doesn't have an order.");
-  customer.order:setActualSandwich(customer.order.requestedSandwich);
+  customer.order:setActualSandwich(sandwich);
 
   -- Reset the customer so the contestant can take a new order.
   local newCustomer = Customer.new({
