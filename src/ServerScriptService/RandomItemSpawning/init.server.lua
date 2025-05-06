@@ -6,7 +6,7 @@ local ServerScriptService = game:GetService("ServerScriptService");
 local ServerStorage = game:GetService("ServerStorage");
 
 local spatulaModel = workspace:WaitForChild("SpatulaModel");
-local kitchenSpawn = workspace:WaitForChild("KitchenSpawn");
+local KitchenSpawn = workspace:WaitForChild("KitchenSpawn");
 
 local hasSpawnedSpatula = false
 
@@ -35,12 +35,14 @@ local function getRandomPoint()
   local randomY = position.Y + math.random(-size.Y/2, size.Y/2)
   local randomZ = position.Z + math.random(-size.Z/2, size.Z/2)
 
-  return Vector3.new(randomX,, randomY, randomZ)
+  return Vector3.new(randomX, randomY, randomZ)
 
 end
 
-local newSpatula = spatulaModel:Clone()
-newSpatula.Position = getRandomPoint()
+while task.wait(3) do
 
+  local newSpatula: Model = spatulaModel:Clone()
+  newSpatula:PivotTo(CFrame.new(getRandomPoint()))
+  newSpatula.Parent = workspace;
 
-
+end
