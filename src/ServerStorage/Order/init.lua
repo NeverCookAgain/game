@@ -63,13 +63,25 @@ function Order.generate(difficulty: IOrder.Difficulty, customerID: string, round
     )
   }, round);
 
+  local function addBread()
+
+    local bread = Item.get("WhiteBread", round);
+    bread:setStatus("Cooked");
+    table.insert(sandwich.items, bread);
+
+  end;
+
+  addBread();
+
   repeat
 
     local item = Item.random(round);
-    item.status = "Cooked";
+    item:setStatus("Cooked");
     table.insert(sandwich.items, item);
 
   until (difficulty == "Easy" and #sandwich.items == 3) or (difficulty == "Medium" and #sandwich.items == 4) or (difficulty == "Hard" and #sandwich.items == 5)
+
+  addBread();
 
   return Order.new({
     requestedSandwich = sandwich;
