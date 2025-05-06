@@ -16,7 +16,7 @@ export type ContestantBaseProperties = {
     happy: string;
     sad: string;
   };
-  id: number;
+  id: string;
 };
 
 export type ContestantConstructorProperties = ContestantBaseProperties & {

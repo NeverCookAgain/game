@@ -100,7 +100,7 @@ local function addPlayerAsContestant(player: Player)
 
   contestant.InventoryChanged:Connect(function()
   
-    ReplicatedStorage.Shared.Events.ContestantInventoryChanged:FireClient(player);
+    ReplicatedStorage.Shared.Events.ContestantInventoryChanged:FireAllClients(contestant);
 
   end);
 

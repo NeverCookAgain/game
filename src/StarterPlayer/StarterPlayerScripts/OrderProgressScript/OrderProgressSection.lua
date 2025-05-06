@@ -3,7 +3,11 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
 local React = require(ReplicatedStorage.Shared.Packages.react);
+local Round = require(ReplicatedStorage.Client.Round);
 local ICustomer = require(ReplicatedStorage.Client.Customer.types);
+local IContestant = require(ReplicatedStorage.Client.Contestant.types);
+local IItem = require(ReplicatedStorage.Client.Item.types);
+local ISandwich = require(ReplicatedStorage.Client.Sandwich.types);
 
 export type CustomerOrderWindowProperties = {
   customer: ICustomer.ICustomer;
@@ -11,9 +15,66 @@ export type CustomerOrderWindowProperties = {
 
 local function OrderProgressSection(properties: CustomerOrderWindowProperties)
 
+  local chef, setChef = React.useState(nil :: IContestant.IContestant?);
+  local inventory, setInventory = React.useState({} :: {IItem.IItem | ISandwich.ISandwich});
+
+  React.useEffect(function()
+  
+    task.spawn(function()
+    
+      local round = Round.getFromServerRound();
+      if not round then return; end
+      if properties.customer.order.assignedChefID == nil then return; end
+
+      local contestant = round:findChefFromID(properties.customer.order.assignedChefID);
+      setChef(contestant);
+
+    end);
+
+  end, {properties.customer});
+
+  React.useEffect(function()
+  
+    if (chef == nil) then return; end;
+
+    ReplicatedStorage.Shared.Events.ContestantInventoryChanged.OnClientEvent:Connect(function(contestant)
+    
+      if contestant.id ~= chef.id then return; end
+      setInventory(contestant.inventory);
+    
+    end);
+
+  end, {chef});
+
+  -- Check if player has the sandwich or the ingredients in their inventory.
+  local ingredientCompletion = 0;
+  for _, item in inventory do
+
+    if item.type == "Sandwich" then
+
+      local matchingItemCount = 0;
+      for _, ingredient in item.items do
+
+        for _, requestedIngredient in properties.customer.order.requestedSandwich.items do
+
+          if ingredient.name == requestedIngredient.name then
+
+            matchingItemCount += 1;
+            break;
+          
+          end;
+
+        end;
+
+      end;
+
+    end;
+
+  end;
+
   local specialOrderCompletion = 1 / 3;
 
-  local orderCompletion = specialOrderCompletion;
+  local orderCompletion = ingredientCompletion + specialOrderCompletion;
 
   return React.createElement("Frame", {
     AutomaticSize = Enum.AutomaticSize.X;

@@ -25,6 +25,7 @@ export type RoundProperties = RoundBaseProperties & {
 
 export type RoundMethods = {
   findContestantFromPlayer: (self: IRound, player: Player) -> IContestant.IContestant?;
+  findChefFromID: (self: IRound, chefID: string) -> IContestant.IContestant?;
 };
 
 export type RoundEvents = {
