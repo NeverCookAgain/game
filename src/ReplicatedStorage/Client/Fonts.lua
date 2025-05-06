@@ -1,8 +1,8 @@
 return {
-  Regular = Font.fromId(11702779517, Enum.FontWeight.Regular);
-  Medium = Font.fromId(11702779517, Enum.FontWeight.Medium);
-  Light = Font.fromId(11702779517, Enum.FontWeight.Light);
-  Bold = Font.fromId(11702779517, Enum.FontWeight.Bold);
-  SemiBold = Font.fromId(11702779517, Enum.FontWeight.SemiBold);
-  Heavy = Font.fromId(11702779517, Enum.FontWeight.Heavy);
+  Regular = Font.fromName("Kalam", Enum.FontWeight.Regular);
+  Medium = Font.fromName("Kalam", Enum.FontWeight.Medium);
+  Light = Font.fromName("Kalam", Enum.FontWeight.Light);
+  Bold = Font.fromName("Kalam", Enum.FontWeight.Bold);
+  SemiBold = Font.fromName("Kalam", Enum.FontWeight.SemiBold);
+  Heavy = Font.fromName("Kalam", Enum.FontWeight.Heavy);
 }
