@@ -107,14 +107,6 @@ local function addPlayerAsContestant(player: Player)
 
   round:addContestant(contestant);
 
-  if #contestant.inventory < 2 then
-
-    contestant:addToInventory(Avocado.new(round));
-    contestant:addToInventory(Avocado.new(round));
-
-  end;
-  
-
 end;
 
 Players.PlayerAdded:Connect(function(player: Player)
