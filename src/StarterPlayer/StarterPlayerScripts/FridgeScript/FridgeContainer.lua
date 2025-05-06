@@ -6,19 +6,6 @@ local Players = game:GetService("Players")
 local React = require(ReplicatedStorage.Shared.Packages.react)
 
 
-local foodItems = {
-	{name = "Bacon", image = ""},
-	{name = "Egg", image = ""},
-	{name = "Lettuce", image = ""},
-	{name = "Mozzarella", image = ""},
-	{name = "Peppers", image = ""},
-	{name = "Spinach", image = ""},
-	{name = "Tomatoes", image = ""},
-	{name = "White Bread", image = ""},
-	
-}
-
-
 local foodItems = ReplicatedStorage.Shared.Functions.GetIngredients:InvokeServer();
 
 local itemsPerPage = 8
@@ -50,6 +37,7 @@ local function FridgeContainer(props)
 			Name = foodItem.name,
 			Size = UDim2.new(0, 120, 0, 120),
 			Image = foodItem.image,
+			BackgroundTransparency = 1;
 			[React.Event.MouseButton1Click] = function()
 				ReplicatedStorage.Shared.Functions.AddIngredientToInventory:InvokeServer(foodItem.name);
 				props.onClose();
@@ -99,7 +87,8 @@ local function FridgeContainer(props)
 		nextButton = React.createElement("ImageButton", {
 			Size = UDim2.new(0, 50, 0, 50),
 			Position = UDim2.new(1, -60, 1, -60), 
-			Image = "rbxassetid://133982941769442",  
+			Image = "rbxassetid://133982941769442",
+			BackgroundTransparency = 1,
 			[React.Event.MouseButton1Click] = function()
 				updatePage(1)
 			end,
@@ -110,6 +99,7 @@ local function FridgeContainer(props)
 			Size = UDim2.new(0, 50, 0, 50),
 			Position = UDim2.new(0, 10, 1, -60),  
 			Image = "rbxassetid://118100992314434",  
+			BackgroundTransparency = 1,
 			[React.Event.MouseButton1Click] = function()
 				updatePage(-1)
 			end,
@@ -120,6 +110,7 @@ local function FridgeContainer(props)
 			Size = UDim2.new(0, 50, 0, 50),
 			Position = UDim2.new(1, -60, 0, 10),  
 			Image = "rbxassetid://111357809643186", 
+			BackgroundTransparency = 1,
 			[React.Event.MouseButton1Click] = function()
 				props.onClose();
 			end,
