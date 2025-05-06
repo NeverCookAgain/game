@@ -53,16 +53,57 @@ local function OrderProgressSection(properties: CustomerOrderWindowProperties)
     if item.type == "Sandwich" then
 
       local matchingItemCount = 0;
-      for _, ingredient in item.items do
+      local allIngredients = table.clone(item.items);
+      for _, requestedIngredient in properties.customer.order.requestedSandwich.items do
 
-        for _, requestedIngredient in properties.customer.order.requestedSandwich.items do
+        local matchingIngredientIndices = {};
 
-          if ingredient.name == requestedIngredient.name then
+        for index, possiblyMatchingIngredient in allIngredients do
 
-            matchingItemCount += 1;
-            break;
+          if possiblyMatchingIngredient.name == requestedIngredient.name then
+
+            table.insert(matchingIngredientIndices, index);
           
           end;
+
+        end;
+
+        if matchingIngredientIndices[1] then
+
+          local closestIngredientIndex = 1;
+
+          for _, index in matchingIngredientIndices do
+
+            local ingredient = allIngredients[index];
+            if ingredient.status == requestedIngredient.status then
+
+              closestIngredientIndex = index;
+              break;
+
+            end;
+
+          end;
+
+          matchingItemCount = (
+            if allIngredients[closestIngredientIndex].status == requestedIngredient.status then
+              matchingItemCount + 1
+            else matchingItemCount + 0.5
+          );
+
+        end;
+
+      end;
+
+      ingredientCompletion = matchingItemCount / #properties.customer.order.requestedSandwich.items;
+
+    elseif item.type == "Item" then
+
+      for _, requestedIngredient in properties.customer.order.requestedSandwich.items do
+
+        if item.name == requestedIngredient.name then
+
+          ingredientCompletion = math.max(ingredientCompletion, (if item.status == requestedIngredient.status then 1 else 0.5) / #properties.customer.order.requestedSandwich.items);
+          break;
 
         end;
 
@@ -72,9 +113,11 @@ local function OrderProgressSection(properties: CustomerOrderWindowProperties)
 
   end;
 
-  local specialOrderCompletion = 1 / 3;
+  print(ingredientCompletion);
 
-  local orderCompletion = ingredientCompletion + specialOrderCompletion;
+  local orderCompletion = (ingredientCompletion);
+  -- local specialOrderCompletion = 1;
+  -- local orderCompletion = (ingredientCompletion + specialOrderCompletion) / 2;
 
   return React.createElement("Frame", {
     AutomaticSize = Enum.AutomaticSize.X;
