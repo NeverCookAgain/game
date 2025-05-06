@@ -4,6 +4,8 @@ local Players = game:GetService("Players");
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 local ServerScriptService = game:GetService("ServerScriptService");
 local ServerStorage = game:GetService("ServerStorage");
+local React = require(ReplicatedStorage.Shared.Packages.react)
+local RandomItemSpawningEvent = ReplicatedStorage.Shared.Events.RandomItemSpawning;
 
 local spatulaModel = workspace:WaitForChild("SpatulaModel");
 local KitchenSpawn = workspace:WaitForChild("KitchenSpawn");
@@ -39,10 +41,12 @@ local function getRandomPoint()
 
 end
 
-while task.wait(3) do
+while task.wait(10) do
 
   local newSpatula: Model = spatulaModel:Clone()
   newSpatula:PivotTo(CFrame.new(getRandomPoint()))
   newSpatula.Parent = workspace;
+
+  RandomItemSpawningEvent:FireAllClients()
 
 end
