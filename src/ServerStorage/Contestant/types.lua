@@ -9,7 +9,6 @@ local ISandwich = require(ServerStorage.Sandwich.types);
 export type ContestantBaseProperties = {
   assignedCustomerID: string?;
   player: Player?;
-  inventorySlots: number;
   model: Model?;
   headshotImages: {
     default: string;
@@ -22,11 +21,13 @@ export type ContestantBaseProperties = {
 export type ContestantConstructorProperties = ContestantBaseProperties & {
   id: string?;
   inventory: {IItem.IItem | ISandwich.ISandwich}?;
+  inventorySlots: number?;
 }
 
 export type ContestantProperties = ContestantBaseProperties & {
   id: string;
   inventory: {IItem.IItem | ISandwich.ISandwich};
+  inventorySlots: number;
 };
 
 export type ContestantMethods = {

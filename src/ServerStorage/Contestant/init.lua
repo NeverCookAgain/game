@@ -82,7 +82,7 @@ function Contestant.new(properties: IContestant.ContestantConstructorProperties,
     id = properties.id or HttpService:GenerateGUID(false);
     player = properties.player;
     model = properties.model;
-    inventorySlots = properties.inventorySlots;
+    inventorySlots = properties.inventorySlots or 2;
     inventory = properties.inventory or {};
     headshotImages = properties.headshotImages;
     assignedCustomerID = properties.assignedCustomerID;

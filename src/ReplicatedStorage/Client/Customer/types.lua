@@ -9,6 +9,7 @@ export type CustomerBaseProperties = {
   order: IOrder.IOrder;
   image: string;
   model: Model;
+  headshotImage: string;
 }
 
 export type CustomerConstructorProperties = CustomerBaseProperties & {

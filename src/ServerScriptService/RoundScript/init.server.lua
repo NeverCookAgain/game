@@ -84,8 +84,6 @@ local function addPlayerAsContestant(player: Player)
 
   local contestant = Contestant.new({
     player = player;
-    inventory = {};
-    inventorySlots = 5;
     model = player.Character;
     headshotImages = {
       default = "rbxassetid://132812371775588";
@@ -96,7 +94,7 @@ local function addPlayerAsContestant(player: Player)
 
   contestant.CustomerAssignmentChanged:Connect(function()
   
-    
+    ReplicatedStorage.Shared.Events.CustomerAssignmentChanged:FireAllClients(contestant);
 
   end);
 
