@@ -44,6 +44,8 @@ local function OrderProgressSection(properties: CustomerOrderWindowProperties)
     
     end);
 
+    setInventory(chef.inventory);
+
   end, {chef});
 
   -- Check if player has the sandwich or the ingredients in their inventory.

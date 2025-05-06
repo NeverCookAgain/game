@@ -8,8 +8,6 @@ local ReactRoblox = require(ReplicatedStorage.Shared.Packages["react-roblox"])
 
 local FridgeContainer = require(script.FridgeContainer)
 
-
-
 local fridges = workspace.Restaurant:WaitForChild("Fridges")
 local proximityPromptTemplate = script:WaitForChild("ProximityPrompt")
 local events: {RBXScriptConnection} = {}
@@ -44,7 +42,8 @@ local function setupProximityPrompts()
 			prompt.Parent = fridgePart
 			prompt.ActionText = "Open Fridge"
 			prompt.KeyboardKeyCode = Enum.KeyCode.E
-			prompt.UIOffset = Vector2.new(0, 100)
+			prompt.RequiresLineOfSight = false;
+			prompt.UIOffset = Vector2.new(0, -100)
 			prompt.Triggered:Connect(function()
 			
 				root:render(React.createElement(FridgeContainer, {

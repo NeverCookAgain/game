@@ -39,7 +39,7 @@ local function FridgeContainer(props)
 			Image = foodItem.image,
 			BackgroundTransparency = 1;
 			[React.Event.MouseButton1Click] = function()
-				ReplicatedStorage.Shared.Functions.AddIngredientToInventory:InvokeServer(foodItem.name);
+				ReplicatedStorage.Shared.Functions.AddIngredientToInventory:InvokeServer(foodItem.name:gsub("%s+", ""));
 				props.onClose();
 			end,
 		}))
