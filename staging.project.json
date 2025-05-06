@@ -1,7 +1,7 @@
 {
-  "name": "Never Cook Again (Staging)",
+  "name": "Never Cook Again: Kitchen (Staging)",
   "globIgnorePaths": ["**/*.production.lua", "**/*.staging.lua", "**/*.development.lua"],
-  "servePlaceIds": [91283522679050],
+  "servePlaceIds": [103139686361035],
   "tree": {
     "$className": "DataModel",
     "Workspace": {
@@ -9,13 +9,16 @@
     },
     "ReplicatedStorage": {
       "Client": {
-        "$path": "src/ReplicatedStorage/Client",
-        "Packages": {
-          "$path": "Packages"
-        }
+        "$path": "src/ReplicatedStorage/Client"
       },
       "Shared": {
-        "$path": "src/ReplicatedStorage/Shared"
+        "$path": "src/ReplicatedStorage/Shared",
+        "Packages": {
+          "$path": "Packages"
+        },
+        "PlaceMap": {
+          "$path": "src/ReplicatedStorage/Shared/PlaceMap.staging.lua"
+        }
       }
     },
     "Lighting": {
