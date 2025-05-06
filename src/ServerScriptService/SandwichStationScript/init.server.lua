@@ -48,7 +48,7 @@ if round then
 
           if action:find("Add") then
 
-            local item = contestant.inventory[#contestant.inventory];
+            local item = contestant.selectedItem;
 
             if item then
 

@@ -92,6 +92,8 @@ local function OrderProgressSection(properties: CustomerOrderWindowProperties)
             else matchingItemCount + 0.5
           );
 
+          table.remove(allIngredients, closestIngredientIndex);
+
         end;
 
       end;
