@@ -52,6 +52,7 @@ round.RoundChanged:Connect(function()
     ServerScriptService.ToasterScript.Enabled = true;
     ServerScriptService.SandwichStationScript.Enabled = true;
     ServerScriptService.RandomItemSpawning.Enabled = true;
+    ServerScriptService.TrashScript.Enabled = true;
   
   elseif round.status == "Ended" then
     
