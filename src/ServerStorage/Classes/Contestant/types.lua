@@ -5,6 +5,9 @@ local ServerStorage = game:GetService("ServerStorage");
 local ICustomer = require(ServerStorage.Classes.Customer.types);
 local IItem = require(ServerStorage.Classes.Item.types);
 local ISandwich = require(ServerStorage.Classes.Sandwich.types);
+local ActionItem = require(ServerStorage.Interfaces.ActionItem);
+
+type ActionItem = ActionItem.ActionItem;
 
 export type ContestantBaseProperties = {
   assignedCustomerID: string?;
@@ -16,6 +19,7 @@ export type ContestantBaseProperties = {
     sad: string;
   };
   selectedItem: (IItem.IItem | ISandwich.ISandwich)?;
+  actionItem: ActionItem?;
 }
 
 export type ContestantConstructorProperties = ContestantBaseProperties & {
@@ -35,6 +39,7 @@ export type ContestantMethods = {
   addToInventory: (self: IContestant, item: IItem.IItem | ISandwich.ISandwich) -> ();
   setSelectedItem: (self: IContestant, item: (IItem.IItem | ISandwich.ISandwich)?) -> ();
   removeFromInventory: (self: IContestant, item: IItem.IItem | ISandwich.ISandwich) -> ();
+  setActionItem: (self: IContestant, actionItem: ActionItem?) -> ();
 };
 
 export type ContestantEvents = {

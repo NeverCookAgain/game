@@ -2,9 +2,9 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
-local Contestant = require(ReplicatedStorage.Client.Contestant);
+local Contestant = require(ReplicatedStorage.Client.Classes.Contestant);
 local IRound = require(script.types);
-local IContestant = require(ReplicatedStorage.Client.Contestant.types);
+local IContestant = require(ReplicatedStorage.Client.Classes.Contestant.types);
 
 local Round = {};
 

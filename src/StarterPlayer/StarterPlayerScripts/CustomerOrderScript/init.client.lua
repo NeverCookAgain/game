@@ -6,8 +6,8 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
 local React = require(ReplicatedStorage.Shared.Packages.react);
 local ReactRoblox = require(ReplicatedStorage.Shared.Packages["react-roblox"]);
-local ICustomer = require(ReplicatedStorage.Client.Customer.types);
-local Round = require(ReplicatedStorage.Client.Round);
+local ICustomer = require(ReplicatedStorage.Client.Classes.Customer.types);
+local Round = require(ReplicatedStorage.Client.Classes.Round);
 
 local CustomerOrderWindow = require(script.CustomerOrderWindow);
 local CustomerReceipt = require(script.CustomerReceipt);

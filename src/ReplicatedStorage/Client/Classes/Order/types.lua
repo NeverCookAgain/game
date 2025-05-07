@@ -2,7 +2,7 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
-local ISandwich = require(ReplicatedStorage.Client.Sandwich.types);
+local ISandwich = require(ReplicatedStorage.Client.Classes.Sandwich.types);
 
 export type Difficulty = "Easy" | "Medium" | "Hard";
 

@@ -2,7 +2,7 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
-local IOrder = require(ReplicatedStorage.Client.Order.types);
+local IOrder = require(ReplicatedStorage.Client.Classes.Order.types);
 
 export type CustomerBaseProperties = {
   id: string;

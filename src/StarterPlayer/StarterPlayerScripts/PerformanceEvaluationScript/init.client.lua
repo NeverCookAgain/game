@@ -5,7 +5,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
 local React = require(ReplicatedStorage.Shared.Packages.react);
 local ReactRoblox = require(ReplicatedStorage.Shared.Packages["react-roblox"]);
-local Round = require(ReplicatedStorage.Client.Round);
+local Round = require(ReplicatedStorage.Client.Classes.Round);
 
 local PerformanceEvaluationWindow = require(script.PerformanceEvaluationWindow);
 

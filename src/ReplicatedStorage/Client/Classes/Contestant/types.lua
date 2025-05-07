@@ -2,9 +2,9 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
-local IItem = require(ReplicatedStorage.Client.Item.types);
-local ICustomer = require(ReplicatedStorage.Client.Customer.types);
-local ISandwich = require(ReplicatedStorage.Client.Sandwich.types);
+local IItem = require(ReplicatedStorage.Client.Classes.Item.types);
+local ICustomer = require(ReplicatedStorage.Client.Classes.Customer.types);
+local ISandwich = require(ReplicatedStorage.Client.Classes.Sandwich.types);
 
 export type ContestantBaseProperties = {
   assignedCustomerID: string?;

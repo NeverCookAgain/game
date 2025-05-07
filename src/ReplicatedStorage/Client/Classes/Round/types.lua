@@ -2,8 +2,8 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
-local IContestant = require(ReplicatedStorage.Client.Contestant.types);
-local ICustomer = require(ReplicatedStorage.Client.Customer.types);
+local IContestant = require(ReplicatedStorage.Client.Classes.Contestant.types);
+local ICustomer = require(ReplicatedStorage.Client.Classes.Customer.types);
 
 export type RoundStatus = "Preparing" | "Ongoing" | "Ended";
 

@@ -2,7 +2,7 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
-local IItem = require(ReplicatedStorage.Client.Item.types);
+local IItem = require(ReplicatedStorage.Client.Classes.Item.types);
 
 export type SandwichBaseProperties = {
   name: string;

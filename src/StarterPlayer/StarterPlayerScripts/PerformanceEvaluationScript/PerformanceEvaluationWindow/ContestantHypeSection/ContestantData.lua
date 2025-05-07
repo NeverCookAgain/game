@@ -4,7 +4,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage");
 local TweenService = game:GetService("TweenService");
 
 local React = require(ReplicatedStorage.Shared.Packages.react);
-local IContestant = require(ReplicatedStorage.Client.Contestant.types);
+local IContestant = require(ReplicatedStorage.Client.Classes.Contestant.types);
 
 export type ContestantPerformanceSectionProperties = {
   contestant: IContestant.IContestant;

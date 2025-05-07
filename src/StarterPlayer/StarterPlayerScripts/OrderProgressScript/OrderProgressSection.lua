@@ -3,11 +3,11 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
 local React = require(ReplicatedStorage.Shared.Packages.react);
-local Round = require(ReplicatedStorage.Client.Round);
-local ICustomer = require(ReplicatedStorage.Client.Customer.types);
-local IContestant = require(ReplicatedStorage.Client.Contestant.types);
-local IItem = require(ReplicatedStorage.Client.Item.types);
-local ISandwich = require(ReplicatedStorage.Client.Sandwich.types);
+local Round = require(ReplicatedStorage.Client.Classes.Round);
+local ICustomer = require(ReplicatedStorage.Client.Classes.Customer.types);
+local IContestant = require(ReplicatedStorage.Client.Classes.Contestant.types);
+local IItem = require(ReplicatedStorage.Client.Classes.Item.types);
+local ISandwich = require(ReplicatedStorage.Client.Classes.Sandwich.types);
 
 export type CustomerOrderWindowProperties = {
   customer: ICustomer.ICustomer;
