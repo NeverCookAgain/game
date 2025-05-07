@@ -11,6 +11,10 @@ export type ActionItemConstructorProperties = ActionItemBaseProperties & {
   activate: (self: ActionItem) -> ();
 }
 
+export type ExtendedActionItemConstructorProperties = {
+  chefID: string?;
+}
+
 export type ActionItemProperties = {
   type: "ActionItem";
 } & ActionItemBaseProperties & ActionItemConstructorProperties;

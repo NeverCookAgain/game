@@ -13,15 +13,33 @@ local ActionItem = {};
 export type ActionItemClass = {
   name: string;
   description: string;
-  new: (round: IRound.IRound) -> ActionItem;
+  new: (properties: IActionItem.ExtendedActionItemConstructorProperties, round: IRound.IRound) -> ActionItem;
 };
 
 function ActionItem.new(properties: IActionItem.ActionItemConstructorProperties, round: Round): ActionItem
+
+  local triggerEvent: RBXScriptConnection?;
 
   local function drop(self: ActionItem, originalPosition: CFrame): ()
 
     local model = self.modelTemplate:Clone();
     assert(model.PrimaryPart, "Model has no PrimaryPart.");
+
+    local proximityPrompt = script.ProximityPrompt:Clone();
+    proximityPrompt.Parent = model.PrimaryPart;
+    triggerEvent = proximityPrompt.Triggered:Connect(function(player)
+      
+      local contestant = round:findContestantFromPlayer(player);
+      if not contestant then return; end;
+
+      (triggerEvent :: RBXScriptConnection):Disconnect();
+      triggerEvent = nil;
+
+      model:Destroy();
+
+      contestant:setActionItem(self);
+
+    end);
 
     model:PivotTo(originalPosition);
     model.Parent = workspace;
@@ -50,7 +68,7 @@ function ActionItem.listClasses(): {[string]: ActionItemClass}
 
 end;
 
-function ActionItem.random(round: Round): ActionItem
+function ActionItem.random(properties: IActionItem.ExtendedActionItemConstructorProperties, round: Round): ActionItem
 
   local itemNames = {};
   local items = ActionItem.listClasses();
@@ -65,11 +83,11 @@ function ActionItem.random(round: Round): ActionItem
   local itemName = itemNames[randomIndex];
   local item = items[itemName];
 
-  return item.new(round);
+  return item.new(properties, round);
 
 end;
 
-function ActionItem.get(itemName: string, round: IRound.IRound): ActionItem
+function ActionItem.get(itemName: string, properties: IActionItem.ExtendedActionItemConstructorProperties, round: IRound.IRound): ActionItem
 
   local items = ActionItem.listClasses();
   local item = items[itemName];
@@ -80,7 +98,7 @@ function ActionItem.get(itemName: string, round: IRound.IRound): ActionItem
 
   end;
 
-  return item.new(round);
+  return item.new(properties, round);
 
 end;
 

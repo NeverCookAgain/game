@@ -30,7 +30,7 @@ local spawnRateSeconds = 4;
 
 while task.wait(spawnRateSeconds) do
 
-  local actionItem = ActionItem.random(round);
+  local actionItem = ActionItem.random({}, round);
   local dropPosition = CFrame.new(getRandomPoint());
   actionItem:drop(dropPosition);
   RandomItemSpawningEvent:FireAllClients()
