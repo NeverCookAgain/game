@@ -7,11 +7,22 @@ local ServerStorage = game:GetService("ServerStorage");
 
 local Contestant = require(ServerStorage.Contestant);
 local Customer = require(ServerStorage.Customer);
-local Avocado = require(ServerStorage.Items.Avocado);
 local Item = require(ServerStorage.Item);
 local Round = require(ServerStorage.Round);
 local Order = require(ServerStorage.Order);
 local Sandwich = require(ServerStorage.Sandwich);
+local Room = require(ServerStorage.Room);
+
+local room;
+
+if not script:GetAttribute("Debug_BypassRoomCheck") then
+  
+  assert(game.PrivateServerId ~= "", "This script must be run in a private server.");
+  room = Room.getByPrivateServerID(game.PrivateServerId);
+  
+  assert(room, "Room not found.");
+
+end;
 
 local round = Round.new({});
 
@@ -63,6 +74,29 @@ round.EventsChanged:Connect(function()
 end);
 
 local function addPlayerAsContestant(player: Player)
+
+  if room then
+
+    local canJoin = false;
+    for _, roomPlayer in room.players do
+
+      if player.UserId == roomPlayer.userID then
+
+        canJoin = true;
+        break;
+
+      end;
+
+    end;
+
+    if not canJoin then
+
+      player:Kick("You are not allowed to join this round.");
+      return;
+
+    end;
+
+  end;
 
   local spawnLocations: {SpawnLocation} = workspace:FindFirstChild("SpawnLocations"):GetChildren();
 
