@@ -3,7 +3,7 @@
 local ServerStorage = game:GetService("ServerStorage");
 
 local IItem = require(script.types);
-local IRound = require(ServerStorage.Round.types);
+local IRound = require(ServerStorage.Classes.Round.types);
 
 local Item = {};
 

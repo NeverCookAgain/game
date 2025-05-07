@@ -3,8 +3,8 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 local ServerStorage = game:GetService("ServerStorage");
 
-local SandwichStation = require(ServerStorage.SandwichStation);
-local Round = require(ServerStorage.Round);
+local SandwichStation = require(ServerStorage.Classes.SandwichStation);
+local Round = require(ServerStorage.Classes.Round);
 
 local sandwichStations = {};
 

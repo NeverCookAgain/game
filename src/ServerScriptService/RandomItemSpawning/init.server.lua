@@ -12,7 +12,7 @@ local KitchenSpawn = workspace:WaitForChild("KitchenSpawn");
 
 local hasSpawnedSpatula = false
 
-local Round = require(ServerStorage.Round);
+local Round = require(ServerStorage.Classes.Round);
 local round
 
 repeat

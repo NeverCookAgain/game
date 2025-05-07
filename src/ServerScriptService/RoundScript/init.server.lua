@@ -5,13 +5,13 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage");
 local ServerScriptService = game:GetService("ServerScriptService");
 local ServerStorage = game:GetService("ServerStorage");
 
-local Contestant = require(ServerStorage.Contestant);
-local Customer = require(ServerStorage.Customer);
-local Item = require(ServerStorage.Item);
-local Round = require(ServerStorage.Round);
-local Order = require(ServerStorage.Order);
-local Sandwich = require(ServerStorage.Sandwich);
-local Room = require(ServerStorage.Room);
+local Contestant = require(ServerStorage.Classes.Contestant);
+local Customer = require(ServerStorage.Classes.Customer);
+local Item = require(ServerStorage.Classes.Item);
+local Round = require(ServerStorage.Classes.Round);
+local Order = require(ServerStorage.Classes.Order);
+local Sandwich = require(ServerStorage.Classes.Sandwich);
+local Room = require(ServerStorage.Classes.Room);
 
 local room;
 
