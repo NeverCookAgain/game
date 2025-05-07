@@ -28,8 +28,10 @@ function Spatula.new(properties: ActionItem, round: IRound.IRound): ActionItem
 
     local model: Model = script.GiantSpatula:Clone();
     assert(model:IsA("Model") and model.PrimaryPart, "Model has no PrimaryPart.");
-    model:PivotTo(character:GetPivot() * CFrame.new(0, 5, 0) + character:GetPivot().LookVector);
+    model:PivotTo(character:GetPivot() * CFrame.new(0, 5, 0) * CFrame.Angles(0, 0, math.rad(90)) + character:GetPivot().LookVector);
     model.Parent = workspace;
+
+    model.PrimaryPart:ApplyImpulse(Vector3.new(1, 0, 0) * -200);
 
     user:setActionItem();
 
