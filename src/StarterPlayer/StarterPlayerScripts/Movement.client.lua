@@ -2,8 +2,23 @@
 
 local Players = game:GetService("Players");
 local UserInputService = game:GetService("UserInputService");
+local ReplicatedStorage = game:GetService("ReplicatedStorage");
 local ContextActionService = game:GetService("ContextActionService");
 local TweenService = game:GetService("TweenService");
+
+local Round = require(ReplicatedStorage.Client.Classes.Round);
+local IRound = require(ReplicatedStorage.Client.Classes.Round.types);
+local round: IRound.IRound? = nil;
+repeat
+
+	round = Round.getFromServerRound();
+
+until round;
+assert(round, "Round not found!");
+
+local player = Players.LocalPlayer;
+local contestant = round:findContestantFromPlayer(player);
+assert(contestant, "Contestant not found!");
 
 local animationTask: thread?;
 
@@ -12,11 +27,16 @@ local shouldMoveRight = false;
 local shouldMoveForward = false;
 local shouldMoveBackward = false;
 
-local player = Players.LocalPlayer;
 
 if not player.Character then
 
 	player.CharacterAdded:Wait();
+
+end;
+
+local function setAnimationFrame(frameNumber: number)
+
+	ReplicatedStorage.Shared.Functions.SetContestantAnimationFrame:InvokeServer(frameNumber, if shouldMoveLeft then "Left" elseif shouldMoveRight then "Right" else nil);
 
 end;
 
@@ -36,27 +56,6 @@ local function moveCharacter(actionName, inputState)
 		if shouldMoveLeft and shouldMoveRight then 0 elseif shouldMoveLeft then force elseif shouldMoveRight then -force else 0
 	);
 
-	local walkCycleLeftIDs = {138071730441626, 127157712731282, 90099424286222, 88329203120597, 110743064881685, 138805926032055, 137674659781586, 80218653204415, 72783473022560};
-	local function setAnimationFrame(frameNumber: number)
-
-		local spriteSides = {player.Character.SpritePart.BackGUI.ImageLabel, player.Character.SpritePart.FrontGUI.ImageLabel};
-
-		for _, sprite in spriteSides do
-
-			sprite.Image = `rbxassetid://{walkCycleLeftIDs[frameNumber]}`;
-
-			if shouldMoveLeft or shouldMoveRight then
-
-				TweenService:Create(player.Character.SpritePart.Attachment, TweenInfo.new(0.1), {
-					CFrame = CFrame.new(player.Character.SpritePart.Attachment.CFrame.Position) * CFrame.Angles(0, if shouldMoveLeft then 0 else math.rad(180), 0);
-				}):Play()
-
-			end;
-
-		end;
-	
-	end;
-
 	if not animationTask and linearVelocity.VectorVelocity ~= Vector3.zero then
 
 		animationTask = task.spawn(function()
@@ -66,7 +65,7 @@ local function moveCharacter(actionName, inputState)
 			while task.wait(0.05) do
 
 				setAnimationFrame(frameNumber);
-				frameNumber = if frameNumber + 1 <= #walkCycleLeftIDs then frameNumber + 1 else 1;
+				frameNumber = if frameNumber + 1 <= #contestant.headshotImages.walkCycle then frameNumber + 1 else 1;
 		
 			end;
 
@@ -87,3 +86,5 @@ ContextActionService:BindAction("MoveLeft", moveCharacter, false, Enum.KeyCode.A
 ContextActionService:BindAction("MoveRight", moveCharacter, false, Enum.KeyCode.D, Enum.KeyCode.Right);
 ContextActionService:BindAction("MoveBackward", moveCharacter, false, Enum.KeyCode.W, Enum.KeyCode.Up);
 ContextActionService:BindAction("MoveForward", moveCharacter, false, Enum.KeyCode.S, Enum.KeyCode.Down);
+
+setAnimationFrame(1)

@@ -4,6 +4,7 @@ local Players = game:GetService("Players");
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 local ServerScriptService = game:GetService("ServerScriptService");
 local ServerStorage = game:GetService("ServerStorage");
+local TweenService = game:GetService("TweenService");
 
 local Contestant = require(ServerStorage.Classes.Contestant);
 local Customer = require(ServerStorage.Classes.Customer);
@@ -12,6 +13,9 @@ local Round = require(ServerStorage.Classes.Round);
 local Order = require(ServerStorage.Classes.Order);
 local Sandwich = require(ServerStorage.Classes.Sandwich);
 local Room = require(ServerStorage.Classes.Room);
+
+local IContestant = require(ServerStorage.Classes.Contestant.types);
+type Contestant = IContestant.IContestant;
 
 local room;
 
@@ -74,8 +78,55 @@ round.EventsChanged:Connect(function()
 
 end);
 
+ReplicatedStorage.Shared.Functions.SetContestantAnimationFrame.OnServerInvoke = function(player, frameNumber: unknown, direction: unknown)
+
+  assert(typeof(frameNumber) == "number", "Frame number must be a number.");
+  assert(not direction or (typeof(direction) == "string" and (direction == "Left" or direction == "Right")), "Direction must be a string.");
+
+  local contestant = round:findContestantFromPlayer(player);
+  assert(contestant, "You aren't a contestant of this round.");
+
+  assert(player.Character, "Player character not found.");
+
+  local spritePart = player.Character:FindFirstChild("SpritePart");
+  assert(spritePart, "Sprite part not found.");
+
+  local backGUI = spritePart:FindFirstChild("BackGUI");
+  assert(backGUI, "Back GUI not found.");
+
+  local frontGUI = spritePart:FindFirstChild("FrontGUI");
+  assert(frontGUI, "Front GUI not found.");
+
+  local backImageLabel = backGUI:FindFirstChild("ImageLabel");
+  assert(backImageLabel and backImageLabel:IsA("ImageLabel"), "Back image label not found.");
+
+  local frontImageLabel = frontGUI:FindFirstChild("ImageLabel");
+  assert(frontImageLabel and frontImageLabel:IsA("ImageLabel"), "Front image label not found.");
+
+  local attachment = spritePart:FindFirstChild("Attachment");
+  assert(attachment and attachment:IsA("Attachment"), "Attachment not found.");
+
+  if direction then
+
+    TweenService:Create(attachment, TweenInfo.new(0.1), {
+      CFrame = CFrame.new(attachment.CFrame.Position) * CFrame.Angles(0, if direction == "Left" then 0 else math.rad(180), 0);
+    }):Play()
+
+  end;
+
+  local spriteSides = {backImageLabel, frontImageLabel};
+
+  for _, sprite in spriteSides do
+
+    sprite.Image = `rbxassetid://{contestant.headshotImages.walkCycle[frameNumber]}`;
+
+  end;
+
+end;
+
 local function addPlayerAsContestant(player: Player)
 
+  local characterName = "Sweaty Todd";
   if room then
 
     local canJoin = false;
@@ -84,6 +135,7 @@ local function addPlayerAsContestant(player: Player)
       if player.UserId == roomPlayer.userID then
 
         canJoin = true;
+        characterName = roomPlayer.characterName;
         break;
 
       end;
@@ -121,11 +173,7 @@ local function addPlayerAsContestant(player: Player)
   local contestant = Contestant.new({
     player = player;
     model = player.Character;
-    headshotImages = {
-      default = "rbxassetid://132812371775588";
-      happy = "rbxassetid://72985907419460";
-      sad = "rbxassetid://112655319908614";
-    };
+    characterName = characterName;
   }, round);
 
   contestant.CustomerAssignmentChanged:Connect(function()

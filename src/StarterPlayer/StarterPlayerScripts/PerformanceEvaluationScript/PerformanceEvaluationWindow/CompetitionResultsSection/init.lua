@@ -43,7 +43,7 @@ local function CompetitionResultsSection(properties: ContestantsSectionPropertie
         });
         LoserImageLabel = React.createElement("ImageLabel", {
           BackgroundTransparency = 1;
-          Image = losingContestant.headshotImages.sad;
+          Image = `rbxassetid://{losingContestant.headshotImages.sad}`;
           Size = UDim2.new(0, 60, 0, 60);
           ImageTransparency = 0.5;
         });
@@ -134,7 +134,7 @@ local function CompetitionResultsSection(properties: ContestantsSectionPropertie
       WinnerHeadshotButton = React.createElement("ImageButton", {
         BackgroundTransparency = 1;
         LayoutOrder = 2;
-        Image = bestContestant.headshotImages.happy;
+        Image = `rbxassetid://{bestContestant.headshotImages.happy}`;
         Size = UDim2.new(0, 100, 0, 100);
         [React.Event.Activated] = function()
 

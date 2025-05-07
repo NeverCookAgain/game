@@ -118,7 +118,7 @@ local function ContestantHypeSection(properties: ContestantPerformanceSectionPro
       ContestantImageLabel = React.createElement("ImageLabel", {
         BackgroundTransparency = 1;
         LayoutOrder = 1;
-        Image = properties.contestant.headshotImages.default;
+        Image = `rbxassetid://{properties.contestant.headshotImages.default}`;
         Size = UDim2.new(0, 100, 0, 100);
         ref = headshotImage;
       });

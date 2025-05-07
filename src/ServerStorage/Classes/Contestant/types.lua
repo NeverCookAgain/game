@@ -13,11 +13,6 @@ export type ContestantBaseProperties = {
   assignedCustomerID: string?;
   player: Player?;
   model: Model?;
-  headshotImages: {
-    default: string;
-    happy: string;
-    sad: string;
-  };
   selectedItem: (IItem.IItem | ISandwich.ISandwich)?;
   actionItem: ActionItem?;
 }
@@ -26,12 +21,19 @@ export type ContestantConstructorProperties = ContestantBaseProperties & {
   id: string?;
   inventory: {IItem.IItem | ISandwich.ISandwich}?;
   inventorySlots: number?;
+  characterName: string;
 }
 
 export type ContestantProperties = ContestantBaseProperties & {
   id: string;
   inventory: {IItem.IItem | ISandwich.ISandwich};
   inventorySlots: number;
+  headshotImages: {
+    default: string;
+    happy: string;
+    sad: string;
+    walkCycle: {number};
+  };
 };
 
 export type ContestantMethods = {

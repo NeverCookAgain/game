@@ -15,10 +15,12 @@ export type ContestantBaseProperties = {
   player: Player?;
   inventorySlots: number;
   model: Model?;
+  characterName: string;
   headshotImages: {
-    default: string;
-    happy: string;
-    sad: string;
+    default: number;
+    happy: number;
+    sad: number;
+    walkCycle: {number};
   };
   id: string;
 };
