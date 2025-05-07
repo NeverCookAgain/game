@@ -117,14 +117,14 @@ local function updateOrder()
 
   local customerID = contestant.assignedCustomerID;
   if not customerID then return receiptRoot:unmount(); end;
-  
+
   local customer = ReplicatedStorage.Shared.Functions.GetCustomer:InvokeServer(customerID) :: ICustomer.ICustomer;
   if not customer then return receiptRoot:unmount(); end;
 
   receiptRoot:render(React.createElement(CustomerReceipt, {
     order = customer.order;
   }));
-  
+
 end;
 
 ReplicatedStorage.Shared.Events.CustomerAssignmentChanged.OnClientEvent:Connect(updateOrder);

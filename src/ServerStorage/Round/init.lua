@@ -91,6 +91,22 @@ function Round.new(properties: IRound.RoundConstructorProperties): IRound.IRound
 
   end;
 
+  local function findChefFromID(self: IRound.IRound, chefID: string): IContestant.IContestant?
+
+    for _, chef in self.contestants do
+
+      if chef.id == chefID then
+
+        return chef;
+
+      end;
+
+    end;
+
+    return;
+
+  end;
+
   local round: IRound.IRound = {
     status = properties.status or "Preparing" :: "Preparing";
     contestants = properties.contestants or {};
@@ -102,6 +118,7 @@ function Round.new(properties: IRound.RoundConstructorProperties): IRound.IRound
     findCustomerFromID = findCustomerFromID;
     removeEvent = removeEvent;
     setStatus = setStatus;
+    findChefFromID = findChefFromID;
     ContestantsChanged = contestantsChangedEvent.Event;
     RoundChanged = roundChangedEvent.Event;
     EventsChanged = eventsChangedEvent.Event;

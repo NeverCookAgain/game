@@ -33,6 +33,7 @@ export type RoundMethods = {
   setStatus: (self: IRound, newStatus: RoundStatus) -> ();
   findContestantFromPlayer: (self: IRound, targetPlayer: Player) -> IContestant.IContestant?;
   findCustomerFromID: (self: IRound, targetCustomerID: string) -> ICustomer.ICustomer?;
+  findChefFromID: (self: IRound, targetChefID: string) -> IContestant.IContestant?;
 };
 
 export type RoundEvents = {
