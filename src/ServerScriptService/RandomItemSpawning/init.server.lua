@@ -1,37 +1,22 @@
 --!strict
 
-local Players = game:GetService("Players");
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
-local ServerScriptService = game:GetService("ServerScriptService");
 local ServerStorage = game:GetService("ServerStorage");
-local React = require(ReplicatedStorage.Shared.Packages.react)
+
+local Round = require(ServerStorage.Classes.Round);
+local ActionItem = require(ServerStorage.Classes.ActionItem);
+
 local RandomItemSpawningEvent = ReplicatedStorage.Shared.Events.RandomItemSpawning;
 
-local spatulaModel = workspace:WaitForChild("SpatulaModel");
-local KitchenSpawn = workspace:WaitForChild("KitchenSpawn");
+local kitchenSpawnPart = workspace:WaitForChild("KitchenSpawn");
 
-local hasSpawnedSpatula = false
-
-local Round = require(ServerStorage.Round);
-local round
-
-repeat
-
-  round = Round.getFromSharedRound();
-  task.wait();
-
-until round;
-
-while round.status ~= "Ongoing" do
-
-  task.wait();
-  hasSpawnedSpatula = true
-
-end;
+local round = Round.getFromSharedRound();
+assert(round, "Round not found!");
 
 local function getRandomPoint()
-  local size = KitchenSpawn.Size
-  local position = KitchenSpawn.Position
+
+  local size = kitchenSpawnPart.Size
+  local position = kitchenSpawnPart.Position
 
   local randomX = position.X + math.random(-size.X/2, size.X/2)
   local randomY = position.Y + math.random(-size.Y/2, size.Y/2)
@@ -41,12 +26,13 @@ local function getRandomPoint()
 
 end
 
-while task.wait(10) do
+local spawnRateSeconds = 4;
 
-  local newSpatula: Model = spatulaModel:Clone()
-  newSpatula:PivotTo(CFrame.new(getRandomPoint()))
-  newSpatula.Parent = workspace;
+while task.wait(spawnRateSeconds) do
 
+  local actionItem = ActionItem.random({}, round);
+  local dropPosition = CFrame.new(getRandomPoint());
+  actionItem:drop(dropPosition);
   RandomItemSpawningEvent:FireAllClients()
 
 end

@@ -5,13 +5,13 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage");
 local ServerScriptService = game:GetService("ServerScriptService");
 local ServerStorage = game:GetService("ServerStorage");
 
-local Contestant = require(ServerStorage.Contestant);
-local Customer = require(ServerStorage.Customer);
-local Item = require(ServerStorage.Item);
-local Round = require(ServerStorage.Round);
-local Order = require(ServerStorage.Order);
-local Sandwich = require(ServerStorage.Sandwich);
-local Room = require(ServerStorage.Room);
+local Contestant = require(ServerStorage.Classes.Contestant);
+local Customer = require(ServerStorage.Classes.Customer);
+local Item = require(ServerStorage.Classes.Item);
+local Round = require(ServerStorage.Classes.Round);
+local Order = require(ServerStorage.Classes.Order);
+local Sandwich = require(ServerStorage.Classes.Sandwich);
+local Room = require(ServerStorage.Classes.Room);
 
 local room;
 
@@ -47,6 +47,7 @@ round.RoundChanged:Connect(function()
 
     ServerScriptService.ToasterScript.Enabled = true;
     ServerScriptService.SandwichStationScript.Enabled = true;
+    ServerScriptService.RandomItemSpawning.Enabled = true;
   
   elseif round.status == "Ended" then
     
@@ -327,6 +328,18 @@ ReplicatedStorage.Shared.Functions.GetIngredients.OnServerInvoke = function(play
   end;
 
   return possibleIngredients;
+
+end;
+
+ReplicatedStorage.Shared.Functions.ActivateActionItem.OnServerInvoke = function(player)
+
+  local contestant = round:findContestantFromPlayer(player);
+  assert(contestant, "You aren't a contestant of this round.");
+
+  local actionItem = contestant.actionItem;
+  assert(actionItem, "You don't have an action item.");
+
+  actionItem:activate();
 
 end;
 

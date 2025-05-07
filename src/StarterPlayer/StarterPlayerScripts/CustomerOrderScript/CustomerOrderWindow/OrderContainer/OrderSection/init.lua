@@ -3,7 +3,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
 local React = require(ReplicatedStorage.Shared.Packages.react);
-local IOrder = require(ReplicatedStorage.Client.Order.types);
+local IOrder = require(ReplicatedStorage.Client.Classes.Order.types);
 
 local IngredientSection = require(script.IngredientSection);
 

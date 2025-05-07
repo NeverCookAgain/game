@@ -2,8 +2,8 @@
 
 local ServerStorage = game:GetService("ServerStorage");
 
-local Round = require(ServerStorage.Round);
-local Toaster = require(ServerStorage.Toaster);
+local Round = require(ServerStorage.Classes.Round);
+local Toaster = require(ServerStorage.Classes.Toaster);
 
 local round = Round.getFromSharedRound()
 

@@ -3,7 +3,7 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
 local React = require(ReplicatedStorage.Shared.Packages.react);
-local IContestant = require(ReplicatedStorage.Client.Contestant.types);
+local IContestant = require(ReplicatedStorage.Client.Classes.Contestant.types);
 
 export type ContestantsSectionProperties = {
   contestants: {IContestant.IContestant};

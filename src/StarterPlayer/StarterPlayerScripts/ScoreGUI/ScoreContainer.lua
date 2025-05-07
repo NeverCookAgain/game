@@ -3,10 +3,10 @@
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
 local React = require(ReplicatedStorage.Shared.Packages.react);
-local Round = require(ReplicatedStorage.Client.Round);
+local Round = require(ReplicatedStorage.Client.Classes.Round);
 local Fonts = require(ReplicatedStorage.Client.Fonts);
 
-local IContestant = require(ReplicatedStorage.Client.Contestant.types);
+local IContestant = require(ReplicatedStorage.Client.Classes.Contestant.types);
 
 type IContestant = IContestant.IContestant;
 
