@@ -47,6 +47,7 @@ round.RoundChanged:Connect(function()
 
     ServerScriptService.ToasterScript.Enabled = true;
     ServerScriptService.SandwichStationScript.Enabled = true;
+    ServerScriptService.RandomItemSpawning.Enabled = true;
   
   elseif round.status == "Ended" then
     
@@ -327,6 +328,18 @@ ReplicatedStorage.Shared.Functions.GetIngredients.OnServerInvoke = function(play
   end;
 
   return possibleIngredients;
+
+end;
+
+ReplicatedStorage.Shared.Functions.ActivateActionItem.OnServerInvoke = function(player)
+
+  local contestant = round:findContestantFromPlayer(player);
+  assert(contestant, "You aren't a contestant of this round.");
+
+  local actionItem = contestant.actionItem;
+  assert(actionItem, "You don't have an action item.");
+
+  actionItem:activate();
 
 end;
 

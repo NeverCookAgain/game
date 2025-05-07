@@ -15,6 +15,9 @@ screenGUI.ScreenInsets = Enum.ScreenInsets.None;
 screenGUI.Parent = Players.LocalPlayer:WaitForChild("PlayerGui");
 
 local actionItemGUI = screenGUI:Clone();
+actionItemGUI.Name = "ActionItemInventory";
+actionItemGUI.Parent = screenGUI.Parent;
+
 local actionItemContainerRoot = ReactRoblox.createRoot(actionItemGUI);
 local inventoryContainerRoot = ReactRoblox.createRoot(screenGUI);
 
@@ -37,3 +40,4 @@ local function checkRound()
 end;
 
 ReplicatedStorage.Shared.Events.RoundChanged.OnClientEvent:Connect(checkRound);
+checkRound();

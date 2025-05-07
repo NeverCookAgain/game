@@ -14,13 +14,13 @@ export type Properties = {}
 
 local function ActionItemContainer(properties: Properties)
 
-  local contestant: Contestant, setContestant = React.useState(nil :: Contestant?);
+  local contestant: Contestant?, setContestant = React.useState(nil :: Contestant?);
   local shouldActivate, setShouldActivate = React.useState(false);
 
   React.useEffect(function()
 
-    task.spawn(function()
-    
+    local function updateContestant()
+
       local round = Round.getFromServerRound();
       if not round then return; end;
 
@@ -29,7 +29,17 @@ local function ActionItemContainer(properties: Properties)
 
       setContestant(contestant);
 
-    end);
+    end;
+
+    task.spawn(updateContestant);
+
+    local connection = ReplicatedStorage.Shared.Events.ContestantInventoryChanged.OnClientEvent:Connect(updateContestant);
+
+    return function()
+
+      connection:Disconnect();
+
+    end;
 
   end, {});
 
@@ -54,7 +64,7 @@ local function ActionItemContainer(properties: Properties)
         AnchorPoint = Vector2.new(1, 1);
         AutomaticSize = Enum.AutomaticSize.XY;
         BackgroundTransparency = 1;
-        Position = UDim2.new(1, 0, 1, 65);
+        Position = UDim2.new(1, -15, 1, -80);
       }, {
         Button = React.createElement(InventoryButton, {
           isDisabled = shouldActivate;

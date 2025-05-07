@@ -27,8 +27,10 @@ function ActionItem.new(properties: IActionItem.ActionItemConstructorProperties,
 
     local proximityPrompt = script.ProximityPrompt:Clone();
     proximityPrompt.Parent = model.PrimaryPart;
+    proximityPrompt.ActionText = "Pick up";
+    proximityPrompt.ObjectText = self.name;
     triggerEvent = proximityPrompt.Triggered:Connect(function(player)
-      
+
       local contestant = round:findContestantFromPlayer(player);
       if not contestant then return; end;
 
@@ -37,6 +39,7 @@ function ActionItem.new(properties: IActionItem.ActionItemConstructorProperties,
 
       model:Destroy();
 
+      self.chefID = contestant.id;
       contestant:setActionItem(self);
 
     end);

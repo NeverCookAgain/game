@@ -57,6 +57,7 @@ function Contestant.new(properties: IContestant.ContestantProperties, round: IRo
   local contestant: IContestant.IContestant = {
     type = "Contestant" :: "Contestant";
     assignedCustomerID = properties.assignedCustomerID;
+    actionItem = properties.actionItem;
     id = properties.id;
     headshotImages = properties.headshotImages;
     player = properties.player;

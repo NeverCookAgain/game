@@ -26,14 +26,16 @@ function Spatula.new(properties: ActionItem, round: IRound.IRound): ActionItem
     local character = user.player.Character;
     assert(character, "Character not found.");
 
-    local model: Model = self.modelTemplate:Clone();
+    local model: Model = script.GiantSpatula:Clone();
     assert(model:IsA("Model") and model.PrimaryPart, "Model has no PrimaryPart.");
-    model:PivotTo(character:GetPivot() * CFrame.new(0, 5, 0));
+    model:PivotTo(character:GetPivot() * CFrame.new(0, 5, 0) + character:GetPivot().LookVector);
     model.Parent = workspace;
+
+    user:setActionItem();
 
     -- Stun any player who touches it.
     local immuneContestants = {};
-    model.PrimaryPart.Touched:Connect(function(hit: Instance)
+    local touchedEvent = model.PrimaryPart.Touched:Connect(function(hit: Instance)
       
       local player = game.Players:GetPlayerFromCharacter(hit:FindFirstAncestorOfClass("Model"));
       if player and player ~= user.player then
@@ -76,6 +78,12 @@ function Spatula.new(properties: ActionItem, round: IRound.IRound): ActionItem
 
       end;
     
+    end);
+
+    task.delay(3, function()
+    
+      touchedEvent:Disconnect();
+
     end);
 
     task.delay(5, function()

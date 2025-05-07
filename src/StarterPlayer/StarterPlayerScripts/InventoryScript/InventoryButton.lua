@@ -15,12 +15,13 @@ export type InventoryButtonProperties = {
   isSelected: boolean;
   onSelect: () -> ();
   isDisabled: boolean?;
+  anchorPoint: Vector2?;
 }
 
 local function InventoryButton(properties: InventoryButtonProperties)
 
   return React.createElement("TextButton", {
-    AnchorPoint = Vector2.new(1, 1);
+    AnchorPoint = properties.anchorPoint or Vector2.new(1, 1);
     BackgroundTransparency = if properties.item and not properties.isDisabled then 0.65 else 0.85;
     BackgroundColor3 = Color3.new(1, 1, 1);
     BorderSizePixel = 0;

@@ -10,7 +10,7 @@ local RandomItemSpawningEvent = ReplicatedStorage.Shared.Events.RandomItemSpawni
 
 local kitchenSpawnPart = workspace:WaitForChild("KitchenSpawn");
 
-local round = Round.getFromSharedRound() or Round.SharedRoundChanged:Wait();
+local round = Round.getFromSharedRound();
 assert(round, "Round not found!");
 
 local function getRandomPoint()
