@@ -9,6 +9,8 @@ export type ContestantsSectionProperties = {
   contestants: {IContestant.IContestant};
 }
 
+
+
 local function CompetitionResultsSection(properties: ContestantsSectionProperties)
 
   local selectedContestant, setSelectedContestant = React.useState(nil :: IContestant.IContestant?);
@@ -45,7 +47,7 @@ local function CompetitionResultsSection(properties: ContestantsSectionPropertie
           BackgroundTransparency = 1;
           Image = `rbxassetid://{losingContestant.headshotImages.sad}`;
           Size = UDim2.new(0, 60, 0, 60);
-          ImageTransparency = 0.5;
+          ImageTransparency = if selectedContestant == losingContestant then 0 else 0.5,
         });
         LoserScoreTextLabel = React.createElement("TextLabel", {
           AutomaticSize = Enum.AutomaticSize.XY;
@@ -136,10 +138,9 @@ local function CompetitionResultsSection(properties: ContestantsSectionPropertie
         LayoutOrder = 2;
         Image = `rbxassetid://{bestContestant.headshotImages.happy}`;
         Size = UDim2.new(0, 100, 0, 100);
+        ImageTransparency = if not selectedContestant or selectedContestant == bestContestant then 0 else 0.5,
         [React.Event.Activated] = function()
-
           setSelectedContestant(bestContestant);
-
         end;
       });
       SelectedContestantDetailsSection = React.createElement("Frame", {
