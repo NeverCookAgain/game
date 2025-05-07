@@ -68,6 +68,7 @@ local function ActionItemContainer(properties: Properties)
       }, {
         Button = React.createElement(InventoryButton, {
           isDisabled = shouldActivate;
+          text = contestant.actionItem.name;
           onSelect = function()
 
             setShouldActivate(true);
