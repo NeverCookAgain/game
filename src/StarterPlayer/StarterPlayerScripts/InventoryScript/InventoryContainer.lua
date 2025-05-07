@@ -4,36 +4,9 @@ local ContextActionService = game:GetService("ContextActionService");
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
 local React = require(ReplicatedStorage.Shared.Packages.react);
-local InventoryButton = require(script.InventoryButton);
+local InventoryButton = require(script.Parent.InventoryButton);
 
-export type InventoryContainerProperties = {
-  onClose: () -> ();
-}
-
-local function InventoryContainer(properties: InventoryContainerProperties)
-
-  React.useEffect(function()
-    
-    local function checkRound()
-
-      local round = ReplicatedStorage.Shared.Functions.GetRound:InvokeServer();
-      if round.status == "Ended" then
-
-        properties.onClose();
-
-      end;
-
-    end;
-
-    local roundEndedEvent = ReplicatedStorage.Shared.Events.RoundChanged.OnClientEvent:Connect(checkRound);
-
-    return function()
-
-      roundEndedEvent:Disconnect();
-
-    end;
-
-  end, {});
+local function InventoryContainer()
 
   local inventory, setInventory = React.useState({});
   local inventorySlots, setInventorySlots = React.useState(0);

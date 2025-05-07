@@ -3,7 +3,7 @@
 local ServerStorage = game:GetService("ServerStorage");
 
 local IRound = require(ServerStorage.Classes.Round.types);
-local ActionItem = require(ServerStorage.Interfaces.ActionItem);
+local ActionItem = require(ServerStorage.Classes.ActionItem);
 
 type ActionItem = ActionItem.ActionItem;
 type Round = IRound.IRound;
@@ -14,13 +14,13 @@ local Spatula = {
   modelTemplate = script.Spatula;
 };
 
-function Spatula.new(properties: ActionItem.ActionItemConstructorProperties, round: IRound.IRound): ActionItem
+function Spatula.new(properties: ActionItem, round: IRound.IRound): ActionItem
 
   local function activate(self: ActionItem)
 
     -- Create a giant spatula part above the user's head.
     assert(self.chefID, "Chef ID is not set.");
-    local user = round:findChefFromID(self.chefID);
+    local user = round:findChefFromID(self.chefID :: string);
     assert(user and user.player, "User not found.");
 
     local character = user.player.Character;
@@ -86,16 +86,13 @@ function Spatula.new(properties: ActionItem.ActionItemConstructorProperties, rou
 
   end;
 
-  local actionItem: ActionItem = {
-    type = "ActionItem" :: "ActionItem";
+  return ActionItem.new({
     name = Spatula.name;
     description = Spatula.description;
     chefID = properties.chefID;
     modelTemplate = Spatula.modelTemplate:Clone();
     activate = activate;
-  }
-
-  return actionItem;
+  }, round);
 
 end;
 

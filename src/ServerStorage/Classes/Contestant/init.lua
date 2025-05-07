@@ -7,7 +7,7 @@ local IRound = require(ServerStorage.Classes.Round.types);
 local IItem = require(ServerStorage.Classes.Item.types);
 local IContestant = require(script.types);
 local ISandwich = require(ServerStorage.Classes.Sandwich.types);
-local ActionItem = require(ServerStorage.Interfaces.ActionItem);
+local ActionItem = require(ServerStorage.Classes.ActionItem.Interface);
 type ActionItem = ActionItem.ActionItem;
 
 local Contestant = {};

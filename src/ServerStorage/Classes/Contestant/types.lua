@@ -5,7 +5,7 @@ local ServerStorage = game:GetService("ServerStorage");
 local ICustomer = require(ServerStorage.Classes.Customer.types);
 local IItem = require(ServerStorage.Classes.Item.types);
 local ISandwich = require(ServerStorage.Classes.Sandwich.types);
-local ActionItem = require(ServerStorage.Interfaces.ActionItem);
+local ActionItem = require(ServerStorage.Classes.ActionItem.Interface);
 
 type ActionItem = ActionItem.ActionItem;
 

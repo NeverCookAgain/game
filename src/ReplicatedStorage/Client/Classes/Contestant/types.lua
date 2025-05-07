@@ -5,8 +5,12 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage");
 local IItem = require(ReplicatedStorage.Client.Classes.Item.types);
 local ICustomer = require(ReplicatedStorage.Client.Classes.Customer.types);
 local ISandwich = require(ReplicatedStorage.Client.Classes.Sandwich.types);
+local ActionItem = require(ReplicatedStorage.Client.Interfaces.ActionItem);
+
+type ActionItem = ActionItem.ActionItem;
 
 export type ContestantBaseProperties = {
+  actionItem: ActionItem?;
   assignedCustomerID: string?;
   player: Player?;
   inventorySlots: number;
