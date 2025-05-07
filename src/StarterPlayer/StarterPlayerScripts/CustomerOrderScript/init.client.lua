@@ -10,6 +10,7 @@ local ICustomer = require(ReplicatedStorage.Client.Customer.types);
 local Round = require(ReplicatedStorage.Client.Round);
 
 local CustomerOrderWindow = require(script.CustomerOrderWindow);
+local CustomerReceipt = require(script.CustomerReceipt);
 
 local screenGUI: ScreenGui?;
 
@@ -97,3 +98,34 @@ ProximityPromptService.PromptTriggered:Connect(function(prompt)
   end;
 
 end);
+
+local receiptGUI = Instance.new("ScreenGui");
+receiptGUI.Name = "Receipt";
+receiptGUI.ScreenInsets = Enum.ScreenInsets.None;
+receiptGUI.ZIndexBehavior = Enum.ZIndexBehavior.Sibling;
+receiptGUI.Parent = Players.LocalPlayer.PlayerGui;
+
+local receiptRoot = ReactRoblox.createRoot(receiptGUI);
+
+local function updateOrder()
+
+  local round = Round.getFromServerRound();
+  if not round then return receiptRoot:unmount(); end;
+
+  local contestant = round:findContestantFromPlayer(Players.LocalPlayer);
+  if not contestant then return receiptRoot:unmount(); end;
+
+  local customerID = contestant.assignedCustomerID;
+  if not customerID then return receiptRoot:unmount(); end;
+  
+  local customer = ReplicatedStorage.Shared.Functions.GetCustomer:InvokeServer(customerID) :: ICustomer.ICustomer;
+  if not customer then return receiptRoot:unmount(); end;
+
+  receiptRoot:render(React.createElement(CustomerReceipt, {
+    order = customer.order;
+  }));
+  
+end;
+
+ReplicatedStorage.Shared.Events.CustomerAssignmentChanged.OnClientEvent:Connect(updateOrder);
+updateOrder();
