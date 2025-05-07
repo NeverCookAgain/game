@@ -46,12 +46,16 @@ function Item.new(properties: IItem.ItemConstructorProperties, round: IRound.IRo
       
     end;
     
-    local smoke = Instance.new("Smoke");
-    smoke.Color = Color3.new(0, 0, 0);
-    smoke.Size = 1;
-    smoke.RiseVelocity = 2;
-    smoke.Opacity = 0.1;
-    smoke.Parent = part;
+    if self.status == "Burnt" then
+
+      local smoke = Instance.new("Smoke");
+      smoke.Color = Color3.new(0, 0, 0);
+      smoke.Size = 1;
+      smoke.RiseVelocity = 2;
+      smoke.Opacity = 0.1;
+      smoke.Parent = part;
+
+    end;
 
     local backGUI = part:FindFirstChild("BackGUI");
     local frontGUI = part:FindFirstChild("FrontGUI");

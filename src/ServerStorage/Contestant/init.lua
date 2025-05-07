@@ -1,8 +1,8 @@
 --!strict
 
 local ServerStorage = game:GetService("ServerStorage");
+local HttpService = game:GetService("HttpService");
 
-local ICustomer = require(ServerStorage.Customer.types);
 local IRound = require(ServerStorage.Round.types);
 local IItem = require(ServerStorage.Item.types);
 local IContestant = require(script.types);
@@ -23,13 +23,6 @@ function Contestant.new(properties: IContestant.ContestantConstructorProperties,
 
   end;
 
-  local function addServedCustomer(self: IContestant.IContestant, customer: ICustomer.ICustomer): ()
-
-    table.insert(self.servedCustomers, customer);
-    customerServedEvent:Fire(customer);
-
-  end;
-
   local function removeFromInventory(self: IContestant.IContestant, item: IItem.IItem | ISandwich.ISandwich): ()
 
     for index = #self.inventory, 1, -1 do
@@ -37,6 +30,13 @@ function Contestant.new(properties: IContestant.ContestantConstructorProperties,
       if self.inventory[index] == item then
 
         table.remove(self.inventory, index);
+        
+        if self.selectedItem == item then
+
+          self.selectedItem = nil;
+
+        end;
+
         inventoryChangedEvent:Fire();
         break;
 
@@ -46,25 +46,51 @@ function Contestant.new(properties: IContestant.ContestantConstructorProperties,
 
   end;
 
-  local function setAssignedCustomer(self: IContestant.IContestant, customer: ICustomer.ICustomer?): ()
+  local function setAssignedCustomerID(self: IContestant.IContestant, customerID: string?): ()
 
-    self.assignedCustomer = customer;
-    customerAssignmentChangedEvent:Fire(customer);
+    self.assignedCustomerID = customerID;
+    customerAssignmentChangedEvent:Fire(customerID);
+
+  end;
+
+  local function setSelectedItem(self: IContestant.IContestant, item: (IItem.IItem | ISandwich.ISandwich)?): ()
+
+    if item then
+
+      -- Verify that the item is in the inventory.
+      local found = false;
+      for _, inventoryItem in ipairs(self.inventory) do
+
+        if inventoryItem == item then
+
+          found = true;
+          break;
+
+        end;
+
+      end;
+
+      assert(found, "Item not found in inventory.");
+
+    end;
+
+    self.selectedItem = item;
 
   end;
 
   local contestant: IContestant.IContestant = {
-    id = properties.id;
+    id = properties.id or HttpService:GenerateGUID(false);
     player = properties.player;
     model = properties.model;
-    inventorySlots = properties.inventorySlots;
+    inventorySlots = properties.inventorySlots or 2;
     inventory = properties.inventory or {};
-    servedCustomers = properties.servedCustomers or {};
     headshotImages = properties.headshotImages;
-    addServedCustomer = addServedCustomer;
+    assignedCustomerID = properties.assignedCustomerID;
+    selectedItem = properties.selectedItem;
     addToInventory = addToInventory;
+    setSelectedItem = setSelectedItem;
     removeFromInventory = removeFromInventory;
-    setAssignedCustomer = setAssignedCustomer;
+    setAssignedCustomerID = setAssignedCustomerID;
     CustomerServed = customerServedEvent.Event;
     InventoryChanged = inventoryChangedEvent.Event;
     CustomerAssignmentChanged = customerAssignmentChangedEvent.Event;

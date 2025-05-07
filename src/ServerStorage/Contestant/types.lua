@@ -7,32 +7,33 @@ local IItem = require(ServerStorage.Item.types);
 local ISandwich = require(ServerStorage.Sandwich.types);
 
 export type ContestantBaseProperties = {
-  id: number;
-  assignedCustomer: ICustomer.ICustomer?;
+  assignedCustomerID: string?;
   player: Player?;
-  inventorySlots: number;
   model: Model?;
   headshotImages: {
     default: string;
     happy: string;
     sad: string;
   };
+  selectedItem: (IItem.IItem | ISandwich.ISandwich)?;
 }
 
 export type ContestantConstructorProperties = ContestantBaseProperties & {
-  servedCustomers: {ICustomer.ICustomer}?;
+  id: string?;
   inventory: {IItem.IItem | ISandwich.ISandwich}?;
+  inventorySlots: number?;
 }
 
 export type ContestantProperties = ContestantBaseProperties & {
-  servedCustomers: {ICustomer.ICustomer};
+  id: string;
   inventory: {IItem.IItem | ISandwich.ISandwich};
+  inventorySlots: number;
 };
 
 export type ContestantMethods = {
-  setAssignedCustomer: (self: IContestant, customer: ICustomer.ICustomer?) -> ();
-  addServedCustomer: (self: IContestant, customer: ICustomer.ICustomer) -> ();
+  setAssignedCustomerID: (self: IContestant, customerID: string?) -> ();
   addToInventory: (self: IContestant, item: IItem.IItem | ISandwich.ISandwich) -> ();
+  setSelectedItem: (self: IContestant, item: (IItem.IItem | ISandwich.ISandwich)?) -> ();
   removeFromInventory: (self: IContestant, item: IItem.IItem | ISandwich.ISandwich) -> ();
 };
 

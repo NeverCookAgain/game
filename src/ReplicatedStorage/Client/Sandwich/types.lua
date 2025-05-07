@@ -6,7 +6,6 @@ local IItem = require(ReplicatedStorage.Client.Item.types);
 
 export type SandwichBaseProperties = {
   name: string;
-  description: string;
 }
 
 export type SandwichConstructorProperties = SandwichBaseProperties & {

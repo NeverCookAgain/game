@@ -72,7 +72,7 @@ local function InventoryContainer()
     TextLabel = React.createElement("TextLabel", {
       AutomaticSize = Enum.AutomaticSize.XY;
       BackgroundTransparency = 1;
-      FontFace = Fonts.Bold;
+      FontFace = Font.fromId(11702779517, Enum.FontWeight.Bold);
       TextColor3 = Color3.new(1, 1, 1);
       TextSize = 24;
       Text = formattedTime;

@@ -2,11 +2,12 @@
 
 local ReplicatedStorage = game:GetService("ReplicatedStorage");
 
+local PlaceMap = require(ReplicatedStorage.Shared.PlaceMap);
+
 ReplicatedStorage.Shared.Functions.TeleportToMainMenu.OnServerInvoke = function(player: Player)
   
   local teleportService = game:GetService("TeleportService");
-  local startPlaceID = 85139156311421;
   
-  teleportService:TeleportAsync(startPlaceID, {player});
+  teleportService:TeleportAsync(PlaceMap.Outside, {player});
   
 end

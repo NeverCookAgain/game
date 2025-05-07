@@ -1,5 +1,5 @@
 {
-  "name": "Never Cook Again (Development)",
+  "name": "Never Cook Again: Game (Development)",
   "globIgnorePaths": ["**/*.production.lua", "**/*.staging.lua", "**/*.development.lua"],
   "tree": {
     "$className": "DataModel",
@@ -14,6 +14,9 @@
         "$path": "src/ReplicatedStorage/Shared",
         "Packages": {
           "$path": "Packages"
+        },
+        "PlaceMap": {
+          "$path": "src/ReplicatedStorage/Shared/PlaceMap.development.lua"
         }
       }
     },

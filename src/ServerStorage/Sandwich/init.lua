@@ -128,7 +128,6 @@ function Sandwich.new(properties: ISandwich.SandwichConstructorProperties, round
     type = "Sandwich" :: "Sandwich";
     name = properties.name;
     items = properties.items or {};
-    description = properties.description;
     createModel = createModel;
     drop = drop;
     StatusChanged = statusChangedEvent.Event;

@@ -7,6 +7,7 @@ local ISandwich = require(ReplicatedStorage.Client.Sandwich.types);
 export type Difficulty = "Easy" | "Medium" | "Hard";
 
 export type OrderBaseProperties = {
+  assignedChefID: string?;
   difficulty: Difficulty;
   requestedSandwich: ISandwich.ISandwich;
   actualSandwich: ISandwich.ISandwich?;

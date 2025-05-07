@@ -12,28 +12,15 @@ export type Item = {
 export type InventoryButtonProperties = {
   layoutOrder: number;
   item: Item?;
+  isSelected: boolean;
+  onSelect: () -> ();
 }
 
 local function InventoryButton(properties: InventoryButtonProperties)
 
-  local isActivated, setIsActivated = React.useState(false);
-  React.useEffect(function()
-  
-    task.spawn(function()
-    
-      if isActivated then
-
-        ReplicatedStorage.Shared.Functions.ActivateItem:InvokeServer(properties.layoutOrder);
-        setIsActivated(false);
-
-      end;
-
-    end);
-
-  end, {isActivated});
-
   return React.createElement("TextButton", {
     AnchorPoint = Vector2.new(1, 1);
+    BackgroundTransparency = if properties.item then 0.65 else 0.85;
     BackgroundColor3 = Color3.new(1, 1, 1);
     BorderSizePixel = 0;
     Size = UDim2.new(0, 50, 0, 50);
@@ -41,12 +28,18 @@ local function InventoryButton(properties: InventoryButtonProperties)
     LayoutOrder = properties.layoutOrder;
     [React.Event.Activated] = function()
 
-      setIsActivated(true);
+      properties.onSelect();
 
     end;
   }, {
     UICorner = React.createElement("UICorner", {
       CornerRadius = UDim.new(1, 0);
+    });
+    UIStroke = React.createElement("UIStroke", {
+      ApplyStrokeMode = Enum.ApplyStrokeMode.Border;
+      Color = if properties.isSelected then Color3.fromRGB(219, 117, 33) else Color3.fromRGB(255, 255, 255);
+      Transparency = if properties.item then 0 else 0.75;
+      Thickness = 2;
     });
   })
 

@@ -6,7 +6,6 @@ local IItem = require(ServerStorage.Item.types);
 
 export type SandwichBaseProperties = {
   name: string;
-  description: string;
 }
 
 export type SandwichConstructorProperties = SandwichBaseProperties & {

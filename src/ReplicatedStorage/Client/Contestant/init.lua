@@ -16,33 +16,37 @@ function Contestant.new(properties: IContestant.ContestantProperties, round: IRo
     local totalSandwichIngredientCount = 0;
     local correctSandwichIngredientCount = 0;
 
-    for _, customer in self.servedCustomers do
+    for _, customer in round.customers do
 
-      for _, item in customer.order.requestedSandwich.items do
-      
-        if customer.order.actualSandwich == nil then
+      if customer.order.assignedChefID == self.id then
 
-          continue;
+        if customer.order.actualSandwich then
 
-        end;
+          local actualSandwichItems = table.clone(customer.order.actualSandwich.items);
 
-        local itemAccuracy = 0;
-        for possibleItemIndex, possibleItem in customer.order.actualSandwich.items do
+          for _, item in customer.order.requestedSandwich.items do
 
-          if possibleItem.name == item.name then
-            
-            itemAccuracy = if possibleItem.status == item.status then 1 else 0;
-            table.remove(customer.order.actualSandwich.items, possibleItemIndex);
-            break;
+            local itemAccuracy = 0;
+            for possibleItemIndex, possibleItem in actualSandwichItems do
+
+              if possibleItem.name == item.name then
+                
+                itemAccuracy = if possibleItem.status == item.status then 1 else 0.5;
+                table.remove(actualSandwichItems, possibleItemIndex);
+                break;
+
+              end;
+
+            end;
+            correctSandwichIngredientCount += itemAccuracy;
 
           end;
 
         end;
-        correctSandwichIngredientCount += itemAccuracy;
+
+        totalSandwichIngredientCount += #customer.order.requestedSandwich.items;
 
       end;
-
-      totalSandwichIngredientCount += #customer.order.requestedSandwich.items;
 
     end;
 
@@ -52,8 +56,8 @@ function Contestant.new(properties: IContestant.ContestantProperties, round: IRo
 
   local contestant: IContestant.IContestant = {
     type = "Contestant" :: "Contestant";
+    assignedCustomerID = properties.assignedCustomerID;
     id = properties.id;
-    assignedCustomer = properties.assignedCustomer;
     headshotImages = properties.headshotImages;
     player = properties.player;
     model = properties.model;

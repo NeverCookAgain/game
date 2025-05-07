@@ -7,10 +7,22 @@ local ServerStorage = game:GetService("ServerStorage");
 
 local Contestant = require(ServerStorage.Contestant);
 local Customer = require(ServerStorage.Customer);
-local Avocado = require(ServerStorage.Items.Avocado);
 local Item = require(ServerStorage.Item);
 local Round = require(ServerStorage.Round);
 local Order = require(ServerStorage.Order);
+local Sandwich = require(ServerStorage.Sandwich);
+local Room = require(ServerStorage.Room);
+
+local room;
+
+if not script:GetAttribute("Debug_BypassRoomCheck") then
+  
+  assert(game.PrivateServerId ~= "", "This script must be run in a private server.");
+  room = Room.getByPrivateServerID(game.PrivateServerId);
+  
+  assert(room, "Room not found.");
+
+end;
 
 local round = Round.new({});
 
@@ -63,6 +75,29 @@ end);
 
 local function addPlayerAsContestant(player: Player)
 
+  if room then
+
+    local canJoin = false;
+    for _, roomPlayer in room.players do
+
+      if player.UserId == roomPlayer.userID then
+
+        canJoin = true;
+        break;
+
+      end;
+
+    end;
+
+    if not canJoin then
+
+      player:Kick("You are not allowed to join this round.");
+      return;
+
+    end;
+
+  end;
+
   local spawnLocations: {SpawnLocation} = workspace:FindFirstChild("SpawnLocations"):GetChildren();
 
   local character = script.Character:Clone();
@@ -84,9 +119,6 @@ local function addPlayerAsContestant(player: Player)
 
   local contestant = Contestant.new({
     player = player;
-    id = player.UserId;
-    inventory = {};
-    inventorySlots = 5;
     model = player.Character;
     headshotImages = {
       default = "rbxassetid://132812371775588";
@@ -97,25 +129,17 @@ local function addPlayerAsContestant(player: Player)
 
   contestant.CustomerAssignmentChanged:Connect(function()
   
-    
+    ReplicatedStorage.Shared.Events.CustomerAssignmentChanged:FireAllClients(contestant);
 
   end);
 
   contestant.InventoryChanged:Connect(function()
   
-    ReplicatedStorage.Shared.Events.ContestantInventoryChanged:FireClient(player);
+    ReplicatedStorage.Shared.Events.ContestantInventoryChanged:FireAllClients(contestant);
 
   end);
 
   round:addContestant(contestant);
-
-  if #contestant.inventory < 2 then
-
-    contestant:addToInventory(Avocado.new(round));
-    contestant:addToInventory(Avocado.new(round));
-
-  end;
-  
 
 end;
 
@@ -131,7 +155,6 @@ for _, player in Players:GetPlayers() do
 
 end;
 
-local customers = {};
 local customerModels = {workspace.CustomerA, workspace.CustomerB, workspace.CustomerC, workspace.CustomerD};
 local customerImages = {"rbxassetid://136955129612174", "rbxassetid://121007848481264", "rbxassetid://85190412089778", "rbxassetid://72181972813178"};
 
@@ -140,20 +163,23 @@ for _, customerModel in customerModels do
   local customer = Customer.new({
     model = customerModel;
     image = customerImages[Random.new():NextInteger(1, #customerImages)];
-    order = Order.generate("Easy", round);
+    status = "Thinking" :: "Thinking";
   }, round);
 
-  table.insert(customers, customer);
+  table.insert(round.customers, customer);
+
+  local order = Order.generate("Easy", customer.id, round);
+  customer:setOrder(order);
 
 end;
 
-ReplicatedStorage.Shared.Functions.GetCustomer.OnServerInvoke = function(player, customerName: unknown)
+ReplicatedStorage.Shared.Functions.GetCustomer.OnServerInvoke = function(player, customerID: unknown)
 
-  assert(typeof(customerName) == "string", "Customer name must be a string.");
+  assert(typeof(customerID) == "string", "Customer ID must be a string.");
 
-  for _, customer in customers do
+  for _, customer in round.customers do
 
-    if customer.model.Name == customerName then
+    if customer.id == customerID then
 
       return customer;
 
@@ -165,17 +191,17 @@ ReplicatedStorage.Shared.Functions.GetCustomer.OnServerInvoke = function(player,
 
 end;
 
-ReplicatedStorage.Shared.Functions.AcceptCustomer.OnServerInvoke = function(player, customerName: unknown)
+ReplicatedStorage.Shared.Functions.AcceptCustomer.OnServerInvoke = function(player, customerID: unknown)
 
   local contestant = round:findContestantFromPlayer(player);
   assert(contestant, "You aren't a contestant of this round.");
-  assert(not contestant.assignedCustomer, "You are already assigned to a customer.");
-  assert(typeof(customerName) == "string", "Customer name must be a string.");
+  assert(not contestant.assignedCustomerID, "You are already assigned to a customer.");
+  assert(typeof(customerID) == "string", "Customer name must be a string.");
 
   local customer;
-  for _, possibleCustomer in customers do
+  for _, possibleCustomer in round.customers do
 
-    if possibleCustomer.model.Name == customerName then
+    if possibleCustomer.id == customerID then
 
       customer = possibleCustomer;
       break;
@@ -185,8 +211,10 @@ ReplicatedStorage.Shared.Functions.AcceptCustomer.OnServerInvoke = function(play
   end;
 
   assert(customer, "Customer not found.");
+  assert(customer.order, "Customer doesn't have an order.");
 
-  contestant:setAssignedCustomer(customer);
+  contestant:setAssignedCustomerID(customer.id);
+  customer.order:setAssignedChefID(contestant.id);
 
   if customer.model.PrimaryPart and not customer.model.PrimaryPart:FindFirstChild("ProximityPrompt") then
     
@@ -205,55 +233,69 @@ ReplicatedStorage.Shared.Functions.DeliverSandwich.OnServerInvoke = function(pla
 
   local contestant = round:findContestantFromPlayer(player);
   assert(contestant, "You aren't a contestant of this round.");
-  assert(contestant.assignedCustomer, "You don't have a customer assigned.");
+  assert(contestant.assignedCustomerID, "You don't have a customer assigned.");
+  assert(contestant.selectedItem, "You don't have a sandwich selected.");
 
   -- Set the order.
-  contestant.assignedCustomer.order:setActualSandwich(contestant.assignedCustomer.order.requestedSandwich);
+  local item = contestant.selectedItem;
+  contestant:removeFromInventory(item);
+  
+  local sandwich;
+  if item.type == "Sandwich" then
+
+    sandwich = item;
+  
+  else
+
+    sandwich = Sandwich.new({
+      items = {item};
+      name = "Easy";
+      type = "Sandwich";
+    }, round);
+
+  end;
+
+  local customer = round:findCustomerFromID(contestant.assignedCustomerID);
+  assert(customer, "Customer not found.");
+  assert(customer.order, "Customer doesn't have an order.");
+  customer.order:setActualSandwich(sandwich);
 
   -- Reset the customer so the contestant can take a new order.
   local newCustomer = Customer.new({
-    model = contestant.assignedCustomer.model;
+    model = customer.model;
     image = customerImages[Random.new():NextInteger(1, #customerImages)];
-    order = Order.generate("Easy", round);
+    status = "Thinking" :: "Thinking";
   }, round);
 
-  table.remove(customers, table.find(customers, contestant.assignedCustomer));
-  table.insert(customers, newCustomer);
-  table.insert(contestant.servedCustomers, contestant.assignedCustomer);
+  table.insert(round.customers, newCustomer);
 
-  contestant:setAssignedCustomer();
+  local order = Order.generate("Easy", newCustomer.id, round);
+  newCustomer:setOrder(order);
+
+  contestant:setAssignedCustomerID();
 
 end;
 
 ReplicatedStorage.Shared.Functions.ActivateItem.OnServerInvoke = function(player, slot)
 
   local contestant = round:findContestantFromPlayer(player);
-  if contestant then
+  assert(contestant, "You aren't a contestant of this round.");
 
-    local item = contestant.inventory[slot];
-    if item then
-
-      contestant:removeFromInventory(item);
-      
-      if contestant.model and contestant.model.PrimaryPart then
-        
-        if item.type == "Item" then
-
-          item:drop(contestant.model.PrimaryPart.CFrame, -contestant.model.PrimaryPart.CFrame.LookVector * 5);
-
-        elseif item.type == "Sandwich" then
-
-          item:drop(contestant.model.PrimaryPart.CFrame, -contestant.model.PrimaryPart.CFrame.LookVector * 5);
-
-        end;
-
-      end;
-
-    end;
-
-  end;
+  local item = contestant.inventory[slot];
+  assert(item, "Item not found.");
 
 end;
+
+ReplicatedStorage.Shared.Events.SelectedItemChanged.OnServerEvent:Connect(function(player, slot: unknown)
+
+  local contestant = round:findContestantFromPlayer(player);
+  assert(contestant, "You aren't a contestant of this round.");
+  assert(slot == nil or typeof(slot) == "number", "Slot must be a number or nil.");
+
+  local item = if slot then contestant.inventory[slot :: number] else nil;
+  contestant:setSelectedItem(item);
+
+end);
 
 ReplicatedStorage.Shared.Functions.AddIngredientToInventory.OnServerInvoke = function(player, ingredientName: unknown)
 
@@ -263,9 +305,9 @@ ReplicatedStorage.Shared.Functions.AddIngredientToInventory.OnServerInvoke = fun
 
   if contestant then
 
-    local item = Item.get(ingredientName);
+    local item = Item.get(ingredientName, round);
     contestant:addToInventory(item);
-    print("Added item to inventory: " .. item.name);
+    print(`Added item to inventory: {item.name}`);
 
   end;
 
@@ -280,11 +322,7 @@ ReplicatedStorage.Shared.Functions.GetIngredients.OnServerInvoke = function(play
   local possibleIngredients = {};
   for _, itemClass in itemClasses do
 
-    if itemClass ~= "Item" and itemClass ~= "Sandwich" then
-
-      table.insert(possibleIngredients, itemClass);
-
-    end;
+    table.insert(possibleIngredients, itemClass);
 
   end;
 
