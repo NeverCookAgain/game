@@ -68,7 +68,7 @@ function Item.new(properties: IItem.ItemConstructorProperties, round: IRound.IRo
 
   local function drop(self: IItem.IItem, origin: CFrame, direction: Vector3): BasePart
 
-    local part = droppedPart or self.templatePart:Clone();
+    local part = droppedPart or self:createPart();
     droppedPart = part;
 
     local proximityPrompt = part:FindFirstChild("ProximityPrompt");

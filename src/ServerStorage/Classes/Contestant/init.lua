@@ -47,6 +47,7 @@ function Contestant.new(properties: IContestant.ContestantConstructorProperties,
 
   local function addToInventory(self: IContestant.IContestant, item: IItem.IItem | ISandwich.ISandwich): ()
 
+    assert(#self.inventory < self.inventorySlots, "Inventory is full.");
     table.insert(self.inventory, item);
     inventoryChangedEvent:Fire();
 
