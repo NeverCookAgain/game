@@ -29,7 +29,7 @@ local function InventoryButton(properties: InventoryButtonProperties)
     BorderSizePixel = 0;
     Size = UDim2.new(0, 50, 0, 50);
     Text = if properties.item then nil else (properties.text or "");
-    Image = if properties.item then properties.item.image else nil;
+    Image = if properties.item then (properties.item.image or "rbxassetid://107867225935323") else nil;
     LayoutOrder = properties.layoutOrder;
     [React.Event.Activated] = function()
 

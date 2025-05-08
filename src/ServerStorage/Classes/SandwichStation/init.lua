@@ -47,16 +47,15 @@ function SandwichStation.new(properties: ISandwichStation.SandwichStationPropert
       newSandwichModel:PivotTo(self.model.PrimaryPart.CFrame);
       newSandwichModel.Parent = self.model;
 
-      -- for index, item in self.sandwich.items do
+      for index, item in self.sandwich.items do
 
-      --   local itemPart = item.templatePart:Clone();
-      --   itemPart.CFrame = CFrame.Angles(0, 0, math.rad(90)) + self.model.PrimaryPart.CFrame.Position + Vector3.new(0, (index - 1) * 0.1, 0);
-      --   itemPart.Anchored = true;
-      --   itemPart.Parent = self.model:FindFirstChild("Sandwich");
-      --   sandwichModel:SetAttribute("LatestIngredient", item.name);
-      --   table.insert(sandwichParts, itemPart);
+        local itemPart = item.templatePart:Clone();
+        itemPart.CFrame = CFrame.Angles(0, 0, math.rad(90)) + self.model.PrimaryPart.CFrame.Position + Vector3.new(0, (index - 1) * 0.1, 0);
+        itemPart.Anchored = true;
+        itemPart.Parent = self.model:FindFirstChild("Sandwich");
+        newSandwichModel:SetAttribute("LatestIngredient", item.name);
 
-      -- end;
+      end;
 
     end;
     
