@@ -26,7 +26,7 @@ local function getRandomPoint()
 
 end
 
-local spawnRateSeconds = 4;
+local spawnRateSeconds = 10;
 
 while task.wait(spawnRateSeconds) do
 
