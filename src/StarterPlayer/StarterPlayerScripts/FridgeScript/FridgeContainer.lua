@@ -33,17 +33,32 @@ local function FridgeContainer(props)
 	local displayedItems = {}
 	for i = startIndex, endIndex do
 		local foodItem = foodItems[i]
-		table.insert(displayedItems, React.createElement("ImageButton", {
-			Name = foodItem.name,
-			Size = UDim2.new(0, 120, 0, 120),
-			Image = foodItem.image,
-			BackgroundTransparency = 1;
-			[React.Event.MouseButton1Click] = function()
-				ReplicatedStorage.Shared.Functions.AddIngredientToInventory:InvokeServer(foodItem.name:gsub("%s+", ""));
-				props.onClose();
-			end,
+		table.insert(displayedItems, React.createElement("Frame", {
+			Size = UDim2.new(0, 120, 0, 140), 
+			BackgroundTransparency = 1,
+		}, {
+			Image = React.createElement("ImageButton", {
+				Name = foodItem.name,
+				Size = UDim2.new(0, 120, 0, 120),
+				Image = foodItem.image,
+				BackgroundTransparency = 1,
+				[React.Event.MouseButton1Click] = function()
+					ReplicatedStorage.Shared.Functions.AddIngredientToInventory:InvokeServer(foodItem.name:gsub("%s+", ""))
+					props.onClose()
+				end,
+			}),
+			Label = React.createElement("TextLabel", {
+				Size = UDim2.new(1, 0, 0, 20),
+				Position = UDim2.new(0, 0, 1, 0), 
+				Text = foodItem.name,
+				TextScaled = true,
+				BackgroundTransparency = 1,
+				TextColor3 = Color3.new(0, 0, 0), 
+				Font = Enum.Font.Kalam,
+			})
 		}))
 	end
+	
 
 	return React.createElement("Frame", {
 		AnchorPoint = Vector2.new(0.5, 0.5),
